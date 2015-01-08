@@ -1,1 +1,4 @@
 *~
+cabal.sandbox.config
+dist/
+.cabal-sandbox
