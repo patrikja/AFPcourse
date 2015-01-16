@@ -16,7 +16,7 @@ version:             1.0
 synopsis:            AFP course lecture 1 Signal EDSL example + smaller code examples.
 
 -- A longer description of the package.
--- description:         
+description:         To be done.
 
 -- URL for the project homepage or repository.
 homepage:            http://www.cse.chalmers.se/edu/course/afp/
@@ -37,7 +37,7 @@ maintainer:          patrikj@chalmers.se
 -- A copyright notice.
 -- copyright:           
 
--- category:            
+-- category:            Not intended for hackage.
 
 build-type:          Simple
 
