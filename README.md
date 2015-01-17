@@ -8,7 +8,7 @@ http://www.cse.chalmers.se/edu/course/afp/
 Lecture plan:
 ------------
 
-* [L1](L1/): Course intro, Haskell recap, first DSL exampl 
+* [L1](L1/): Course intro, Haskell recap, first DSL example 
 * L2: EDSLs and the Shapes example
 * L3: Monads: how to build your own monad from scratch
 * L4: Parsing: a case-study in program transformation
