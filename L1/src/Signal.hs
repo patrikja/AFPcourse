@@ -59,7 +59,7 @@ test1 :: IO ()
 test1 = magic $ sinS 0.2
 
 test2 :: IO ()
-test2 = magic $ (avS (sinS 0.2) (sinS 0.1))
+test2 = magic $ avS (sinS 0.2) (sinS 0.1)
 
 -- | Problem: averaging two signals?
 -- @

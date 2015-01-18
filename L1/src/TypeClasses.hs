@@ -17,7 +17,9 @@ instance Eq' Int where
 instance Eq' a => Eq' [a] where 
   (==) = eqList (TypeClasses.==)
 
-eqList :: (a->a->Bool) -> ([a]->[a]->Bool)
+type EqT a = a -> a -> Bool
+
+eqList :: EqT a -> EqT [a]
 eqList _eq []     []      = True
 eqList _eq []     (_:_)   = False
 eqList _eq (_:_)  []      = False

@@ -1,4 +1,5 @@
 module Lect1 where
+import Data.Maybe (isNothing)
 
 -- An example of a pure function returning an Int
 
@@ -17,6 +18,7 @@ g xs = do putStrLn xs
 
 -- An IO action can be executed several times and can give different results 
 
+testg :: IO [Int]
 testg = let a = g "Shoesize?"
         in do s1 <- a
               s2 <- a
@@ -30,7 +32,7 @@ hello =
      putStrLn ("Hi, " ++ name ++ "!")
 
 printTable1 :: [String] -> IO ()
-printTable1 xs = prnt 1 xs
+printTable1 = prnt 1    -- Note the use of partial application
  where
   prnt i []      = return ()
   prnt i (x:xs)  = do  putStrLn (show i ++ ": " ++ x)
@@ -49,7 +51,7 @@ printTable2 xs =
 testTable2 = printTable2 lussekatter
 
 fun :: Maybe Int -> Int
-fun mx  | mx == Nothing  = 0
+fun mx  | isNothing mx   = 0
         | otherwise      = x + 3
  where
   x = fromJust mx
@@ -58,7 +60,7 @@ fromJust :: Maybe a -> a -- also available in module Data.Maybe
 fromJust (Just x)  = x
 fromJust Nothing   = error "fromJust: Nothing is not allowed"
 
-testFun = (fun (Just 100), fun (Nothing))
+testFun = (fun (Just 100), fun Nothing)
 
 ----------------
 
