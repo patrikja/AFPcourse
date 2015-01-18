@@ -15,7 +15,7 @@ sudo apt-get install haskell-platform
 
 ### haskell-platform 2014.2
 
-Go get a newer version, you need to activate another [package archive
+To get version 2014-2 (which I recommend for the AFP course), you need to activate another [package archive
 for ghc](ppa:hvr/ghc), then install cabal-install and ghc from this
 ppa, followed by alex and happy using cabal.  (Instructions copied
 from [stackage](http://www.stackage.org/install#ubuntu).)
