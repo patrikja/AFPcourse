@@ -46,8 +46,10 @@ cabal-version:       >=1.8
 
 
 library
+  hs-source-dirs: src
+
   -- Modules exported by the library.
-  exposed-modules:     Signal, Lect1
+  exposed-modules:     Signal, Lect1, TypeClasses
   
   -- Modules included in this library but not exported.
   -- other-modules:       

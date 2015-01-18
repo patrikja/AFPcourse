@@ -5,7 +5,7 @@ module Lect1 where
 f :: String -> Int
 f xs = case reads xs of
   []             -> 1738
-  ((i,_rest):_)  -> i
+  ((i,_rest):_)  -> i+1
 
 -- An example of a pure function returning an IO action (which in turn
 -- returns an Int). Sometimes called an "impure function returning an Int".
@@ -33,10 +33,11 @@ printTable1 :: [String] -> IO ()
 printTable1 xs = prnt 1 xs
  where
   prnt i []      = return ()
-  prnt i (x:xs)  = do  putStrLn (show i ++ ":" ++ x)
+  prnt i (x:xs)  = do  putStrLn (show i ++ ": " ++ x)
                        prnt (i+1) xs
 
-lussekatter = ["1g saffran", "1kg (17dl) vetemjöl", "5dl mjölk", "250g mager kesella", "50g jäst", "1.5dl socker", "0.5tsk salt"]
+lussekatter = ["1g saffran", "1kg (17dl) vetemjöl", "5dl mjölk", 
+               "250g mager kesella", "50g jäst", "1.5dl socker", "0.5tsk salt"]
 testTable1 = printTable1 lussekatter
 
 printTable2 :: [String] -> IO ()
@@ -119,7 +120,9 @@ testTable3 = printTable3 lussekatter
 iterate' :: (a -> a) -> a -> [a]
 iterate' f x = x : iterate' f (f x)
 
+testIterate :: [Integer]
 testIterate = iterate' (2*) 1
+testIt :: [Integer]
 testIt = take 12 testIterate
 
 repeat' :: a -> [a]
@@ -135,6 +138,7 @@ cycle'' :: [a] -> [a]
 cycle'' xs = concat (repeat xs)
 
 ----------------
+-- *** skip down to Labyrinth in lack of time
 
 replicate' :: Int -> a -> [a]
 replicate' n x = take n (repeat x)
@@ -147,7 +151,8 @@ group n = takeWhile (not . null)
 primes :: [Integer]
 primes = sieve [2..]
  where
-  sieve (p:xs) = p : sieve [ y | y <- xs, y `mod` p /= 0 ]
+  sieve (p:xs)  = p : sieve [ y | y <- xs, y `mod` p /= 0 ]
+  sieve []      = error "sieve: empty list is impossible"
 
 ----------------
 
@@ -165,7 +170,6 @@ labyrinth = start
   forest = Crossroad "forest" town   exit
   exit   = Crossroad "exit"   exit   exit
 
-----------------
+showLabyrinth :: Labyrinth -> String
+showLabyrinth (Crossroad _label _left _right) = error "Exercise!"
 
---class MyEq a where
---  (
