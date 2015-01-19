@@ -64,3 +64,10 @@ cabal-install version 1.18.0.8
 using version 1.18.1.5 of the Cabal library 
 ```
 
+## FreeBSD
+
+### haskell-platform 2014.2
+
+```Shell
+# pkg install hs-haskell-platform
+```
