@@ -39,7 +39,7 @@ to instruct cabal to use stackage LTS Haskell 1.2:
 
 ```Shell
 cd .cabal
-wget 'http://www.stackage.org/snapshot/lts-1.2/cabal.config?global=true' -o cabal.global.config
+wget 'http://www.stackage.org/snapshot/lts-1.2/cabal.config?global=true' -O cabal.global.config
 mv config config.old
 cat config.old cabal.global.config > config
 cabal update
@@ -91,7 +91,7 @@ $ cabal update
 $ cabal install alex happy
 ```
 
-The procedure for telling cabal to use stackage LTS Haskell 1.2 is the same as the Ubuntu instructions above, except the flag to wget should be '-O' (as in capital Oh), but maybe that is the case under Ubuntu as well? Then comment/uncomment the appropriate remote-repo lines in the config file you just cat:ed together, make sure your shell can find the binaries in ~/.cabal/bin, and run:
+The procedure for telling cabal to use stackage LTS Haskell 1.2 is the same as the Ubuntu instructions above. Then comment/uncomment the appropriate remote-repo lines in the config file you just cat:ed together, make sure your shell can find the binaries in ~/.cabal/bin, and run:
 ```Shell
 $ cabal update
 $ cabal install cabal-install
