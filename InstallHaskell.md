@@ -64,6 +64,7 @@ cabal-install version 1.18.0.8
 using version 1.18.1.5 of the Cabal library 
 ```
 
+
 ## Mac OS X
 (This approach is tested on OS X 10.8 Mountain Lion (I know, I know, I really should update soon...), YMMV.)
 
@@ -74,3 +75,33 @@ I generally like the packet manager Homebrew, but it doesn't always play very ni
 When trying to install HGL (the graphics library recommended in lab 1) by doing `cabal install hgl` , cabal fails to install the dependency X11 due to the following error: `ld: library not found for -lXss`.
 
 The solution for this is to run the command `LIBRARY_PATH=/opt/X11/lib:$LIBRARY_PATH cabal install X11` or, if that doesn't work, `LIBRARY_PATH=/opt/X11/lib:$LIBRARY_PATH CPPFLAGS="-I/opt/X11/include" LDFLAGS="-L/opt/X11/lib" cabal install X11`. After this, HGL should install just fine. (Solution found [here](https://github.com/haskell-pkg-janitors/X11/issues/24#issuecomment-47996753).)
+
+
+## FreeBSD
+(Tested on FreeBSD 10.1-RELEASE)
+
+### haskell-platform 2014.2
+
+```Shell
+# pkg install hs-haskell-platform
+```
+
+```Shell
+$ cabal update
+$ cabal install alex happy
+```
+
+The procedure for telling cabal to use stackage LTS Haskell 1.2 is the same as the Ubuntu instructions above, except the flag to wget should be '-O' (as in capital Oh), but maybe that is the case under Ubuntu as well? Then comment/uncomment the appropriate remote-repo lines in the config file you just cat:ed together, make sure your shell can find the binaries in ~/.cabal/bin, and run:
+```Shell
+$ cabal update
+$ cabal install cabal-install
+```
+
+This gives us
+```Shell
+$ ghc --version
+The Glorious Glasgow Haskell Compilation System, version 7.8.3
+$ cabal --version
+cabal-install version 1.18.0.8
+using version 1.18.1.3 of the Cabal library
+```
