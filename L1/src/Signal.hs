@@ -1,4 +1,6 @@
 -- | A very simple library for manipulating continuous signals.
+
+-- 2015: We only looked at the module header in L1
 module Signal
   ( Time
   -- | the 'Signal' type is abstract

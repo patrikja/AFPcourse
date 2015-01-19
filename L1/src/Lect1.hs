@@ -140,7 +140,7 @@ cycle'' :: [a] -> [a]
 cycle'' xs = concat (repeat xs)
 
 ----------------
--- *** skip down to Labyrinth in lack of time
+-- 2015: Skipped replicate' and group in the lecture
 
 replicate' :: Int -> a -> [a]
 replicate' n x = take n (repeat x)
@@ -150,6 +150,7 @@ group n = takeWhile (not . null)
         . map (take n)
         . iterate (drop n)
 
+-- 2015: Only a brief explanation
 primes :: [Integer]
 primes = sieve [2..]
  where
@@ -175,3 +176,4 @@ labyrinth = start
 showLabyrinth :: Labyrinth -> String
 showLabyrinth (Crossroad _label _left _right) = error "Exercise!"
 
+-- Next: TypeClasses.hs
