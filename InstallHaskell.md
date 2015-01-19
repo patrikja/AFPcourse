@@ -71,3 +71,23 @@ using version 1.18.1.5 of the Cabal library
 ```Shell
 # pkg install hs-haskell-platform
 ```
+
+```Shell
+$ cabal update
+$ cabal install alex happy
+```
+
+The procedure for telling cabal to use stackage LTS Haskell 1.2 are the same as the Ubuntu instructions above, except the flag to wget should be '-O' (as in capital Oh), but maybe that is the case under Ubuntu as well? Then comment/uncomment the appropriate remote-repo lines in the config file you just cat:ed together and make sure your shell can find the binaries in ~/.cabal/bin, and run:
+```Shell
+$ cabal update
+$ cabal install cabal-install
+```
+
+This gives us
+```Shell
+$ ghc --version
+The Glorious Glasgow Haskell Compilation System, version 7.8.3
+$ cabal --version
+cabal-install version 1.18.0.8
+using version 1.18.1.3 of the Cabal library
+```
