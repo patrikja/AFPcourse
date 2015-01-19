@@ -64,3 +64,13 @@ cabal-install version 1.18.0.8
 using version 1.18.1.5 of the Cabal library 
 ```
 
+## Mac OS X
+(This approach is tested on OS X 10.8 Mountain Lion (I know, I know, I really should update soon...), YMMV.)
+
+### haskell-platform 2014.2
+I generally like the packet manager Homebrew, but it doesn't always play very nice with the Haskell platform, so my advice is to get the installer from here: https://www.haskell.org/platform/mac.html The rest should be more or less analogous to the Linux instructions, but please add anything else you may encounter. (I didn't do this now, so I don't remember all the details. I only wrote this because I know that homebrew can cause issues and because of the issue with HGL and X11 below.)
+
+### Issue with HGL/X11
+When trying to install HGL (the graphics library recommended in lab 1) by doing `cabal install hgl` , cabal fails to install the dependency X11 due to the following error: `ld: library not found for -lXss`.
+
+The solution for this is to run the command `LIBRARY_PATH=/opt/X11/lib:$LIBRARY_PATH cabal install X11` or, if that doesn't work, `LIBRARY_PATH=/opt/X11/lib:$LIBRARY_PATH CPPFLAGS="-I/opt/X11/include" LDFLAGS="-L/opt/X11/lib" cabal install X11`. After this, HGL should install just fine. (Solution found [here](https://github.com/haskell-pkg-janitors/X11/issues/24#issuecomment-47996753).)
