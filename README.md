@@ -6,7 +6,7 @@ Some material connected to the Chalmers and Univ. of Gothenburg course.
 Main course homepage:
 * http://www.cse.chalmers.se/edu/course/afp/
 
-Emerency mirror (due to [major cable failure](http://www.gp.se/nyheter/goteborg/1.2606797-kabelbrott-drabbar-hogskolor-i-vastsverige) 2015-01-20): 
+Emergency mirror (due to [major cable failure](http://www.gp.se/nyheter/goteborg/1.2606797-kabelbrott-drabbar-hogskolor-i-vastsverige), [SUNET ticket](http://www.nunoc.org/nunocweb/ticket.php?key=SUNETTICKET-3112)): 
 * https://cdn.rawgit.com/patrikja/AFPcourse/master/mirror/index.html
 
 
