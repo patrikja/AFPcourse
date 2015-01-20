@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+    <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+            <link rel="stylesheet" href="css/progs-print.css">
+    	<!--<base href="http://www.cse.chalmers.se/edu/course/TDA342/">-->
+    	<title>Advanced Functional Programming</title>
+        </head>
+
+    <body>
+	<div class="heading">
+	    <h1>Assignment 3 Package Suggestions</h1>
+	</div>
+
+       <div class=content>
+	 <h2> General suggestions </h2>
+How do you know which package is suitable for the assignment?
+    Here are some guidelines:
+
+    <ul>
+
+    <li><p>
+
+    Libraries consisting of less than three modules are typically too small
+    for you to propertly demonstrate your abilities of reading and
+    understanding code you have not written yourselves. On the other hand, if
+    the library has too many modules, you may want to pick a subset of the
+    library and focus on that.  Describe as clearly as possible which part of
+    the library you cover.
+
+    </p></li>
+
+    <li><p>
+    The <a href="http://hackage.haskell.org/packages/archive/pkg-list.html">package list on hackage</a>
+    can be a bit daunting, but they are organised in categories and you can
+    search the page for keywords that interest you.
+    It could be wise to choose packages of a domain you are already familiar
+    with.  For instance, it could be related to your Bachelor or Master's
+    thesis, or related to some course you are taking (to get some possible
+    synergy effect). And of course, libraries you used in the labs, or
+    discussed in this course's lectures, may be worth considering.
+    </p></li>
+
+    <li><p>
+
+    To determine if the package contains the advanced features of Haskell
+    taught in this course, you can check if they use relevant language
+    extensions (such as GADTs or TypeFamilies).  These are either declared in
+    the header of the modules or in the .cabal file.
+
+    </p></li>
+
+    <li><p>When in doubt, pick a package which
+              <a href="http://hackage.haskell.org/packages/top">is downloaded frequently</a>
+           or <a href="http://packdeps.haskellers.com/reverse">is used by many other packages (has many reverse dependencies)</a>.</p></li>
+    </ul>
+       </div>
+
+
+       <div class=content>
+	 <h2> Projects at Chalmers </h2>
+There are several packages maintained by people at Chalmers.
+    The maintainer might be able to help you with suggestions for improvements.
+    Here is a partial list:
+
+    <ul>
+    <li><a href="http://hackage.haskell.org/package/Agda">Agda</a></li>
+    <li><a href="http://hackage.haskell.org/package/BNFC-meta">BNFC-meta</a></li>
+    <li><a href="http://hackage.haskell.org/package/chalmers-lava2000">chalmers-lava2000</a></li>
+    <li><a href="http://hackage.haskell.org/package/feldspar-language">feldspar-language</a> and <a href="http://hackage.haskell.org/package/feldspar-compiler">feldspar-compiler</a></li>
+    <li><a href="http://hackage.haskell.org/package/haskell-src-exts">haskell-src-exts</a></li>
+    <li><a href="http://hackage.haskell.org/package/paragon">paragon</a></li>
+    <li><a href="http://hackage.haskell.org/package/QuickCheck">QuickCheck</a></li>
+    <li><a href="http://hackage.haskell.org/package/quickspec">quickspec</a></li>
+    <li><a href="http://hackage.haskell.org/package/syntactic">syntactic</a></li>
+    <li><a href="http://hackage.haskell.org/package/testing-feat">testing-feat</a></li>
+    </ul>
+       </div>
+
+
+       <div class=content>
+	 <h2> A few semi-concrete suggestions </h2>
+<p>
+    Some libraries of parts of them lack documentation or tests. For
+    instance, the internals of <a href="http://hackage.haskell.org/package/QuickCheck">QuickCheck</a> is not tested,
+    and its module for Monadic testing is not documented.
+    </p>
+
+    <p>
+    Many well-known and used packages are not properly tested.
+    <a href="https://github.com/ekmett/mtl/commit/a60fc2695c5e1bfe72e564c53b88ef266957a00d">Here</a>
+    is an example of a recently found bug in <a href="http://hackage.haskell.org/package/mtl">mtl</a>. Obviously
+    many packages could benefit from having a test suite!
+    </p>
+
+    <!--
+    <p>
+    Some tests for <a href="http://hackage.haskell.org/package/haskell-src-exts">haskell-src-exts</a> has been written using
+    <a href="http://hackage.haskell.org/package/testing-feat">testing-feat</a>, but is not completed. Ask Jonas if you
+    are interested in this particular example.
+    </p>
+
+    <p>The <a href="http://hackage.haskell.org/package/logic-TPTP">logic-TPTP</a> uses two-level types and other
+    advanced Haskell type features.</p>
+    -->
+       </div>
+
+
+       <div class=content>
+	 <h2> Surveys </h2>
+<ul>
+    <li><a href="http://ocharles.org.uk/blog/">24 days of Hackage</a></li>
+    <li><a href="http://stackoverflow.com/questions/2891160/which-is-your-favorite-hidden-gem-package-on-hackage">
+            Stack Overflow question on favorite "hidden gem" packages on Hackage</a></li>
+    <li><a href="http://haskellwebnews.wordpress.com/2011/03/16/hackage-stats-the-past-year/">
+            Top libraries 2010</a></li>
+    </ul>
+       </div>
+	<div id="navAlpha">
+ 	&nbsp;&nbsp;<span class="bullet">o</span>&nbsp;<a href="index.html"><b>Main</b></a><br>
+  		   &nbsp;&nbsp;<span class="bullet">o</span>&nbsp;<a href="schedule.html"><b>Schedule</b></a><br>
+       		   &nbsp;&nbsp;<span class="bullet">+</span>&nbsp;<a href="lectures.html"><b>Lectures</b></a><br>
+            		   &nbsp;&nbsp;<span class="bullet">+</span>&nbsp;<a href="assignments.html"><b>Assignments</b></a><br>
+                 		   &nbsp;&nbsp;<span class="bullet">o</span>&nbsp;<a href="exam.html"><b>Exam</b></a><br>
+                      		   &nbsp;&nbsp;<span class="bullet">o</span>&nbsp;<a href="http://groups.google.com/group/afp15"><b>Discussion board</b></a><br>
+                           		   &nbsp;&nbsp;<span class="bullet">o</span>&nbsp;<a href="https://xdat09.ce.chalmers.se/afp/"><b>Reporting system</b></a><br>
+                                		   &nbsp;&nbsp;<span class="bullet">o</span>&nbsp;<a href="contact.html"><b>Contact us</b></a><br>
+                                     		   &nbsp;&nbsp;<span class="bullet">o</span>&nbsp;<a href="links.html"><b>Haskell search</b></a><br>
+                                          		   
+     </div>
+	<div id="chalmers">
+ 	<img src="images/chalmers.gif" alt="[Chalmers]">
+     </div>
+     <div id="gu">
+ 	<img src="images/gu.gif" alt="[GU]">
+     </div>
+	<div id="navBeta">
+	    <a href="packages_printable.html">
+		<img border=0 src="images/print.gif" alt="[Print]"> Printable version
+	    </a>
+	    <p>&nbsp;<p>
+	    Last modified:<br>
+	    Jan 19 14:03, 2015
+	</div>
+    </body>
+</html>

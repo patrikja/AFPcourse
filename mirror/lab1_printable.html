@@ -1,0 +1,454 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+    <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+            <link rel="stylesheet" href="css/progs-print.css">
+    	<!--<base href="http://www.cse.chalmers.se/edu/course/TDA342/">-->
+    	<title>Advanced Functional Programming</title>
+        </head>
+
+    <body>
+	<div class="heading">
+	    <h1>Assignment 1</h1>
+	</div>
+<a name="description"></a>
+       <div class=content>
+	 <h2> Description </h2>
+This lab assignment asks you to implement a library for so-called <EM>turtle
+    graphics</EM>. The library will be interfaced to as an <EM>embedded
+    language</EM>. Several extensions are then made to the original turtle
+    language.
+
+    <P>
+
+    We recommend that you implement the graphics part of the lab using
+    <a HREF="http://hackage.haskell.org/package/HGL">HGL</a>, a simple
+    graphics library with just enough features for this assignment.
+    If you prefer (or if you plan on using 3D) you may use one of the
+    <a HREF="http://www.haskell.org/haskellwiki/Opengl">OpenGL</a> libraries
+    or you may use
+    <a HREF="http://projects.haskell.org/gtk2hs/">gtk2hs</a>. If you would
+    like to use a different graphics library please ask before
+    starting the assignment.
+
+    <h3>Turtle Graphics</h3>
+
+    <P>
+    The idea of turtle graphics was originally part of the <B>Logo</B> programming
+    language. It originated from an environment where a real robot (the "turtle")
+    could move around and act on simple commands. The two basic commands it
+    understood were:
+
+<pre><b>
+forward n
+right d</b></pre>
+
+    Here, <B>n</B> is the number of steps the robot should move
+    forward, and <B>d</B> the number of degrees the robot should
+    turn. More information can be found on the <A
+    HREF="http://en.wikipedia.org/wiki/Turtle_graphics">Turtle
+    graphics</A> wikipedia page (or in a local copy of the <a
+    href="logo_primer_2007.pdf">"Logo primer"</a>).
+
+
+    The idea is that you will implement a part of this turtle graphics language.
+    Your program will be able to produce something like the following output:
+
+    <P>
+    <CENTER>
+    <IMG SRC="images/turtle-tree.gif" alt="[Turtle tree]">
+    </CENTER>
+
+    <P>
+
+    Below are a number of tasks. Needless to say, please <B>read these
+    carefully</B> and make sure you do not miss parts of an assignment! Most
+    assignments require coding <B>and</B> descriptions + motivations of
+    what you have done. Most of the descriptions should be in the form of
+    <a HREF="http://www.haskell.org/haddock/">Haddock</a> comments for modules
+    and fuctions. There are also several questions in this description, make
+    sure you answer all of them in your report.
+       </div>
+
+<a name="part1"></a>
+       <div class=content>
+	 <h2> Part I </h2>
+Deadline: Wed Jan 28
+    <p>
+    The first part of this assignment is just to get you started. You should
+    get started on Part II before the deadline for Part I.
+       </div>
+
+<a name="task1a"></a>
+       <div class=content>
+	 <h2> Part I - Task 1 - Free code! </h2>
+Download and unpack this <a href="files/turtle-graphics-0.1.0.0.tar.gz">stub cabal package</a>.
+    The archive contains a file structure and some useful code snippets for you to build your
+    implementation on. You are free to modify the package however you wish or build a new
+    package from scratch, but if you deviate significantly from the structure in the stub file
+    you may want to explain why your version is an improvement.
+
+    <p>
+
+    Make sure "cabal configure", "cabal build" and "cabal haddock" works (switch the contents of the files to match the graphics framework you are using if not HGL).
+    Look through the contents of the package and the generated documentation, run the generated executable and make sure it works.
+
+    Fill in or replace the fields in the .cabal file with the appropriate information.
+
+    <p>
+
+    Familiarise yourself with the graphics library you are using by writing a
+    simple program which opens a window and draws something in it (the provided code
+    already does this for HGL, but make sure you understand how it is used).
+       </div>
+
+
+<a name="task1b"></a>
+       <div class=content>
+	 <h2> Part I - Task 2 - Library interface </h2>
+The turtle graphics language should be implemented as an embedded language
+    library in Haskell. The turtle language should be provided to the user as a
+    single module, exporting abstract datatypes and operations.
+
+    <p>
+
+    An important part of creating an embedded language is to think carefully
+    about what interface you want to offer to the user. Think about
+    <i>compositionality</i> (how easy is it to combine simpler programs to
+    build more complex ones?), and <i>abstraction</i> (hiding irrelevant
+    implementation details from the users).
+
+    <p>
+
+    For instance, your library might define and export the following things
+    (different types are conceivable, as long
+    as they implement the same basic functionality):
+
+<pre><b>
+type Program <span class='hs-comment'> -- the abstract type of a turtle program</span>
+forward :: Double -> Program
+right   :: Double -> Program
+...</b></pre>
+    Other turtle commands you should provide are:
+    <b>penup</b> and
+    <b>pendown</b> - stop drawing and start drawing respectively,
+    <b>color</b> - changes the color of the turtle's pen, <b>die</b> -
+    "kills" the turtle (rendering it unable to perform any more actions),
+    <b>idle</b> - a program that does nothing,
+    <b>limited</b> - makes the turtle stop what it is doing after a specified period of time
+    (by some definition of time not directly related to minutes and
+    seconds),
+    <b>lifespan</b> - kills the turtle after a specified period of time,
+    <b>backward</b> and <b>left</b> - self explanatory,
+    <b>times</b> - repeats a turtle program a certain number of times,
+    and <b>forever</b> that repeats a program forever.
+
+    You will also need a sequencing operator (<b>&gt;*&gt;</b>) to perform commands
+    one after another.
+
+    <p>
+
+    For running programs, in addition to the graphical interface your program
+    should provide a simple
+    textual interface that prints what happens in sequential order, i.e.
+    prints a description of the actions that the turtles perform at each "step"
+    in time (which lines are drawn, what action turtles perform or any other representation of what is going on will suffice).
+    The textual interface needs to be productive for infinite turtle
+    programs like those created with forever (it should go on printing the
+    actions indefinitely). The graphical interface only needs to handle
+    infinite programs for grades 4 or 5.
+
+    <p>
+
+    Write down the interface of your library, like in the example above,
+    listing the types you plan to export (you may sketch definitions for them, but
+    it is not needed for this part) and type
+    signatures for the operations. When appropriate add explanations of what
+    your operations are intended to do. Make sure you don't forget to add
+    at least one <i>run</i> function for your programs (the types of the
+    run functions may be a bit sketchy at this stage, but explain what each
+    of them do in their comments).
+       </div>
+
+<a name="task1c"></a>
+       <div class=content>
+	 <h2> Part I - Task 3 - Example </h2>
+Write down the <b>spiral</b> example from Logo language
+    using your interface. In their syntax it looks like:
+    <P>
+    <CENTER>
+    <TABLE>
+    <TR>
+    <TD ALIGN=center><IMG SRC="images/turtle-spiral.gif" alt="Turtle spiral"><BR>
+    spiral 0 91
+    </TD>
+    <TD>
+    <PRE>
+    <B>
+      to spiral :size :angle
+        if :size > 100 [stop]
+        forward :size
+        right :angle
+        spiral :size + 2 :angle
+      end
+    </B></PRE>
+    </TD>
+    </TABLE>
+    </CENTER>
+    You won't be able to run your spiral example yet, but it should type check.
+    <p>
+
+    Also, make one version of the spiral example that goes on forever. Can you
+    define the limited version in terms of the unlimited one?
+
+    <p>
+
+    Finally make a program that draws a finite spiral and when done starts drawing
+    an infinite spiral where the finite spiral ended.
+       </div>
+
+<a name="part2"></a>
+       <div class=content>
+	 <h2> Part II </h2>
+Deadline: Wed Feb 4
+    <p>
+    In this part of the assignment you will implement your turtle language and
+    write a report.
+       </div>
+
+<a name="task2b"></a>
+       <div class=content>
+	 <h2> Part II - Task 1 - Implementation </h2>
+Implement the library you designed in Part I. Clearly separate primitive and
+    derived operations, and try to keep the set of primitive operations as small
+    as possible.
+
+    <p>
+
+    At this point you might realise that the interface you've designed is
+    missing some operations, or that parts of it are difficult to implement.
+    Don't hesitate to change the interface in these cases--just be clear about
+    what you changed and motivate why the change was needed (in your report or in
+    the documentation for the relevant functions).
+
+    <p>
+
+    Make sure that you carefully define the borders of your library by
+    exporting only the things you want a user to see (the interface you've designed).
+
+    <p>
+
+    <b>Question</b>: What definition of time do you use (what can a turtle achieve
+    in a single time unit)?
+       </div>
+
+<a name="task2c"></a>
+       <div class=content>
+	 <h2> Part II - Task 2 - Parallel composition </h2>
+Add a <em>parallel composition</em> combinator to your turtle language.
+      One possible interface parallel composition could have is:
+      <pre><b>(<|>) :: Program -> Program -> Program</b></pre>
+      When you run a turtle program <b>p <|> q</b>, there will be
+      two turtles, one running <b>p</b> and the other running <b>q</b>, in
+      parallel. In your textual interface you should show which actions occur
+      in parallel.
+
+      <p>
+
+      <b>Questions</b>: What happens after a parallel composition finishes? Is your
+      parallel composition commutative, is it associative? (To answer this
+      question you must first define what it means for programs to be equal.)
+      What happens if a turtle runs forever only turning left in parallel with
+      another turtle running the spiral example? Does your textual interface
+      handle this situation correctly, if not - how would you fix it?
+
+      <p>
+      <b>Question:</b> How does parallel composition interact with lifespan and limited?
+      (lifespan does not need to correspond realistically to actual life spans, just specify how it works.)
+      </p>
+       </div>
+
+<a name="task2d"></a>
+       <div class=content>
+	 <h2> Part II - Task 3 - Additional operators </h2>
+<b>This task is required only for grade 4 or 5.</b>
+
+  <p>
+
+  Add a new module TurtleExtras to your cabal package. This module should contain
+  some derived operators that you think may be a useful addition to the language.
+  Try to add higher level components like squares and other geometrical shapes as
+  well as operators that capture common patterns.
+
+  <p>
+
+  Operators that demonstrate the flexibility of your turtle language are encouraged.
+  See the <a href="lab1grading.html">grading page</a> for more hints.
+       </div>
+
+
+
+
+<a name="task2f"></a>
+       <div class=content>
+	 <h2> Part II - Task 4 - Examples </h2>
+Implement a few examples that together use all of the constructs you have
+    implemented. (Do this in a different module that imports the module
+    defining the embedded language.) Make sure that you have at least one program
+    that does not terminate, and show that the textual interface can handle this.
+
+    <p>
+
+    Also choose your "favorite" turtle
+    program, resulting in a cool picture or animation. This program should
+    be the main function of your executable module, so building your cabal package
+    yields an executable that runs the program in graphical mode.
+       </div>
+
+<a name="task2g"></a>
+       <div class=content>
+	 <h2> Part II - Task 5 - Thoughts and reflections </h2>
+Answer the following questions:
+
+    <ol> <li> Start by answering all the questions in the Assignment description above. </li>
+         <li> Did you use a shallow or a deep embedding, or a combination?
+                             Why? Discuss in a detailed manner how you would have implemented
+                             the Program type if you had chosen the other approach. What
+                             would have been easier/more difficult? </li>
+         <li> Compare the usability of your embedding against a custom-made
+                             implementation of a turtle language with dedicated syntax and
+                             interpreters. How easy is it to write programs in your embedded
+                             language compared to a dedicated language? What are the
+                             advantages and disadvantages of your embedding? </li>
+         <li> Compare the ease of implementation of your embedding against a
+                             custom-made implementation. How easy was it to implement the
+                             language and extensions in your embedded language compared to a
+                             dedicated language? What are the advantages/disadvantages of
+                             your embedding? </li>
+         <li> In what way have you used the following programming language
+                             features: higher-order functions, laziness, polymorphism? </li> </ol>
+
+    <b>Required only for grade 5</b> (but helpful for grade 4):
+    Characterize the relationships between your operators as a set of algebraic laws.
+
+    For inspiration look at the laws of <a href="http://en.wikipedia.org/wiki/Semiring">algebraic semirings</a>, also look at the laws for the <a href="http://hackage.haskell.org/package/base-4.6.0.1/docs/Data-Monoid.html">monoid typeclass</a> and possibly other type classes like <a href="http://hackage.haskell.org/package/base-4.3.1.0/docs/Control-Applicative.html">Applicative/Alternative</a>.
+    Also, consider the following:
+    <ul>
+    <li>How does &lt;|> and >*> interact? </li>
+    <li>How does idle and die interact with your combinators? </li>
+    <li>How does forever and times interact with your combinators? </li>
+    <li>Can you find any law that is unexpected, unintuitive or undesired, but follows from your operators? </li>
+    </li>
+    </ul>
+
+    <b>Question</b>:Is your program data type a Monoid? Under which operations? There may be several possible Monoid instances. Would it be a Monoid if some small change was made to your operators?
+       </div>
+
+<a name="submission"></a>
+       <div class=content>
+	 <h2> Submission </h2>
+<h3>Deadline</h3>
+
+  The deadline for the first part is Wed Jan 28 and the deadline for
+  the second part is Wed Feb 4. The final deadline is Sun Mar 22. (Please read <A HREF="assignments.html#rules">the rules</A>
+  on what first and final deadline mean.) Each part of the assignment should
+  be submitted in its corresponding task in the <a href="https://xdat09.ce.chalmers.se/afp/">reporting system</a>.
+
+  <h3>Clean Code</h3>
+
+  Before you submit your code, Clean It Up! Submitting clean code is Really
+  Important, and simply the polite thing to do. After you feel you are done, spend
+  some time on cleaning your code; make it simpler, remove unnecessary things,
+  etc. We will reject your solution if it is not clean. Clean code:
+
+  <UL>
+  <LI>Does not have long lines (&lt; 80 characters)
+  <LI>Has a consistent layout
+  <LI>Has type signatures for all top-level functions
+  <LI>Has good comments for all modules, functions, data types and instances. The comments should look good when compiled to HTML with Haddock.
+  <LI>Has no junk (junk is unused code, commented code, unnecessary comments)
+  <LI>Has no overly complicated function definitions
+  <LI>Does not contain any repetitive code (copy-and-paste programming)
+  </UL>
+
+  <h3>Submission</h3>
+
+  For part 1 the submission format is not so important, use the stub cabal package or
+  just submit one or two .hs files if you prefer - as long as they contain appropriate
+  commenting (you do not need to write any
+  functions except the example for the first part, just type signatures).
+  Make sure to answer the question asked in part one about defining the finite spiral using the
+  infinite one! Omitting
+  this is one of the few ways to fail on the first part.
+
+  <p>
+
+  For part 2 your submission needs to include the following:
+
+  <UL>
+  <LI>Your cabal package, containing your
+  solution. Use "cabal sdist" to generate the source tarball. Make sure the tarball
+  is working by extracting it in another directory and running "cabal configure",
+  "cabal build" and "cabal haddock" and checking that everything looks right.
+
+
+  <LI><B>report.txt</B> or <b>report.pdf</b>, a file containing documentation
+  of what you have done: Also give the motivations you were asked to give in
+  the assignments, answers to questions, and how to use your language.
+  </UL>
+
+  <P>
+
+  Before you submit,
+  please read the <A HREF="cheating.html">note on cheating</A>.
+
+  <P>
+
+  You are supposed to submit your solution using the <A HREF="https://xdat09.ce.chalmers.se/afp/">Fire system</A>.
+  <p>
+  Don't forget to submit when you have uploaded the files.
+  <P>
+
+  <A HREF="https://xdat09.ce.chalmers.se/afp/"><B>To the Fire System</B></A>
+
+  <P>
+
+  Good luck!
+       </div>
+	<div id="navAlpha">
+ 	&nbsp;&nbsp;<span class="bullet">o</span>&nbsp;<a href="index.html"><b>Main</b></a><br>
+  		   &nbsp;&nbsp;<span class="bullet">o</span>&nbsp;<a href="schedule.html"><b>Schedule</b></a><br>
+       		   &nbsp;&nbsp;<span class="bullet">+</span>&nbsp;<a href="lectures.html"><b>Lectures</b></a><br>
+            		   &nbsp;&nbsp;<span class="bullet">-</span>&nbsp;<a href="assignments.html"><b>Assignments</b></a><br>
+                 		   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="bullet">-</span>&nbsp;<a href="lab1.html"><b>Assignment 1</b></a><br>
+                      		   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="bullet">o</span>&nbsp;<a href="lab1.html#description"><b>Description</b></a><br>
+                           		   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="bullet">o</span>&nbsp;<a href="lab1.html#part1"><b>Part 1</b></a><br>
+                                		   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="bullet">o</span>&nbsp;<a href="lab1.html#part2"><b>Part 2</b></a><br>
+                                     		   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="bullet">o</span>&nbsp;<a href="lab1.html#submission"><b>Submission</b></a><br>
+                                          		   
+                      		   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="bullet">+</span>&nbsp;<a href="lab2.html"><b>Assignment 2</b></a><br>
+                           		   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="bullet">+</span>&nbsp;<a href="lab3.html"><b>Assignment 3</b></a><br>
+                                		   
+                 		   &nbsp;&nbsp;<span class="bullet">o</span>&nbsp;<a href="exam.html"><b>Exam</b></a><br>
+                      		   &nbsp;&nbsp;<span class="bullet">o</span>&nbsp;<a href="http://groups.google.com/group/afp15"><b>Discussion board</b></a><br>
+                           		   &nbsp;&nbsp;<span class="bullet">o</span>&nbsp;<a href="https://xdat09.ce.chalmers.se/afp/"><b>Reporting system</b></a><br>
+                                		   &nbsp;&nbsp;<span class="bullet">o</span>&nbsp;<a href="contact.html"><b>Contact us</b></a><br>
+                                     		   &nbsp;&nbsp;<span class="bullet">o</span>&nbsp;<a href="links.html"><b>Haskell search</b></a><br>
+                                          		   
+     </div>
+	<div id="chalmers">
+ 	<img src="images/chalmers.gif" alt="[Chalmers]">
+     </div>
+     <div id="gu">
+ 	<img src="images/gu.gif" alt="[GU]">
+     </div>
+	<div id="navBeta">
+	    <a href="lab1_printable.html">
+		<img border=0 src="images/print.gif" alt="[Print]"> Printable version
+	    </a>
+	    <p>&nbsp;<p>
+	    Last modified:<br>
+	    Jan 19 14:03, 2015
+	</div>
+    </body>
+</html>

@@ -1,0 +1,12 @@
+This directory contains files related to the written re-exam of the course
+  Advanced Functional Programming (7.5 hec), Spring 2012
+  TDA342 / DIT260
+  Patrik Jansson
+
+The exam questions are in 
+  AFP_exam_20120828.pdf     
+And the three solutions (+ some testing code) are in 
+  DSL/Deep.hs                    
+  DSL/Shallow.hs                    
+  Spec.hs
+  Types.hs
