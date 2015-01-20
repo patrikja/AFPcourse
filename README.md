@@ -3,7 +3,12 @@ Advanced Functional Programming
 
 Some material connected to the Chalmers and Univ. of Gothenburg course.
 
-http://www.cse.chalmers.se/edu/course/afp/
+Main course homepage:
+* http://www.cse.chalmers.se/edu/course/afp/
+
+Emerency mirror (due to [major cable failure](http://www.gp.se/nyheter/goteborg/1.2606797-kabelbrott-drabbar-hogskolor-i-vastsverige) 2015-01-20): 
+* https://cdn.rawgit.com/patrikja/AFPcourse/master/mirror/index.html
+
 
 Lecture plan:
 ------------
