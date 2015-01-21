@@ -22,9 +22,9 @@ bouncingBall = translate <$> pos <*> pure ball
   where
     ball = scale (vec 0.5 0.5) disc
     pos  = constS vec $$ bounceX $$ bounceY
-    bounceY = mapS (sin . (3*)) timeS
+    bounceY = mapS ((0.8*) . sin . (3*)) timeS
 --    bounceX = constS 0
-    bounceX = mapS (sin . (2*)) timeS
+    bounceX = mapS ((0.8*) . sin . (2*)) timeS
 --    bounceX = mapS (0.3*) bounceY
 
 -- | Combining the two
