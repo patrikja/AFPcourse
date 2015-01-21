@@ -92,17 +92,275 @@ addS x y = mapS (\t -> sample x t + sample y t) timeS
 
 [Look at the Deep.hs](src/Signal/Deep.hs)
 
+## Deep versus Shallow
 
+* A shallow embedding (when it works out) is often more elegant
+    * When there is an obvious semantics, shallow embeddings usually work out nicely (like in the Signal example)
+    * working out the type might be very difficult (so a deep embedding may give you an easier start)
 
-##
+* A deep embedding is easier to extend
+    * adding new operations
+    * adding new run functions (more on this is another lecture)
+    * adding optimizations
+
+Most of the time you end up with a mix of both.
+
+## Case Study: A language for Shapes, v1
 
 ```Haskell
+type Shape
+-- Constructor functions
+disc        :: Point -> Radius -> Shape
+rectangle   :: Point -> Point  -> Shape
+-- Combinators
+translate   :: Vec ->    Shape -> Shape
+scale       :: Vec ->    Shape -> Shape
+rotate      :: Angle ->  Shape -> Shape
+union       :: Shape ->  Shape -> Shape
+intersect   :: Shape ->  Shape -> Shape
+difference  :: Shape ->  Shape -> Shape
+-- Run functions
+inside      :: Point ->  Shape -> Bool
 ```
+
+Think about primitive and derived operations
+* can some be generalized?
+* simplified?
+* more compositional?
+
+## A language for Shapes, v2
+
 ```Haskell
+type Shape
+-- Constructor functions
+empty   :: Shape  -- useful "base case"
+disc    :: Shape  -- unit disc,   use scale to change size
+square  :: Shape  -- unit square, use translate to move it from the origin
+-- Combinators
+translate   :: Vec ->    Shape -> Shape
+scale       :: Vec ->    Shape -> Shape
+rotate      :: Angle ->  Shape -> Shape
+union       :: Shape ->  Shape -> Shape
+intersect   :: Shape ->  Shape -> Shape
+difference  :: Shape ->  Shape -> Shape
+-- Run functions
+inside  :: Point -> Shape -> Bool
 ```
+
+## More on the interfaces
+
+* No obvious derived operations
+* Sometimes introducing additional primitives makes the language nicer
+* We need a language for working with matrices!
+
 ```Haskell
+transform  :: Matrix -> Shape -> Shape  -- new primitive
+
+scale      :: Vec -> Shape -> Shape     -- now derived
+scale v = transform (matrix (vecX v) 0 0 (vecY v))
+
+rotate     :: Angle -> Shape -> Shape   -- now derived
+rotate a = transform (matrix    (cos a) (-sin a)  -- Some linear algebra
+                                (sin a)  (cos a) )
+
+invert     :: Shape -> Shape            -- new primitive
+
+difference :: Shape -> Shape -> Shape   -- now derived
+difference a b = a `intersect` invert b
 ```
+
+## Side track: A matrix library
+
 ```Haskell
+type Matrix
+type Vector
+type Point
+
+-- Constructor functions
+point       :: Double -> Double -> Point
+vec         :: Double -> Double -> Vec
+matrix      :: Double -> Double -> Double -> Double -> Matrix
+-- Combinators
+mulPt       :: Matrix -> Point -> Point
+mulVec      :: Matrix -> Vec -> Vec
+inv         :: Matrix -> Matrix
+subtract    :: Point -> Vec -> Point
+-- Run functions
+ptX, ptY    :: Point -> Double
+vecX, vecY  :: Vec -> Double
 ```
+
+## Shallow embedding
+
+* What are the observations we can make of a shape?
+
 ```Haskell
+inside :: Point -> Shape -> Bool
 ```
+
+* So let's go for
+
+```Haskell
+newtype Shape = Shape (Point -> Bool)
+
+inside :: Point -> Shape -> Bool
+inside p (Shape f) = f p
+```
+
+In general it's not this easy. In most cases you need to generalize the type of the run function a little to get a *compositional* shallow embedding.
+
+## Shallow embedding, continued
+
+* If we picked the right implementation the operations should now be easy to implement
+
+```Haskell
+empty   = Shape $ \p -> False
+disc    = Shape $ \p -> ptX p ^ 2 + ptY p ^ 2 <= 1
+square  = Shape $ \p -> abs (ptX p) <= 1 && abs (ptY p) <= 1
+
+-- Trick: move the point p instead of the shape a
+transform m a   = Shape $ \p -> mulPt (inv m) p   `inside` a
+translate v a   = Shape $ \p -> subtract p v      `inside` a
+
+union     a b   = Shape $ \p -> inside p a   ||   inside p b
+intersect a b   = Shape $ \p -> inside p a   &&   inside p b
+invert    a     = Shape $ \p -> not (inside p a)
+```
+
+# Deep embedding
+
+* Representation is easy, just make a datatype of the primitive operations.
+* Deep ~= syntax tree ~= expression type
+
+```Haskell
+data Shape where -- using Gen. Alg. DataType syntax
+  -- Constructor functions
+  Empty     :: Shape
+  Disc      :: Shape
+  Square    :: Shape
+  -- Combinators
+  Translate :: Vec ->    Shape -> Shape
+  Transform :: Matrix -> Shape -> Shape
+  Union     :: Shape ->  Shape -> Shape
+  Intersect :: Shape ->  Shape -> Shape
+  Invert    :: Shape ->  Shape
+
+empty = Empty; disc = Disc; ... 
+```
+
+# Deep embedding, without GADT for reference
+
+```Haskell
+data Shape  =   Empty | Disc | Square
+            |   Translate Vec Shape
+            |   Transform Matrix Shape
+            |   Union Shape Shape | Intersect Shape Shape
+            |   Invert Shape
+
+empty     = Empty
+disc      = Disc
+translate = Translate
+transform = Transform
+union     = Union
+intersect = Intersect
+invert    = Invert
+```
+
+# Deep embedding, cont.
+
+* All the work happens in the run function (the interpreter)
+
+```Haskell
+inside :: Point -> Shape  -> Bool
+p `inside` Empty           = False
+p `inside` Disc            = ptX p ^ 2 + ptY p ^ 2    <= 1
+p `inside` Square          = abs (ptX p) <= 1 && abs (ptY p) <= 1
+p `inside` Translate v a   = subtract p v `inside` a
+p `inside` Transform m a   = mulPt (inv m) p `inside` a
+p `inside` Union a b       = inside p a  ||   inside p b
+p `inside` Intersect a b   = inside p a && inside p b
+p `inside` Invert a        = not (inside p a)
+```
+
+# Abstraction!
+
+The module header can be the same for both the shallow and the deep embedding:
+
+```Haskell
+module Shape
+	(  module Matrix   -- re-exporting the matrix library is nice
+	,  Shape           -- hide the implementation, only export the type name
+	,  empty, disc, square
+	,  translate, transform, scale, rotate
+	,  union, intersect, difference, invert
+	,  inside
+	)  where
+
+import Matrix
+```
+
+## More interesting run function: render as ASCII-art
+
+```Haskell
+module Render where
+
+import Shape
+
+data Window = Window
+    {  bottomLeft   :: Point
+    ,  topRight     :: Point
+    ,  resolution   :: (Int, Int)
+    }
+
+defaultWindow   :: Window
+pixels          :: Window -> [ [ Point ] ]
+
+render :: Window -> Shape -> String
+render win a = unlines $ map (concatMap putPixel) (pixels win)
+    where
+        putPixel p  | p `inside` a  = "[]"
+                    | otherwise     = "  "
+```
+
+# Connect back to to Signals
+
+* Remember that the Signal type could handle any payload
+
+```Haskell
+type ButtonPress  = Signal Bool
+type Curve        = Signal Double
+type Animation    = Signal Shape
+```
+
+```Haskell
+module Animate where
+
+import Shape
+import Render
+import Signal
+
+animate :: Window -> Time -> Time -> Signal Shape -> IO ()
+```
+
+Live demo.
+
+## Discussion
+
+* Adding coloured shapes
+    * Go back and discuss what changes would need to be made (open-ended)
+* Bad shallow implementations
+    * Looking at the renderer we might decide to try
+        newtype Shape = Shape (Window -> String)
+    * Discuss the problems with this implementation
+* Other questions or comments?
+
+## Summary
+
+* Different kinds of operations
+    *  constructor functions, combinators, run functions
+* Implementation styles
+    * Shallow: representation given by the semantics
+    * Deep: representation given by the syntax 
+* Remember
+    * Compositionality
+    * Abstraction
