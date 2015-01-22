@@ -15,6 +15,10 @@ rotatingSquare = constS rotate $$ timeS $$ constS square
               -- Using the Control.Applicative interface:
 -- rotatingSquare = rotate <$> timeS <*> pure square
 
+-- | A stranger drop-in replacement for rotate in rotatingSquare
+transmogrify :: Double -> Shape -> Shape
+transmogrify d s = scale (vec (sin d) (cos d)) (rotate d s)
+
 -- | A bouncing ball
 bouncingBall :: Signal Shape
 -- bouncingBall = constS translate $$ pos $$ constS ball
