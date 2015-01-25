@@ -3,6 +3,8 @@
   A simple embedded language for input/output. Deep embedding.
 -}
 module Program.Deep1 where
+import Control.Applicative (Applicative(..))
+import Control.Monad       (liftM, ap)
 
 type Input   =  String
 type Output  =  String
@@ -38,6 +40,18 @@ instance Monad Program where
   return  =  Return
   (>>=)   =  (:>>=)
 
+
+--------
+-- Preparing for the Functor-Applicative-Monad proposal:
+--   https://www.haskell.org/haskellwiki/Functor-Applicative-Monad_Proposal
+
+-- | The following instances are valid for _all_ monads:
+instance Functor Program where
+  fmap = liftM
+  
+instance Applicative Program where
+  pure   = return
+  (<*>)  = ap
 
 {-
 

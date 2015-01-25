@@ -1,0 +1,120 @@
+% -*- latex -*-
+
+\documentclass[times, 10pt,twocolumn,preprint]{article} 
+\usepackage{times}
+\usepackage[mathletters]{ucs}
+\usepackage[utf8x]{inputenc}
+\usepackage{latexsym}
+%include lhs2TeX.fmt
+
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{verbatim}
+\usetikzlibrary{arrows,shapes}
+
+\usepackage{amsthm}
+\usepackage{natbib}
+
+
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+
+
+\newcommand{\prop}{\mathsf{prop}}
+\newcommand{\LAMBDA}[2]{{\lambda #1.\,#2}}
+\newcommand{\FORALL}[3]{{\forall #1 : #2.\,#3}}
+\newcommand{\Subs}[3]{{#1}[{#2} \mapsto {#3}]}
+
+\newcommand{\Assert}[3]{{#1 \vdash #2 : #3}}
+
+
+\newcommand{\many}[1]{\overline{#1}}
+\newcommand{\subR}[1]{{#1}_R}
+\newcommand{\trans}[1]{[\![#1]\!]}
+\newcommand{\bind}{\mathbin{>\!\!>\!\!=}}
+
+% \newcommand{\tsort}[1]{\fbox{\ensuremath{#1}}}
+\newcommand{\tsort}[1]{\underline{#1}}
+
+\newcommand{\reducesto}[0]{\longrightarrow_\beta}
+% \newcommand{\implies}[0]{\Rightarrow}
+
+\newcommand{\para}[1]{
+  \vspace{0.8cm}
+  \paragraph{#1}}
+
+\title{Monads reference card}
+\author{Jean-Philippe Bernardy}
+
+\begin{document}
+
+\maketitle
+
+% For every picture that defines or uses external nodes, you'll have to
+% apply the 'remember picture' style. To avoid some typing, we'll apply
+% the style to all pictures.
+\tikzstyle{every picture}+=[remember picture]
+
+% By default all math in TikZ nodes are set in inline mode. Change this to
+% displaystyle so that we don't get small fractions.
+\everymath{\displaystyle}
+
+\tikzstyle{na} = [baseline=-.8mm]
+
+\para{Syntax}
+\begin{tabular}{lc}
+monad component  & DSL application \\
+\hline
+$m :: \star \to \star$ & Expressions parameterized on return type \\
+$return :: a \to m \, a$ & constant expression \\
+$(\bind{}) :: m \, \tikz[na]{ \node[fill=blue!20] (a1) {$a$}; } \to (\tikz[na]{ \node[fill=blue!20] (a2) {$a$}; }  \to m\,b ) \to m\,b$ & bind an $a$ returned by the lhs into the rhs \\
+\end{tabular}
+
+\begin{tikzpicture}[overlay]
+        \path[->] (a1) edge [bend right=90] node [auto,swap] {\small bind} (a2);
+\end{tikzpicture}
+
+\para{Laws}
+\begin{tabular}{ccc}
+name & law & a DSL aspect \\
+\hline
+left identity & $return \, a \bind{} (\LAMBDA{x}{m\,x}) \equiv m \, a $ & inlining/factorizing a constant \\
+right identity & $m \bind{} (\LAMBDA{x}{return\,x})\equiv m$ &
+removal/introduction of useless return \\
+associativity & $(m \bind{} f) \bind{} g \equiv  m \bind{} (\LAMBDA x {f \,x \bind{} g})$ & extension/shrinking of scope \\ 
+\end{tabular}
+
+\para{``do''}
+\begin{tabular}{rl@{\qquad}|@{\qquad}rl}
+do & $x \leftarrow α$  & $ α$ & $\bind{} \LAMBDA x {} $\\
+  & $y \leftarrow β$      & $ β$ &  $\bind{} \LAMBDA y {} $ \\
+  & $γ$ &  $γ$ & \\
+\end{tabular}
+\begin{itemize}
+\item parentheses are not needed
+\item $x$ may appear in $\gamma$
+\end{itemize}
+
+\para{Comprehensions}
+\begin{tabular}{rl|rl}
+[        & $γ$  &  & \\
+$|$    & $x \leftarrow α$  & $ α$ & $\bind{} \LAMBDA x {} $\\
+$,$    & $y \leftarrow β$      & $ β$ &  $\bind{} \LAMBDA y {} $ \\
+]        &  &  return $γ$ & \\
+\end{tabular}
+
+
+\begin{itemize}
+\item $\bind{}$ can be used to ``flatten'' levels of the monad.
+\item $join :: m (m\, a)  \to m\, a$
+\item $join \, xs = xs \bind{} id$
+\end{itemize}
+
+
+\end{document}
+
+

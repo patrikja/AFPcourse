@@ -18,8 +18,9 @@ cabal-version:       >=1.8
 library
   hs-source-dirs:      src
   exposed-modules:     Program, Program.Deep1, Program.Deep2, Program.Shallow,
-                       Game, Snake, RobberLanguage, 
-                       Coord, ANSI
+                       Game, Snake, 
+                       Coord, ANSI,
+                       RobberLanguage, NotAFunctor
                        
   -- other-modules:       
   build-depends:       base < 5, unix < 2.8

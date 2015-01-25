@@ -3,7 +3,9 @@
   A simple embedded language for input/output. Intermediate emb.
 -}
 module Program.Deep2 where
-import Control.Monad((>=>))
+import Control.Monad       ((>=>))
+import Control.Applicative (Applicative(..))
+import Control.Monad       (liftM, ap)
 
 type Input   =  String
 type Output  =  String
@@ -168,3 +170,17 @@ run (PutThen c p)  i        =  (x,  i',  c : o)
 run (GetBind f)    []       =  run (f Nothing)   []
 run (GetBind f)    (c : i)  =  run (f $ Just c)  i
 run (Return x)     i        =  (x,  i,  [])
+
+
+--------
+-- Preparing for the Functor-Applicative-Monad proposal:
+--   https://www.haskell.org/haskellwiki/Functor-Applicative-Monad_Proposal
+
+-- | The following instances are valid for _all_ monads:
+instance Functor Program where
+  fmap = liftM
+  
+instance Applicative Program where
+  pure   = return
+  (<*>)  = ap
+
