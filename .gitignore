@@ -3,3 +3,7 @@ cabal.sandbox.config
 dist/
 .cabal-sandbox
 TAGS
+*.aux
+*.fdb_latexmk
+*.fls
+*.log

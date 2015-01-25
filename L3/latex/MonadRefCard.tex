@@ -89,10 +89,10 @@ associativity & $(m \bind{} f) \bind{} g \equiv  m \bind{} (\LAMBDA x {f \,x \bi
 \end{tabular}
 
 \para{``do''}
-\begin{tabular}{rl@{\qquad}|@{\qquad}rl}
-do & $x \leftarrow α$  & $ α$ & $\bind{} \LAMBDA x {} $\\
-  & $y \leftarrow β$      & $ β$ &  $\bind{} \LAMBDA y {} $ \\
-  & $γ$ &  $γ$ & \\
+\begin{tabular}{rl@{\qquad\qquad}|@{\qquad\qquad}rl}
+do & $x \leftarrow α$      & $ α$ & $\bind{} \LAMBDA x {} $\\
+   & $y \leftarrow β$      & $ β$ & $\bind{} \LAMBDA y {} $\\
+   & $γ$ &  $γ$ & \\
 \end{tabular}
 \begin{itemize}
 \item parentheses are not needed
@@ -100,11 +100,11 @@ do & $x \leftarrow α$  & $ α$ & $\bind{} \LAMBDA x {} $\\
 \end{itemize}
 
 \para{Comprehensions}
-\begin{tabular}{rl|rl}
-[        & $γ$  &  & \\
-$|$    & $x \leftarrow α$  & $ α$ & $\bind{} \LAMBDA x {} $\\
-$,$    & $y \leftarrow β$      & $ β$ &  $\bind{} \LAMBDA y {} $ \\
-]        &  &  return $γ$ & \\
+\begin{tabular}{rl@{\qquad\qquad}|@{\qquad\qquad}rl}
+[       & $γ$  &  & \\
+$|$     & $x \leftarrow α$      & $ α$ & $\bind{} \LAMBDA x {} $\\
+$,$     & $y \leftarrow β$      & $ β$ & $\bind{} \LAMBDA y {} $\\
+]       &  &  return $γ$ & \\
 \end{tabular}
 
 
@@ -116,5 +116,3 @@ $,$    & $y \leftarrow β$      & $ β$ &  $\bind{} \LAMBDA y {} $ \\
 
 
 \end{document}
-
-
