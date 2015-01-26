@@ -20,7 +20,7 @@ library
   exposed-modules:     Program, Program.Deep1, Program.Deep2, Program.Shallow,
                        Game, Snake, 
                        Coord, ANSI,
-                       RobberLanguage, NotAFunctor
+                       RobberLanguage, SomeFunctors, NotAFunctor
                        
   -- other-modules:       
   build-depends:       base < 5, unix < 2.8

@@ -35,7 +35,7 @@ Lecture plan:
 
 Due to large interest the lectures have been moved to bigger rooms
 starting 2015-01-26 (study week 2). The resulting schedule looks a bit
-messy, but we will have lots of more air to breath.
+messy, but we will have lots of more air to breathe.
 
 [TimeEdit schedule](https://se.timeedit.net/web/chalmers/db1/public/ri1X50gQ9560YvQQ05Z6970Y0Zy6007311Y54Q785.html):
 

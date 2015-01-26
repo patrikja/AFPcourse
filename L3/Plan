@@ -1,0 +1,134 @@
+-*- org -*-
+AFP Lecture 3: Monads
+* Start
+** AFP learning outcomes: (HOT = Higher-Order Types)
+
+Types: read, understand and extend Haskell programs which use 
+  advanced type system features
+Types.HOT: functors, monads and monad transformers
+
+** Lab note
+
+Note that this material is not essential for lab 1, 
+but rather lab 2.
+
+* First: What is a (Haskell) functor?
+(class Functor m where ...)
+
+> m :: * -> *     -- "m has kind star to star" = "m takes types to types"
+> fmap  :: ∀ a b.  (a -> b) -> (m a -> m b)
+** Examples: 
+
+file:src/SomeFunctors.hs
+
+** Non-example:
+
+file:src/NotAFunctor.hs
+
+* Overview: what is a (Haskell) monad?
+(class Monad m where ...)
+
+> m :: * -> *     -- "m has kind star to star" = "m takes types to types"
+> return :: ∀ a.    a -> m a
+> (>>=)  :: ∀ a b.  m a -> (a -> m b) -> m b   -- pronounced "bind"
++ laws (see later)
+
+** Examples: 
+
+start with several "well-known" examples of Monads (Maybe, [], Reader,
+IO, ...)  give implementation of a few core operations.
+
+** Non-examples:
+
+file:src/NotAFunctor.hs
+
+If sequencing is all we need, a monad is "overkill" - a simple List 
+or Tree is enough.
+
+More reading: Typeclassopedia up to section 5.
+http://www.haskell.org/haskellwiki/Typeclassopedia
+  
+* DSL use
+** If a DSL (implementation) has monadic structure, it has:
+*** _sequencing_ and 
+*** _binding intermediate results to variables_
+** Example: a monad for IO
+ - character input
+ - character output
+ - sequencing & binding
+
+data Program :: * -> * where
+  Put    :: ???
+  Get    :: ???
+  Return :: a -> Program a
+  (:>>=) :: Program a -> (a -> Program b) -> Program b
+
+type Semantics a = Input -> (a, Input, Output)
+
+file:src/Program/Deep1.hs
+
+** Interlude: The _do_ notation
+file:latex/MonadRefCard.pdf
+** Example (cont'd): programming a Snake game!
+*** Basic stuff: 
+file:src/Coord.hs
+file:src/ANSI.hs
+*** What's a 'Game' (step) with state 's'?
+
+> type Game s = s -> Program (Maybe s)
+
+(note that the type is transluscent = defined using type, not newtype)
+
+> runGame :: Float -> Game s -> s -> IO ()
+
+(semantics)
+file:src/Game.hs 
+
+*** The Game!
+file:src/Snake.hs 
+
+
+* Shallow embedding (for comparison)
+file:src/Program/Shallow.hs
+* Laws
+file:src/MonadRefCard.pdf
+** Putting Laws to use (probably next lecture)
+A more efficient implementation of 'Program'?
+file:src/Program/Deep2.hs
+
+* Course evaluation
+
+** Student representatives AFP 2015
+
+| CID       | Name              |
+| --------- | ----------------- |
+| yutingc;  | Y. Chen           |
+| pjack;    | J. Pettersson     |
+| warvik;   | N. Wärvik         |
+| nhansen;  | J. Nilsson Hansen |
+| ronakorn; | R. Soponpunth     |
+
+They can be reached by CID@student.chalmers.se.
+
+TODO: +one from Univ. of Gothenburg wanted
+
+** Meetings
+Mid-course meeting: TBD
+Final meeting: after course end - half-way into SP4
+
+
+** Evaluation details
+
+Being a student representative means that you are responsible for evaluating the course together with the examiner/course responsible and the program board of the program that gives the course. The evaluation process consists of three parts:
+
+
+
+1. The student representatives and the examiner/course responsible are to have two informal meetings during the course. The first one should be in the second study week, the second one after approximately half the course. The first meeting is mostly for you to get acquainted, the second one is for the student representatives to give feedback to the teacher on the progress of the course.
+
+
+
+2. After the course an evaluation questionnaire is sent out. The examiner will get an opportunity to add extra questions to the standard questionnaire.
+
+
+
+3. After the course, in the middle of the next study period, there will be an evaluation meeting where the student representatives and the examiner/course responsible for the course meet the program board of the program who gives the course, discussing the course’s advantages and potential for improvement.
