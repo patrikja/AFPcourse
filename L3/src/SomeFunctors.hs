@@ -28,3 +28,10 @@ fmapList _ Nil         = Nil
 fmapList f (Cons x xs) = Cons (f x) (fmap f xs)
 
 
+-- ----------------
+-- Utility functions
+
+(+++) :: List a -> List a -> List a
+Nil        +++ ys   = ys
+Cons x xs  +++ ys   = Cons x (xs +++ ys)
+

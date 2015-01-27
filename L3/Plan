@@ -5,7 +5,7 @@ AFP Lecture 3: Monads
 
 Types: read, understand and extend Haskell programs which use 
   advanced type system features
-Types.HOT: functors, monads and monad transformers
+Types.HOT: functors, monads (and monad transformers)
 
 ** Lab note
 
@@ -35,8 +35,10 @@ file:src/NotAFunctor.hs
 
 ** Examples: 
 
-start with several "well-known" examples of Monads (Maybe, [], Reader,
-IO, ...)  give implementation of a few core operations.
+file:src/SomeFunctors.hs
+
+start with several "well-known" examples of Monads (Maybe, List,
+Reader, ...)  give implementation of a few core operations.
 
 ** Non-examples:
 
@@ -100,6 +102,8 @@ file:src/Program/Deep2.hs
 
 ** Student representatives AFP 2015
 
+M. Öhrman from GU and the following from Chalmers: 
+
 | CID       | Name              |
 | --------- | ----------------- |
 | yutingc;  | Y. Chen           |
@@ -110,11 +114,9 @@ file:src/Program/Deep2.hs
 
 They can be reached by CID@student.chalmers.se.
 
-TODO: +one from Univ. of Gothenburg wanted
-
 ** Meetings
-Mid-course meeting: TBD
-Final meeting: after course end - half-way into SP4
+Mid-course meeting:   TBD 
+Final meeting:        after course end - half-way into SP4
 
 
 ** Evaluation details

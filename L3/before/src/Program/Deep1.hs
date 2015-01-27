@@ -10,25 +10,18 @@ type Input   =  String
 type Output  =  String
 
 data Program a where
-  Put    :: Char -> Program ()
-  Get    :: Program (Maybe Char)
+  Put    :: ??? 
+  Get    :: ???
   Return :: a -> Program a
   Bind   :: Program a -> (a -> Program b) -> Program b
 
 type IOSem a = Input  -> (a      , Input, Output)
 -- | run function: translate syntax to semantics
 run :: Program a -> IOSem a
-run (Put c)    inp =     (()     ,inp   , c:"")
-run (Get)      ""  =     (Nothing, ""   , ""  )
-run (Get)      (c:cs) =  (Just c ,cs    , ""  )
-run (Return x) inp =     (x      ,inp   , ""  )
-run (Bind p g) inp =     (someb  ,someinp', someoutp ++ someoutp')
-   where   (someb, someinp', someoutp') = run pb someinp
-           pb = g somea
-           (somea, someinp, someoutp) = run p inp 
+run = error "TBD"
 -- p :: Program a
 -- g :: a -> Program b
---  :: IOSem b
+-- ? :: IOSem b
 -- inp :: Input = String        
 
 example1 :: Program ()
