@@ -1,0 +1,88 @@
+-*- Org -*-
+* Learning outcomes:
+** DSL: design embedded domain specific languages
+DSL.Concepts: (abstract) syntax, semantics, ...
+DSL.Implement: implement EDSLs in Haskell (as combinator libraries)
+** Types: read, understand and extend Haskell programs which use advanced type system features
+Types.HOT: functors, monads and monad transformers
+** Spec: use specification based development techniques
+Spec.Test: formulate and test properties about the program
+Spec.Prove: reason about correctness of functional programs
+Spec.Trans: transform programs on the basis of reasoning
+* This lecture:
+** Parsing (parser combinators)
+** A monadic parsing library
+** Program transformation
+** Hughes' technique for ADTs (Embedded DSLs)
+*** Start with the API (constructors, combinators, run-functions)
+*** Dream up properties (inspired by a semantics)
+*** First implementation: purely deep embedding
+*** Refine using properties
+Identify usage patterns
+Give them names
+Simplify away the old ones
+* Parser Combinators
+Interface of file:src/Parsers.hs
+
+Two levels: 
+** parsers  - the EDSL builds parsers
+** results  - the parsers build results (often ASTs)
+
+The "parse" (run-) function can be seen as an interpreter for the
+parsing DSL. For a deep embedding, the run function is just an
+interpreter of the DSL AST.
+
+It is often more efficient to first compile the parser to "byte
+code" (some lower level implementation), then a run function for
+that byte code can be used to parse.
+
+* Type for the semantics of parsing
+
+What type should the run function of a parser return?
+
+What is a language? - a set of strings? A recognizer could be
+  P = String -> Bool
+A parser should give more information than that, say an expression
+  P = String -> Expr
+In fact it makes sense for any type of Expr so we can generalise
+  P a = String -> a
+Now, this type is not "compositional": if we have two parsers
+  p1 :: P a 
+  p2 :: P b
+we cannot combine them to produce a pair because we don't know what
+was left, so the next step is to return the remaining output.
+  P a = String -> (a, String)
+Now combining can be done by "threading" the input through.
+  pair p1 p2 = \s -> let (a, s')   = p1 s
+                         (b, s'')  = p2 s'
+                     in ((a, b), s'')
+But parsers sometimes fail
+  P a = String -> Maybe (a, String)
+and sometimes they are ambiguous
+  P a = String -> [(a, String)]
+[Nice slogan: "replace failure by a list of successes" by Wadler]
+As the last step (for today) we generalise String to a list of
+symbols of type s.
+  P s a = [s] -> [(a, [s])]
+(More extensions could be to handle error messages, IO, etc.)
+
+
+
+type Semantics s a = [s] -> [(a,[s])]
+
+
+* Example of parser combinators and of parsing
+file:src/ParseUtil.hs   -- Derived operations
+file:exe/Example.hs
+Test:
+> parse exprP "1+2+3"
+* Implementation
+** Naive
+file:src/Parsers.hs
+file:src/Parser1.hs
+** Opt. 1
+file:src/Parsers.hs
+file:src/Parser2.hs
+** Opt. 2
+file:src/Parsers.hs
+file:src/Parser3.hs
