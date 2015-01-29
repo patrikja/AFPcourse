@@ -27,9 +27,13 @@ run = error "TBD"
 example1 :: Program ()
 example1 = Put 'a'
 
+example2 :: Program ()
 example2 = Get >>= f
   where f Nothing  = example1
         f (Just c) = Put c >> Put c
+
+-- (>>) :: m a -> m b -> m b
+-- m1 >> m2 = m1 >>= \_ -> m2
 
 instance Monad Program where
   return  =  Return

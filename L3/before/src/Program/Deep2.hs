@@ -72,9 +72,9 @@ instance Monad Program where
 
 -- | Bind takes the first argument apart:
 bindP :: Program a -> (a -> Program b) -> Program b
-bindP (PutThen c p)  k   =  PutThen c (bindP p k)
-bindP (GetBind f)    k   =  GetBind (\x -> bindP (f x) k)
-bindP (Return x)     k   =  k x
+bindP (PutThen c p)  k   =  error "TBD"
+bindP (GetBind f)    k   =  error "TBD"
+bindP (Return x)     k   =  error "TBD"
 
 -- Alt. 
 -- bindP (GetBind f)    k   =  GetBind (f >=> k)

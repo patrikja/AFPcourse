@@ -82,7 +82,7 @@ $(\bind{}) :: m \, \tikz[na]{ \node[fill=blue!20] (a1) {$a$}; } \to (\tikz[na]{ 
 \begin{tabular}{ccc}
 name & law & a DSL aspect \\
 \hline
-left identity & $return \, a \bind{} (\LAMBDA{x}{m\,x}) \equiv m \, a $ & inlining/factorizing a constant \\
+left identity & $return \, a \bind{} (\LAMBDA{x}{f\,x}) \equiv f \, a $ & inlining/factorizing a constant \\
 right identity & $m \bind{} (\LAMBDA{x}{return\,x})\equiv m$ &
 removal/introduction of useless return \\
 associativity & $(m \bind{} f) \bind{} g \equiv  m \bind{} (\LAMBDA x {f \,x \bind{} g})$ & extension/shrinking of scope \\ 
