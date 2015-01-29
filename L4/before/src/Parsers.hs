@@ -46,38 +46,22 @@ run (Choice p q) = choiceS (run p) (run q)
 run (Return x)   = returnS x
 run (p :>>= f)   = run p  `bindS`  (run . f)
 
-symbolS :: [s] -> [(s, [s])] -- Semantics s s
-symbolS []      = []         -- no parse
-symbolS (s:ss)  = [(s, ss)]  -- exactly one parse resuls
+-- Starting point:
+
+symbolS :: Semantics s s -- [s] -> [(s, [s])]
+symbolS = error "TBD"
 
 failS   :: Semantics s a
-failS _ = []
+failS   = error "TBD"
 
-choiceS :: ([s] -> [(a, [s])]) -> Semantics s a -> ([s] -> [(a,[s])])
-choiceS p q = \ss -> p ss ++ q ss
+choiceS :: Semantics s a -> Semantics s a -> Semantics s a
+choiceS = error "TBD"
 
-returnS :: a -> [s] -> [(a, [s])]
-returnS x = \ss -> [(x, ss)] -- exactly one parse, input unchanged
+returnS :: a -> Semantics s a 
+returnS = error "TBD"
 
--- bindS   :: Semantics s a -> (a -> Semantics s b) -> Semantics s b
-{-
-bindS   :: (      [s] -> [(a, [s])])  ->  -- ^ the parser p
-           (a -> ([s] -> [(b, [s])])) ->  -- ^ the function g
-                 ([s] ->                  -- ^ the input string
-                         [(b, [s])])
--}
--- bindS p g = \ss -> concatMap (uncurry g) (p ss)
-bindS p g = concatMap (uncurry g) . p
-
--- g   :: a -> [s] -> [(b, [s])]   -- we have this
--- g'  :: (a, [s]) -> [(b, [s])]   -- we need this
--- Generalise common subterms:
--- g   :: a -> b -> c
--- g'  :: (a, b) -> c
--- Use Hoogle to find the right conversion:
--- uncurry   :: (a -> b  -> c) -> ((a,  b) -> c)
---   curry   :: ((a,  b) -> c) -> (a -> b  -> c)
-
+bindS   :: Semantics s a -> (a -> Semantics s b) -> Semantics s b
+bindS   = error "TBD"
 
 {- 
 
@@ -184,11 +168,9 @@ run2 (Choice2 p q)    = choiceS (run2 p) (run2 q)
 run2 Fail2            = failS
 
 symbolBind2S :: (s -> Semantics s a) -> Semantics s a
-symbolBind2S f []      =  []
-symbolBind2S f (x:xs)  =  f x xs 
+symbolBind2S = error "TBD"
 
-symbolBind2S' :: (s -> Semantics s a) -> Semantics s a
-symbolBind2S' f = symbolS  `bindS`  f
+-- Should satisfy:  symbolBind2S f == symbolS  `bindS`  f
 
 {- 
 

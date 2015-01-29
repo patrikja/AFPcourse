@@ -8,8 +8,8 @@ import Lemmas
 
 -- | A very simple expression type.
 data Expr = Lit Int | Plus Expr Expr
-  deriving (Eq)
---  deriving (Eq, Show) -- for debugging
+--  deriving (Eq)
+  deriving (Eq, Show) -- for debugging
 
 -- | A parser for expressions. E ::= T | T '+' E  
 --                                =  T ( empty | '+' E)
@@ -123,14 +123,14 @@ main = runTests
 
 ---------------------------
 -- * Testing infrastructure
-
+{-
 instance Show Expr where
   showsPrec p (Lit n)      = shows n
   showsPrec p (Plus e1 e2) = showParen (p > 0) $
     shows e1 . showString "+" . showsPrec 1 e2
 -- | For reference:
 -- > shows = showsPrec 0
-
+-}
 
 type Size = Int
 -- | Generating arbitrary expressions.
@@ -147,4 +147,8 @@ instance Arbitrary Expr where
         where
           arb2 :: Gen Expr
           arb2 = arb (n `div` 2)
-
+{-
+[(Lit 1,"+(2+3)+4"),
+ (Plus (Lit 1) (Plus (Lit 2) (Lit 3)),"+4"),
+ (Plus (Plus (Lit 1) (Plus (Lit 2) (Lit 3))) (Lit 4),"")]
+-}
