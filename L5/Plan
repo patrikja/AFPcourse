@@ -1,0 +1,39 @@
+-*- Org -*-
+* Learning outcomes
+** DSL: design embedded domain specific languages
+DSL.Implement: implement EDSLs in Haskell (as combinator libraries)
+** Types: read, understand and extend Haskell programs which use 
+   advanced type system features
+Types.HOT: functors, monads and monad transformers
+Types.Class: type classes, newtypes, deriving, ...
+* Lecture overview
+** Monad transformers
+file:MonadT_API_summary.hs
+file:mtl/Control/Monad/Reader.hs
+Higher-order type + corresponding type class:
+*** ReaderT r m a  +  MonadReader r m
+*** StateT  s m a  +  MonadState  s m
+*** ErrorT  e m a  +  MonadError  e m 
+*** WriterT w m a  +  MonadWriter w m
+** Running example: "Growing a language"
+Starting from a trivial expression language with only numbers
+and addition (file:src/Interpreter0.hs) adding features one by one:
+*** Variables and let-binding
+file:src/Interpreter1.hs
+*** References (pointers to a heap) and state
+file:src/Interpreter2.hs
+*** Exceptions and error-handlers
+file:src/Interpreter3.hs
+
+* Base language:                  file:src/Interpreter0.hs
+* Variables and let-binding:      file:src/Interpreter1.hs
+* References and state:           file:src/Interpreter2.hs
+* Exceptions and error-handlers:  file:src/Interpreter3.hs
+* Preparation of "live-codeing" environment
+# Remove old remains
+rm -r live
+mkdir live
+# Copy all the "finished" files
+rsync ./       live/
+# Overwite some of them with incomplete files
+rsync before/  live/
