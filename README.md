@@ -56,10 +56,4 @@ Evaluation times: To be decided among these
 * Fr 2015-02-20 13:00 - 17:00 Evaluation,
 * On 2015-02-25 13:00 - 17:00 Evaluation,
 
-# Notes
-
-
-Emergency mirror (due to [major cable failure](http://www.gp.se/nyheter/goteborg/1.2606797-kabelbrott-drabbar-hogskolor-i-vastsverige), [SUNET ticket](http://www.nunoc.org/nunocweb/ticket.php?key=SUNETTICKET-3112)): 
-* https://cdn.rawgit.com/patrikja/AFPcourse/master/mirror/index.html
-
 
