@@ -1,4 +1,7 @@
 module NotAFunctor where
+import Data.Monoid
+import Control.Applicative
+
 -- Not a functor
 type NotAFunctor = Equal
 newtype Equal a = Equal {runEqual :: a -> a -> Bool}
@@ -24,7 +27,22 @@ cofmap :: Cofunctor f => (b -> a) -> (f a -> f b)
 
 -- Functor, but not Applicative
 
-{- Either a -}
+data Pair r a = P r a
+
+-- The standard libraries includes the "pair with r" functor:
+
+instance Functor (Pair r) where
+  fmap f (P r x) = P r (f x)
+
+-- This is not in general an Applicative for all r. A degenerate case
+-- is r = Void, a type for which there is no total value. This makes
+-- it impossible to implement pure.
+
+-- But for any Monoid r it is Applicative.
+
+instance Monoid r => Applicative (Pair r) where
+  pure x                = P mempty           x
+  P rf f  <*>  P rx x   = P (mappend rf rx)  (f x)
 
 -- Applicative, but not Monad
 
