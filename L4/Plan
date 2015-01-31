@@ -70,7 +70,6 @@ symbols of type s.
 
 type Semantics s a = [s] -> [(a,[s])]
 
-
 * Example of parser combinators and of parsing
 file:src/ParseUtil.hs   -- Derived operations
 file:exe/Example.hs
@@ -80,6 +79,10 @@ Test:
 ** Naive
 file:src/Parsers.hs
 file:src/Parser1.hs
+
+This is where we got to during the Thursday lecture 2015-01-29.
+TODO: Continue from here...
+
 ** Opt. 1
 file:src/Parsers.hs
 file:src/Parser2.hs

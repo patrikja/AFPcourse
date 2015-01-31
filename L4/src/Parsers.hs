@@ -184,7 +184,7 @@ run2 (Choice2 p q)    = choiceS (run2 p) (run2 q)
 run2 Fail2            = failS
 
 symbolBind2S :: (s -> Semantics s a) -> Semantics s a
-symbolBind2S f []      =  []
+symbolBind2S _ []      =  []
 symbolBind2S f (x:xs)  =  f x xs 
 
 symbolBind2S' :: (s -> Semantics s a) -> Semantics s a

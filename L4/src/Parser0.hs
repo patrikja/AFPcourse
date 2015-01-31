@@ -9,6 +9,9 @@ module Parser0
   , parse       -- :: P s a -> PSem s a
   ) where
 
+import Control.Applicative (Applicative(..))
+import Control.Monad       (liftM, ap)
+
 {-
 
 The semantics of a parser of type 'P s a' is a function from a
@@ -139,3 +142,15 @@ instance Monad (P s) where
 -- implementation.  To solve them we'll start with a naive deep
 -- embedding and successively refine it to get something
 -- efficient.
+
+--------
+-- Preparing for the Functor-Applicative-Monad proposal:
+--   https://www.haskell.org/haskellwiki/Functor-Applicative-Monad_Proposal
+
+-- | The following instances are valid for _all_ monads:
+instance Functor (P s) where
+  fmap = liftM
+  
+instance Applicative (P s) where
+  pure   = return
+  (<*>)  = ap

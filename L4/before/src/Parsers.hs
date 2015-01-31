@@ -46,8 +46,6 @@ run (Choice p q) = choiceS (run p) (run q)
 run (Return x)   = returnS x
 run (p :>>= f)   = run p  `bindS`  (run . f)
 
--- Starting point:
-
 symbolS :: Semantics s s -- [s] -> [(s, [s])]
 symbolS = error "TBD"
 

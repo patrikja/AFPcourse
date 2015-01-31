@@ -10,6 +10,9 @@ module Parser1
   , parse       -- :: P s a -> [s] -> ParseResult s a
   ) where
 
+import Control.Applicative (Applicative(..))
+import Control.Monad       (liftM, ap)
+
 type ParseResult s a = [(a, [s])]
 type PSem s a  =  [s] -> ParseResult s a
 
@@ -84,3 +87,15 @@ q `bindS` g = concatMap (uncurry g) . q
   simplify our implementation.
 
 -}
+
+--------
+-- Preparing for the Functor-Applicative-Monad proposal:
+--   https://www.haskell.org/haskellwiki/Functor-Applicative-Monad_Proposal
+
+-- | The following instances are valid for _all_ monads:
+instance Functor (P s) where
+  fmap = liftM
+  
+instance Applicative (P s) where
+  pure   = return
+  (<*>)  = ap

@@ -9,7 +9,9 @@ module Parser2
   , ParseResult -- ParseResult s a = [(a, [s])]
   , parse       -- :: P s a -> [s] -> ParseResult s a
   ) where
-import Control.Monad((>=>))
+import Control.Applicative (Applicative(..))
+import Control.Monad       (liftM, ap)
+import Control.Monad       ((>=>))
 
 type ParseResult s a = [(a, [s])]
 
@@ -56,7 +58,7 @@ pfail  = Fail
 -- Using the laws we can calculate the definition of a "smart
 -- constructor" bind to replace (:>>=):
 bind :: P s a -> (a -> P s b) -> P s b
-bind Fail            f  =  Fail                         -- by L4
+bind Fail           _f  =  Fail                         -- by L4
 bind (Return x)      f  =  f x                          -- by L1
 bind (p :+++ q)      f  =  (p >>= f) +++ (q >>= f)      -- by L5
 bind (SymbolBind k)  f  =  SymbolBind (k >=> f) 
@@ -82,10 +84,22 @@ instance Monad (P s) where
 -}
 parse :: P s a -> [s] -> ParseResult s a
 parse (SymbolBind f)  (c : s)  =  parse (f c) s
-parse (SymbolBind f)  []       =  []
+parse (SymbolBind _)  []       =  []
 parse Fail            _        =  []
 parse (p :+++ q)      s        =  parse p s ++ parse q s
 parse (Return x)      s        =  [(x, s)]
 
 -- Now the list comprehension (concatMap) is gone. Next up is
 -- the list concatenation in the (:+++) case.
+
+--------
+-- Preparing for the Functor-Applicative-Monad proposal:
+--   https://www.haskell.org/haskellwiki/Functor-Applicative-Monad_Proposal
+
+-- | The following instances are valid for _all_ monads:
+instance Functor (P s) where
+  fmap = liftM
+  
+instance Applicative (P s) where
+  pure   = return
+  (<*>)  = ap

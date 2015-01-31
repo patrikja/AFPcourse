@@ -9,7 +9,9 @@ module Parser3
   , ParseResult -- ParseResult s a = [(a, [s])]
   , parse       -- :: P s a -> [s] -> ParseResult s a
   ) where
-import Control.Monad((>=>))
+import Control.Applicative (Applicative(..))
+import Control.Monad       (liftM, ap)
+import Control.Monad       ((>=>))
 
 type ParseResult s a = [(a, [s])]
 
@@ -73,7 +75,7 @@ ReturnChoice x p +++ q                = ReturnChoice x (p +++ q)
 p                +++ ReturnChoice x q = ReturnChoice x (p +++ q)
 
 bind :: P s a -> (a -> P s b) -> P s b
-bind Fail                f  =  Fail
+bind Fail                _  =  Fail
 bind (ReturnChoice x p)  f  =  f x +++ (p >>= f) -- see below
 bind (SymbolBind k)      f  =  SymbolBind (k >=> f)
 
@@ -95,7 +97,7 @@ instance Monad (P s) where
 
 parse :: P s a -> [s] -> ParseResult s a
 parse (SymbolBind f)      (c : s)  =  parse (f c) s
-parse (SymbolBind f)      []       =  []
+parse (SymbolBind _)      []       =  []
 parse Fail                _        =  []
 parse (ReturnChoice x p)  s        =  (x, s) : parse p s
 
@@ -109,3 +111,15 @@ parse (ReturnChoice x p)  s        =  (x, s) : parse p s
   use another technique, called a "context passing"
   implementation. Read more about it in the paper.
 -}
+
+--------
+-- Preparing for the Functor-Applicative-Monad proposal:
+--   https://www.haskell.org/haskellwiki/Functor-Applicative-Monad_Proposal
+
+-- | The following instances are valid for _all_ monads:
+instance Functor (P s) where
+  fmap = liftM
+  
+instance Applicative (P s) where
+  pure   = return
+  (<*>)  = ap
