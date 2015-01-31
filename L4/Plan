@@ -89,3 +89,12 @@ file:src/Parser2.hs
 ** Opt. 2
 file:src/Parsers.hs
 file:src/Parser3.hs
+
+* Preparation of "live-coding" environment
+# Remove old remains
+rm -r live
+# Copy all the "finished" files
+rsync --recursive   ./       live/
+# Overwite some of them with incomplete files
+rsync --recursive   before/  live/
+# Ready to start live-coding in live/src/Parsers.hs

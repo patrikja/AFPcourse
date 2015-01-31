@@ -29,11 +29,11 @@ file:src/Interpreter3.hs
 * Variables and let-binding:      file:src/Interpreter1.hs
 * References and state:           file:src/Interpreter2.hs
 * Exceptions and error-handlers:  file:src/Interpreter3.hs
-* Preparation of "live-codeing" environment
+* Preparation of "live-coding" environment
 # Remove old remains
 rm -r live
-mkdir live
 # Copy all the "finished" files
-rsync ./       live/
+rsync --recursive   ./       live/
 # Overwite some of them with incomplete files
-rsync before/  live/
+rsync --recursive   before/  live/
+# Ready to start live-coding in live/src/Interpreter0.hs

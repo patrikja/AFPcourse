@@ -7,3 +7,4 @@ TAGS
 *.fdb_latexmk
 *.fls
 *.log
+live/
