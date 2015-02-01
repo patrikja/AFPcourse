@@ -17,9 +17,9 @@ Lecture plan:
 * [L1](L1/): Course intro, Haskell recap, first DSL example 
 * [L2](L2/): EDSLs and the Shapes example
 * [L3](L3/): Monads: how to build your own monad from scratch
-* L4: Parsing: a case-study in program transformation
-* L5: Monad Transformers, part 1: how to build your monad from transformers
-* L6: Monad Transformers, part 2: more transformers
+* [L4](L4/): [Monads](L3/) and [Parsing](L4/): a case-study in program transformation
+* [L5](L5/): [Parsing](L4/) and [Monad Transformers](L5/), part 1: how to build your monad from transformers. 
+* L6: [Monad Transformers](L5/), part 2: more transformers and the extensible interpreter
 * L7: Specification, verification and testing (QuickCheck)
 * L8: Exercise session based on exams from earlier years
 * L9: EDSL guest lecture by Emil Axelsson
@@ -51,9 +51,7 @@ messy, but we will have lots of more air to breathe.
 |   8  | 2015-03-09       | EF   | 2015-03-12       | HA2  |
 
 
-Evaluation times: To be decided among these
-* Ti 2015-02-10 08:00 - 12:00 Evaluation,
-* Fr 2015-02-20 13:00 - 17:00 Evaluation,
-* On 2015-02-25 13:00 - 17:00 Evaluation,
+## Evaluation times:
 
-
+* Mid-course evaluation meeting: Fr 2015-02-20 15:15 - 16:00 in EDIT-5128
+* Final evaluation meeting: TBD
