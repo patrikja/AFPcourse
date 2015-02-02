@@ -6,6 +6,7 @@ module Parsers
   , (+++)       -- :: P s a -> P s a -> P s a
   , Semantics   -- :: * -> * -> *
   , parse       -- :: P s a -> Semantics s a
+  , run, run2 -- Just for testing
   ) where
 
 import Control.Applicative (Applicative(..))
@@ -59,7 +60,7 @@ choiceS p q = \ss -> p ss ++ q ss
 returnS :: a -> [s] -> [(a, [s])]
 returnS x = \ss -> [(x, ss)] -- exactly one parse, input unchanged
 
--- bindS   :: Semantics s a -> (a -> Semantics s b) -> Semantics s b
+bindS   :: Semantics s a -> (a -> Semantics s b) -> Semantics s b
 {-
 bindS   :: (      [s] -> [(a, [s])])  ->  -- ^ the parser p
            (a -> ([s] -> [(b, [s])])) ->  -- ^ the function g
@@ -187,8 +188,10 @@ symbolBind2S :: (s -> Semantics s a) -> Semantics s a
 symbolBind2S _ []      =  []
 symbolBind2S f (x:xs)  =  f x xs 
 
+{-
 symbolBind2S' :: (s -> Semantics s a) -> Semantics s a
 symbolBind2S' f = symbolS  `bindS`  f
+-}
 
 {- 
 
@@ -223,7 +226,7 @@ p12 (Choice p q)=  Choice2 (p12 p) (p12 q)
 p12 (Return y)  =  Return2 y 
 p12 (Symbol      :>>= k)  =  SymbolBind2 (p12 . k) 
                             -- def of SymbolBind
-p12 (Fail        :>>= k)  =  Fail2 
+p12 (Fail        :>>= _)  =  Fail2 
                             -- Parser law. L4.
 p12 ((Choice p q):>>= k)  =  Choice2 (p12 (p :>>= k))
                                      (p12 (q :>>= k))
@@ -241,13 +244,13 @@ data Parser3 s a where
     Fail3          ::  Parser3 s a
 
 run3 :: Parser3 s a -> Semantics s a
-run3 (SymbolBind3 f)      []        =  []
+run3 (SymbolBind3 _)      []        =  []
 run3 (SymbolBind3 f)      (s : ss)  =  run3 (f s) ss
 run3 (ReturnChoice3 x p)  l         =  (x , l) : run3 p l 
                                 -- ~= run (Return x +++ p)
-run3 Fail3                l         =  []
+run3 Fail3                _         =  []
 
--- But it turns out that we can translate 2 into 3!
+-- But it turns out that we can also translate 2 into 3!
 p23 :: Parser2 s a -> Parser3 s a
 p23 (SymbolBind2 f)  =  SymbolBind3 (p23 . f)
 p23 (Return2 x)      =  ReturnChoice3 x Fail3 

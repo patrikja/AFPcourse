@@ -17,8 +17,8 @@ Lecture plan:
 * [L1](L1/): Course intro, Haskell recap, first DSL example 
 * [L2](L2/): EDSLs and the Shapes example
 * [L3](L3/): Monads: how to build your own monad from scratch
-* [L4](L4/): [Monads](L3/) and [Parsing](L4/): a case-study in program transformation
-* [L5](L5/): [Parsing](L4/) and [Monad Transformers](L5/), part 1: how to build your monad from transformers. 
+* L4: [Monads](L3/) and [Parsing](L4/): a case-study in program transformation
+* L5: [Parsing](L4/) and [Monad Transformers](L5/), part 1: how to build your monad from transformers. 
 * L6: [Monad Transformers](L5/), part 2: more transformers and the extensible interpreter
 * L7: Specification, verification and testing (QuickCheck)
 * L8: Exercise session based on exams from earlier years
