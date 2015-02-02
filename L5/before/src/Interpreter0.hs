@@ -30,17 +30,17 @@ eval :: Expr  -> Eval Value
 eval (Lit n)   = error "TBD"
 eval (a :+ b)  = error "TBD"
 
+
+
+
+
+
+
+-- liftM2 :: (a->b->c) -> Eval a -> Eval b -> Eval c
+-- liftM2 (+) :: Num a => Eval a -> Eval a -> Eval a
+
 testExpr :: Expr
 testExpr = Lit 1700  :+   Lit 38
 
 test :: Value
 test = runEval $ eval testExpr
-
-
-
-
-
-
-
-
-

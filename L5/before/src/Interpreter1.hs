@@ -22,7 +22,7 @@ type Name  = String
 type Value = Integer
 
 -- | An environment maps variables to values.
-type Env = Map Name Value -- Think of it as [(Name, Value)]
+type Env = Map Name Value -- Think of it as [(Name, Value)] or Name -> Maybe Value
 
 emptyEnv :: Env
 emptyEnv = Map.empty
@@ -50,7 +50,7 @@ startReaderFrom = flip CMR.runReaderT
 lookupVar :: Name -> Eval Value
 lookupVar x = error "TBD"        
   -- Here CMR.ask :: Eval Env
-  -- lookup :: Ord k => k -> Map k a -> Maybe a
+  -- CMR.lookup :: Ord k => k -> Map k a -> Maybe a
                  
 -- | We can extend the environment with a new binding for a local
 -- computation.  Since we're using a reader monad we can be sure
@@ -69,13 +69,15 @@ eval (a :+ b)    = error "TBD"
 eval (Var n)     = error "TBD"
 eval (Let n e b) = error "TBD"
 
-  
-
 -- * Utilities: testing and parsing
+
+testExpr :: Expr
 testExpr = parse "let x=1+2; x+x"
+test :: Value
 test = runEval $ eval testExpr
 
 -- | The parser is parameterised over the abstract syntax.
+language :: P.Language Expr
 language = P.Lang
   { P.lLit    = Lit
   , P.lPlus   = (:+)
@@ -87,6 +89,7 @@ language = P.Lang
   , P.lCatch  = error "language: not implemented: catch"
   }
 
+parse :: String -> Expr
 parse s = case  P.parseExpr language s  of
   Left err  -> error (show err)
   Right x   -> x

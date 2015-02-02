@@ -1,4 +1,5 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
 -- | Version 3 of the interpreter
 module Interpreter3 where
 
@@ -87,9 +88,10 @@ newtype Eval a = Eval { unEval :: CMS.StateT Store
                                       (CME.ErrorT Err  -- new
                                         CMI.Identity))
                                           a }
-  deriving (Monad, CMS.MonadState  Store,
-                   CMR.MonadReader Env,
-                   CME.MonadError  Err) -- new
+  deriving (Monad, CMS.MonadState  Store
+                 , CMR.MonadReader Env
+                 , CME.MonadError  Err -- new
+                 ) 
 
 runEval :: Eval a -> Either Err a
 runEval = CMI.runIdentity
@@ -117,7 +119,7 @@ lookupVar :: Name -> Eval Value
 lookupVar x = do
   env <- CMR.ask
   case Map.lookup x env of
-    Nothing  -> CME.throwError $ UnboundVariable x  -- new
+    Nothing  -> CME.throwError (UnboundVariable x) -- new
     Just v   -> return v
 
 extendEnv :: Name -> Value -> Eval a -> Eval a
@@ -169,15 +171,20 @@ eval (Catch e1 e2)  = eval e1 `CME.catchError` \_ ->    -- new
 
 -- * Examples
 
-testExpr1 = parse "!p+1738"
+testExpr1, testExpr2 :: Expr
+testExpr1 = parse "let p=0; !p+1738"
 testExpr2 = parse "(try !p catch 0)+1738"
-test1 = runEval $ eval testExpr1
-test2 = runEval $ eval testExpr2
+testExpr3 :: Expr
 testExpr3 = parse "let one = new 1; \
                  \ let dummy = (try ((one := 2) + !7) catch 0); \
                  \ !one"
 -- | value is 1 if state is discarded when error occurs
--- value is 2 if state is preserved up to the error
+--   value is 2 if state is preserved up to the error
+test1 :: Either Err Value
+test1 = runEval $ eval testExpr1 
+test2 :: Either Err Value
+test2 = runEval $ eval testExpr2 
+test3 :: Either Err Value
 test3 = runEval $ eval testExpr3
 
 

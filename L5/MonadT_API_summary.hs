@@ -55,9 +55,9 @@ modify  :: (MonadState s m) => (s -> s) -> m ()
 
 ----------------------------------------------------------------
 -- Control.Monad.Error
+newtype ErrorT e m a = ErrorT { runErrorT :: m (Either e a) }
 data Either e a = Left e | Right a -- Haskell Prelude
 -- Either e is already MonadError
-newtype ErrorT e m a = ErrorT { runErrorT :: m (Either e a) }
 
 class (Monad m) => MonadError e m | m -> e where
     throwError :: e -> m a

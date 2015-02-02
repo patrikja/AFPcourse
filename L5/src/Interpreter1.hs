@@ -22,7 +22,7 @@ type Name  = String
 type Value = Integer
 
 -- | An environment maps variables to values.
-type Env = Map Name Value
+type Env = Map Name Value -- Think of it as [(Name, Value)] or Name -> Maybe Value
 
 emptyEnv :: Env
 emptyEnv = Map.empty
@@ -76,10 +76,13 @@ eval (Let x e1 e2)  = do
 
 -- * Utilities: testing and parsing
 
+testExpr :: Expr
 testExpr = parse "let x=1+2; x+x"
+test :: Value
 test = runEval $ eval testExpr
 
 -- | The parser is parameterised over the abstract syntax.
+language :: P.Language Expr
 language = P.Lang
   { P.lLit    = Lit
   , P.lPlus   = (:+)
@@ -91,6 +94,7 @@ language = P.Lang
   , P.lCatch  = error "language: not implemented: catch"
   }
 
+parse :: String -> Expr
 parse s = case  P.parseExpr language s  of
   Left err  -> error (show err)
   Right x   -> x

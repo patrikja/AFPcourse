@@ -141,11 +141,15 @@ eval (pe := ve)     = do                   -- new
 
 -- * Utilities: testing and parsing
 
-testExercise = parse "p:=0"
+testExercise :: Expr
+testExercise = parse "let p=new 7; !p"
+testUgly :: Expr
 testUgly = parse "let p=new 1; let q=new 1738; !(p+1)"
+test :: Value
 test = runEval $ eval testUgly
 
 -- | The parser is parameterised over the abstract syntax.
+language :: P.Language Expr
 language = P.Lang
   { P.lLit    = Lit
   , P.lPlus   = (:+)
@@ -157,6 +161,7 @@ language = P.Lang
   , P.lCatch  = \_ _ -> Var "language: not implemented: catch"
   }
 
+parse :: String -> Expr
 parse s = case P.parseExpr language s of
   Left err -> error (show err)
   Right x  -> x
