@@ -16,7 +16,7 @@ text :: String -> Doc
 text s = [s]
 
 render :: Doc -> String
-render xs = unlines xs
+render = unlines
 
 empty :: Doc
 empty = []

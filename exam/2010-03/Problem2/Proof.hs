@@ -10,8 +10,8 @@ type EqProof = []
 -- expression by a series of motivated steps
 
 ----------------
-proof_LeftId :: (Monad m, Monad n) => a -> (a -> Prod m n b) -> EqProof (Prod m n b)
-proof_LeftId a f =
+proofLeftId :: (Monad m, Monad n) => a -> (a -> Prod m n b) -> EqProof (Prod m n b)
+proofLeftId a f =
   [ return a >>= (\x -> f x)
   , -- def. of return
     Prod (return a, return a) >>= (\x -> f x)
@@ -31,8 +31,8 @@ proof_LeftId a f =
   ]
 
 ----------------
-proof_RightId :: (Monad m, Monad n) => Prod m n a -> EqProof (Prod m n a)
-proof_RightId mx =
+proofRightId :: (Monad m, Monad n) => Prod m n a -> EqProof (Prod m n a)
+proofRightId mx =
   [ mx >>= return
   , -- inverses
     Prod (unProd mx) >>= return
@@ -79,8 +79,8 @@ sndP_return x =
 -}
 
 -- ----------------------------------------------------------------
-proof_Assoc :: (Monad m, Monad n) => Prod m n c -> (c -> Prod m n b) -> (b -> Prod m n a) -> EqProof (Prod m n a)
-proof_Assoc mx f g  =
+proofAssoc :: (Monad m, Monad n) => Prod m n c -> (c -> Prod m n b) -> (b -> Prod m n a) -> EqProof (Prod m n a)
+proofAssoc mx f g  =
  [ (mx >>= f) >>= g
  , -- Inverses, surjectivePairing
    (Prod (fstP mx, sndP mx) >>= f) >>= g
@@ -96,7 +96,7 @@ proof_Assoc mx f g  =
  , -- Def. of (.)
    Prod ( fstP mx >>= \x -> fstP (f x) >>= (fstP . g)
         , sndP mx >>= \y -> sndP (f y) >>= (sndP . g) )
- , -- fstP_distributes and sndP_distributes
+ , -- fstPDistributes and sndPDistributes
    Prod ( fstP mx >>= \x -> fstP (f x >>= g)
         , sndP mx >>= \y -> sndP (f y >>= g) )
  , -- Def. of (.) + alpha renaming
@@ -113,9 +113,9 @@ proof_Assoc mx f g  =
 ----------------------------------------------------------------
 -- Not part of the exam question
 
-fstP_distributes :: (Monad m, Monad n) =>
+fstPDistributes :: (Monad m, Monad n) =>
    (c -> Prod m n b) -> (b -> Prod m n a) -> c -> EqProof (m a)
-fstP_distributes f g x =
+fstPDistributes f g x =
  [ fstP (f x) >>= (fstP . g)
  , -- Def. of fstP
    fst (unProd (f x)) >>= (fstP . g)
@@ -131,15 +131,15 @@ fstP_distributes f g x =
    fstP (f x >>= g)
  ]
 
--- sndP_distributes is similar
+-- sndPDistributes is similar
 
 ----------------------------------------------------------------
 -- Just some type checking of the laws
 
-prop_LeftId  :: (Monad m) => (m a -> m a -> t) -> b -> (b -> m a) -> t
-prop_RightId :: (Monad m) => (m a -> m a -> t) -> m a -> t
-prop_Assoc   :: (Monad m) => (m a -> m a -> t) -> m c -> (c -> m b) -> (b -> m a) -> t
+propLeftId  :: (Monad m) => (m a -> m a -> t) -> b -> (b -> m a) -> t
+propRightId :: (Monad m) => (m a -> m a -> t) -> m a -> t
+propAssoc   :: (Monad m) => (m a -> m a -> t) -> m c -> (c -> m b) -> (b -> m a) -> t
 
-prop_LeftId  (~=) a f     =  ( return a >>= (\x -> f x))  ~=  ( f a                       )
-prop_RightId (~=) mx      =  ( mx >>= (\x -> return x) )  ~=  ( mx                        )
-prop_Assoc   (~=) mx f g  =  ( (mx >>= f) >>= g        )  ~=  (  mx >>= (\x -> f x >>= g) )
+propLeftId  (~=) a f     =  ( return a >>= (\x -> f x))  ~=  ( f a                       )
+propRightId (~=) mx      =  ( mx >>= (\x -> return x) )  ~=  ( mx                        )
+propAssoc   (~=) mx f g  =  ( (mx >>= f) >>= g        )  ~=  (  mx >>= (\x -> f x >>= g) )

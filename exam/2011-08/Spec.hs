@@ -27,9 +27,12 @@ instance Arbitrary Weekday where
 data Weekday = Mon | Tue | Wed | Thu | Fri | Sat | Sun 
   deriving (Eq, Ord, Show, Enum)
 
+mysort' :: Ord a => [a] -> [a]
 mysort' xs = (if length xs == 14 then reverse else id) (sort xs)
-mysort xs = sort xs
+mysort :: [Weekday] -> [Weekday]
+mysort = sort
 
+main :: IO ()
 main = quickCheck prop_mysort_correct
 
 {-

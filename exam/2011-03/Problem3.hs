@@ -69,7 +69,7 @@ check    :: MonadPlus m =>  (tok   -> Bool) ->               P m tok  tok
 satisfy  :: MonadPlus m =>  ([tok] -> Bool) ->               P m tok  [tok]
 plus     :: MonadPlus m =>  P m tok a -> P m tok b ->  P m tok  (Either a b)
 zero    = P (const mzero)
-one     = P (\xs -> if null xs then return () else mzero)
+one     = P (\xs -> unless (null xs) mzero)
 check   p = P (\xs -> let n = length xs; x = head xs 
                       in if n==1 && p x then return x else mzero)
 satisfy p = P (\xs -> if p xs then return xs else mzero)
@@ -102,24 +102,32 @@ evenOdd = Plus (Star (Times (Check even) (Check odd)))
 
 ----------------
 -- a very rudimentary test suite:
+test1 :: String -> Bool
 test1 xs = parse p xs  ==  if xs == "ab" then Just ('a','b') else Nothing
+test2 :: String -> Property
 test2 xs = if null rest 
-           then label "Just" $ Just (as, bs) == parse p1 xs
-           else label "triv" $ Nothing == parse p1 xs
-    where (as, bs') = (takeWhile ('a'==) xs, dropWhile ('a'==) xs)
-          (bs, rest)= (takeWhile ('b'==) xs, dropWhile ('b'==) xs)
+           then label "Just" $ parse p1 xs == Just (as, bs)
+           else label "triv" $ parse p1 xs == Nothing
+    where (as, _bs') = span ('a'==) xs
+                   -- (takeWhile ('a'==) xs, dropWhile ('a'==) xs)
+          (bs, rest)= span ('b'==) xs
 
 -- This test depends on the choice / order of matches
+test3 :: Bool
 test3 = parse p2 "aaabbbbaabbbbbbbaaabbabab" ==  
         Just [("aaa","bbbb"),("aa","bbbbbbb"),("aaa","bb"),("a","b"),("a","b")]
 -- This test depends on the choice / order of matches
+test4 :: Bool
 test4 = parse blocks "aaaabbbbbbbbcccccddd" ==
         Just ["aaaa","bbbbbbbb","ccccc","ddd"]
+test5 :: Bool
 test5 = parse evenOdd [0..9] ==
         Just (Left [(0,1),(2,3),(4,5),(6,7),(8,9)])
+test6 :: Bool
 test6 = parse evenOdd [1..10] ==
         Just (Right [(1,2),(3,4),(5,6),(7,8),(9,10)])
 
+main :: IO ()
 main = do quickCheck test1
           quickCheck test2
           print $ test3 && test4 && test5 && test6
@@ -151,17 +159,19 @@ parseStar2 p ts =
     liftM (uncurry (:)) (parse (Times p (Star p)) ts)
 
 parseStar3 :: MonadPlus m => Parser tok a -> [tok] -> m [a]
-parseStar3 p [] = return []
+parseStar3 _ [] = return []
 parseStar3 p ts = mconcat [ do a  <- parse p        (take i ts)
                                as <- parse (Star p) (drop i ts)
                                return (a:as)
                           | i <- [1..length ts] ]
 
 
+test7 :: String -> Bool
 test7 xs = parseTimes3 p q xs == (parseTimes p q xs :: Maybe (Char, Char))
   where p = Check ('o'<)
         q = Check ('o'>=)
 
+test8 :: String -> Bool
 test8 xs = parseStar p xs == (parseStar3 p xs :: Maybe String)
   where p = Check ('o'<)
 

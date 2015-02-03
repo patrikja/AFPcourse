@@ -1,7 +1,7 @@
 {-# LANGUAGE GADTs, ExistentialQuantification #-}
 module Typed where
 import qualified Expr as E
-import Maybe (fromJust)
+import Data.Maybe (fromJust)
 
 data Expr t where
   Lit   :: (Eq t, Show t) => t                     -> Expr t

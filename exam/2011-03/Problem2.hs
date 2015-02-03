@@ -28,7 +28,7 @@ type Balance = TVar Gold
 transfer :: Gold -> Balance -> Balance -> IO ()
 transfer qty fromBal toBal = atomically $ do
   fromQty <- readTVar fromBal
-  when (qty > fromQty) $
+  when (qty > fromQty) 
     retry
   writeTVar fromBal (fromQty - qty)
   readTVar toBal >>= writeTVar toBal . (qty +)

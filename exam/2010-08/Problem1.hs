@@ -33,14 +33,13 @@ eval (CUn op e) = do
   v <- eval e
   evalUOp op v
 
-eval (CNull op) = do
-  evalNullOp op
+eval (CNull op) = evalNullOp op
 
 eval (Num n)    = return n
 --  return (fromInteger n) was used before the generalisation
 
 -- evalBOp :: BOp -> Value -> Value -> CalcM Value
-evalBOp :: (Fractional v, Monad m) => BOp -> (v->v->m v)
+evalBOp :: (Eq v, Fractional v, Monad m) => BOp -> (v->v->m v)
 evalBOp Div v1 0 = fail "DivZ"
 evalBOp op v1 v2 = return $ evalBOpPure op v1 v2
 
@@ -53,10 +52,9 @@ evalBOpPure Sub = (-)
 
 ----------------
 -- evalUOp :: UOp -> v -> CM v v
-evalUOp :: (Fractional v, CMS.MonadState v m) => UOp -> (v->m v)
+evalUOp :: (Eq v, Fractional v, CMS.MonadState v m) => UOp -> (v->m v)
 evalUOp Inv 0 = fail "InvZ"
-evalUOp M   v = do
-  putMem v
+evalUOp M   v = putMem v
 evalUOp MP  v = do
   m <- getMem
   putMem (v+m)
