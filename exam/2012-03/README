@@ -1,0 +1,11 @@
+This directory contains files related to the written exam of the course
+  Advanced Functional Programming (7.5 hec), Spring 2012
+  TDA342 / DIT260
+  Patrik Jansson
+
+The exam questions are in 
+  AFP_exam_20120307.pdf     
+And the three solutions (+ some testing code) are in 
+  DSL.hs                    
+  Types.hs
+  Spec.hs

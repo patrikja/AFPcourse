@@ -1,0 +1,25 @@
+Advanced Functional Programming TDA341/DIT260
+Patrik Jansson
+2010-03-10
+
+The actual exam text is in AFP_exam_20100310.pdf
+Solutions in Problem1.hs, Problem2.hs, Problem3.hs
+
+Learning outcomes tested:
+
+Problem 1:
+* DSL.Concepts: (abstract) syntax, semantics, ...
+* DSL.Implement: implement EDSLs in Haskell (as combinator libraries)
+* Types.GADT: (generalised) algebraic datatypes
+* Spec.Test: formulate and test properties about the program
+
+Problem 2:
+* Types.Class: type classes, newtypes, deriving, ...
+* Types.HOT: functors, monads
+* Spec.Prove: reason about correctness of functional programs
+
+Problem 3:
+Types: read, understand and extend Haskell programs which use advanced type system features
+* Types.HOT: functors, monads and monad transformers
+* Types.Class: type classes, newtypes, deriving, ...
+
