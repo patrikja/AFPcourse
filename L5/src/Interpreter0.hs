@@ -1,8 +1,7 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 -- | Version 0 of the interpreter
 module Interpreter0 where
-import Control.Applicative (Applicative)
-
+import qualified Control.Applicative    as CA (Applicative(..))
 import qualified Control.Monad          as CM
 import qualified Control.Monad.Identity as CMI
 
@@ -18,7 +17,7 @@ type Value = Integer
    as well be @type Eval = CMI.Identity@
 -}
 newtype Eval a = Eval { unEval :: CMI.Identity a }
-  deriving (Functor, Applicative, Monad)
+  deriving (Functor, CA.Applicative, Monad)
            -- using newtype deriving (Haskell extension)
 
 runEval :: Eval a -> a

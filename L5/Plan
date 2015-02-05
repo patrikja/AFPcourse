@@ -27,6 +27,18 @@ file:src/Interpreter3.hs
 
 * Base language:                  file:src/Interpreter0.hs
 * Variables and let-binding:      file:src/Interpreter1.hs
+
+(In 2015 this was the start of lecture 6.)
+
+file:MonadT_API_summary.hs
+file:src/Test.hs
+
+For the curious, the full source code of the monad transformer library
+can be downloaded and inspected as follows:
+
+  cabal unpack mtl
+  file:mtl-2.2.1/Control/Monad/State/Lazy.hs
+
 * References and state:           file:src/Interpreter2.hs
 * Exceptions and error-handlers:  file:src/Interpreter3.hs
 * Preparation of "live-coding" environment

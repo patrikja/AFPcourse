@@ -2,6 +2,7 @@
 -- | Version 2 of the interpreter
 module Interpreter2 where
 
+import qualified Control.Applicative    as CA (Applicative(..))
 import qualified Control.Monad          as CM
 import qualified Control.Monad.Identity as CMI
 import qualified Control.Monad.Reader   as CMR
@@ -49,7 +50,8 @@ newtype Eval a = Eval { unEval :: CMS.StateT Store
                                     (CMR.ReaderT Env
                                       CMI.Identity)
                                         a }
-  deriving (Monad,  CMS.MonadState Store,
+  deriving (Functor, CA.Applicative,
+            Monad,  CMS.MonadState Store,
                     CMR.MonadReader Env  )
 {- ^ Explaining and expanding the type
   CMS.StateT s m' a  ~=  s -> m' (a, s)
@@ -59,6 +61,15 @@ newtype Eval a = Eval { unEval :: CMS.StateT Store
      s -> m' (a, s)     ~= {- where m' = CMR.ReaderT Env m -}
      s -> e -> m (a,s)  ~= {- where m  = CMI.Identity      -}
      s -> e -> (a,s)
+
+-- Exercise: Implement a "reader-state-monad" directly:
+newtype MyMonad s e a = MyMonad {runMyMonad :: s -> e -> (a,s)}
+instance Monad (MyMonad s e) where
+  return = returnMyMonad
+  (>>=)  = bindMyMonad
+returnMyMonad :: a -> MyMonad s e a
+returnMyMonad x = MyMonad $ \s -> \ e -> (x, s)
+-- ...
 -}
 
 runEval :: Eval a -> a
@@ -95,25 +106,25 @@ extendEnv x v = CMR.local (Map.insert x v)
 
 -- | Create a new reference containing the given value.
 newRef :: Value -> Eval Ptr
-newRef v = do
-  s <- CMS.get
-  let ptr = nextPtr s
-      s'  = s { nextPtr = ptr + 1
-              , heap    = Map.insert ptr v (heap s)
-              }
-  CMS.put s'
-  return ptr
-
-
+newRef v = do store <- CMS.get
+              let  box = nextPtr store
+                   nextBox  = 1 + box
+                   newHeap  = Map.insert box v (heap store)
+              CMS.put (Store nextBox newHeap)
+              return box
+-- m = Eval
+-- s = Store  
+-- get :: m s
+-- put :: s -> m ()  
+  
 -- | Get the value of a reference. Crashes with our own
 -- "segfault" if given a non-existing pointer.
 deref :: Ptr -> Eval Value
-deref p = do
-  h <- CMS.gets heap -- remember *heap :: Store -> Map Ptr Value*
-  case Map.lookup p h of
-    Nothing -> fail "deref: segmentation fault"
-    Just v  -> return v
-
+deref p = do h <- CMS.gets heap
+             case Map.lookup p h of
+               Nothing -> fail ("Segmentation fault: "++show p++" is not bound")
+               Just v  -> return v
+             
 -- | Updating the value of a reference. Has no effect if the
 -- reference doesn't exist. (Exercise: Maybe that's not the best
 -- semantics... what would be a better one?)
@@ -122,6 +133,14 @@ p =: v = do
   CMS.modify $ \s -> s { heap = Map.adjust (const v) p (heap s) }
   return v
 -- Map.adjust :: (Ord k) => (a -> a) -> k -> Map k a -> Map k a
+
+{-
+-- Alternative
+p =: v = do store <- CMS.get
+            let heap' = Map.adjust (const v) p (heap store)
+            CMS.put (store {heap = heap'})
+            return v
+-}
 
 -- | As before we only need to add cases for the new con-
 -- structors to the evaluator. No need to change the old stuff.
@@ -132,13 +151,12 @@ eval (Var x)        = lookupVar x
 eval (Let x e1 e2)  = do
   v1 <- eval e1
   extendEnv x v1 (eval e2)
-eval (NewRef e)     = newRef =<< eval e    -- new
-eval (Deref e)      = deref  =<< eval e    -- new
-eval (pe := ve)     = do                   -- new
-  p <- eval pe
-  v <- eval ve
-  p =: v
-
+eval (NewRef e)     = eval e >>= newRef
+eval (Deref e)      = eval e >>= deref
+eval (pe := ve)     = do  p <- eval pe
+                          v <- eval ve
+                          p =: v
+  
 -- * Utilities: testing and parsing
 
 testExercise :: Expr

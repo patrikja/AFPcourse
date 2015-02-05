@@ -2,6 +2,7 @@
 -- | Version 4 of the interpreter
 module Interpreter4 where
 
+import qualified Control.Applicative    as CA (Applicative(..))
 import qualified Control.Monad          as CM
 import qualified Control.Monad.Identity as CMI
 import qualified Control.Monad.Reader   as CMR
@@ -81,21 +82,23 @@ instance CME.Error Err where
     just passed as a return value in the underlying monad.
 -}
 
-newtype Eval1 a = Eval1{ unEval1:: CMS.StateT Store
+newtype Eval1 a = Eval1{ unEval1:: CMS.StateT Store   -- S.R.E$I
                                      (CMR.ReaderT Env
                                        (CME.ErrorT Err
                                          CMI.Identity))
                                            a }
-  deriving (Monad, CMS.MonadState  Store,
+  deriving (Functor, CA.Applicative,
+            Monad, CMS.MonadState  Store,
                    CMR.MonadReader Env,
                    CME.MonadError  Err)
 
-newtype Eval2 a = Eval2{ unEval2:: CME.ErrorT Err
+newtype Eval2 a = Eval2{ unEval2:: CME.ErrorT Err     -- E.S.R$I
                                      (CMS.StateT Store
                                        (CMR.ReaderT Env
                                          CMI.Identity))
                                            a }
-  deriving (Monad, CMS.MonadState  Store,
+  deriving (Functor, CA.Applicative,
+            Monad, CMS.MonadState  Store,
                    CMR.MonadReader Env,
                    CME.MonadError  Err)
 

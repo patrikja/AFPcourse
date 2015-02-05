@@ -3,6 +3,7 @@
 -- | Version 3 of the interpreter
 module Interpreter3 where
 
+import qualified Control.Applicative    as CA (Applicative(..))
 import qualified Control.Monad          as CM
 import qualified Control.Monad.Identity as CMI
 import qualified Control.Monad.Reader   as CMR
@@ -67,6 +68,8 @@ the error monad by looking at their implementations. With ErrorT
 on the outside, we will represent computations as
 
   ms (Either err a)
+which is roughly
+  s -> (Either err a, s)
 
 where ms is the underlying monad with state. Since the state is
 hidden inside m it is not affected by whether we return @Right
@@ -77,6 +80,8 @@ If we turn it around, adding a state monad on top of an error
 monad, computations will be represented as
 
   s -> me (a, s)
+which is roughly
+  s -> Either e (a, s)
 
 Here it's clear that if a computation fails, we lose any changes
 to the state made by the failing computation since the state is
@@ -88,7 +93,8 @@ newtype Eval a = Eval { unEval :: CMS.StateT Store
                                       (CME.ErrorT Err  -- new
                                         CMI.Identity))
                                           a }
-  deriving (Monad, CMS.MonadState  Store
+  deriving (Functor, CA.Applicative,
+            Monad, CMS.MonadState  Store
                  , CMR.MonadReader Env
                  , CME.MonadError  Err -- new
                  ) 
@@ -166,8 +172,11 @@ eval (pe := ve)     = do
   p <- eval pe
   v <- eval ve
   p =: v
-eval (Catch e1 e2)  = eval e1 `CME.catchError` \_ ->    -- new
-                      eval e2                           -- new
+eval (Catch e1 e2)  = CME.catchError (eval e1) (\_err -> eval e2)
+--  catchError :: Eval Value -> (e -> Eval Value) -> Eval Value
+                         
+                         
+                      
 
 -- * Examples
 
@@ -194,6 +203,7 @@ test3 = runEval $ eval testExpr3
 
 ----------------
 -- | Parser stuff.
+language :: P.Language Expr
 language = P.Lang
   { P.lLit    = Lit
   , P.lPlus   = (:+)
@@ -205,6 +215,7 @@ language = P.Lang
   , P.lCatch  = Catch
   }
 
+parse :: String -> Expr
 parse s = case P.parseExpr language s of
   Left err -> error (show err)
   Right x  -> x

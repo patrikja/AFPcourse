@@ -2,7 +2,7 @@
 -- documentation, see http://haskell.org/cabal/users-guide/
 
 name:                AFPlecture5
-version:             2014.0
+version:             2015.0
 synopsis:            AFP course lecture 5
 -- description:         
 homepage:            http://www.cse.chalmers.se/edu/course/afp/
@@ -19,6 +19,6 @@ library
   hs-source-dirs:      src
 
   exposed-modules:     Interpreter0, Interpreter1, Interpreter2, Interpreter3, Interpreter4, 
-                       Parser, Examples
+                       Parser, Examples, Test
   -- other-modules:    
   build-depends:       base < 5, mtl < 2.2, containers < 0.6, parsec < 4

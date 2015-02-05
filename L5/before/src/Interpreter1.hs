@@ -2,6 +2,7 @@
 -- | Version 1 of the interpreter
 module Interpreter1 where
 
+import qualified Control.Applicative    as CA (Applicative(..))
 import qualified Control.Monad          as CM
 import qualified Control.Monad.Identity as CMI
 import qualified Control.Monad.Reader   as CMR -- new
@@ -32,7 +33,9 @@ emptyEnv = Map.empty
 newtype Eval a = Eval { unEval :: CMR.ReaderT Env
                                     CMI.Identity
                                       a }
-  deriving (Monad, CMR.MonadReader Env)
+  deriving (Functor, CA.Applicative,
+            Monad, CMR.MonadReader Env)
+-- Eval a ~= Env -> a
 
 runEval :: Eval a -> a
 runEval = CMI.runIdentity
@@ -50,13 +53,13 @@ startReaderFrom = flip CMR.runReaderT
 lookupVar :: Name -> Eval Value
 lookupVar x = error "TBD"        
   -- Here CMR.ask :: Eval Env
-  -- CMR.lookup :: Ord k => k -> Map k a -> Maybe a
-                 
+  -- Map.lookup :: Ord k => k -> Map k a -> Maybe a
+
 -- | We can extend the environment with a new binding for a local
 -- computation.  Since we're using a reader monad we can be sure
 -- that this binding does not escape outside its intended scope.
-extendEnv :: Name -> Value -> Eval a -> Eval a
-extendEnv = error "TBD"
+localScope :: Name -> Value -> Eval a -> Eval a
+localScope = error "TBD"
 -- In general:
 -- > CMR.local :: (CMR.MonadReader r m) => (r -> r) -> m a -> m a
 

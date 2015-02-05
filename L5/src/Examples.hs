@@ -14,7 +14,7 @@ examplePrograms =
   , "let x=1+2; x+x"
   , "let p=new 1; let q=new 1738; !(p+1)"
   , "!p+1738"
-  , "(try !p catch 0)+1738"
+  , "(try !0 catch 0)+1738"
   , "let one = new 1; \
     \let dummy = (try ((one := 2) + !7) catch 0); \
     \!one"
@@ -40,3 +40,6 @@ run' :: String -> (Either Err Value, Either Err Value)
 run' s = ( runEval1 $ evalP s
          , runEval2 $ evalP s
          )
+
+main' :: IO ()
+main' = mapM_ print $ map run' examplePrograms

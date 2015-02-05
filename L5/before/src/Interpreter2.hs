@@ -2,6 +2,7 @@
 -- | Version 2 of the interpreter
 module Interpreter2 where
 
+import qualified Control.Applicative    as CA (Applicative(..))
 import qualified Control.Monad          as CM
 import qualified Control.Monad.Identity as CMI
 import qualified Control.Monad.Reader   as CMR
@@ -49,7 +50,8 @@ newtype Eval a = Eval { unEval :: CMS.StateT Store
                                     (CMR.ReaderT Env
                                       CMI.Identity)
                                         a }
-  deriving (Monad,  CMS.MonadState Store,
+  deriving (Functor, CA.Applicative,
+            Monad,  CMS.MonadState Store,
                     CMR.MonadReader Env  )
 {- ^ Explaining and expanding the type
   CMS.StateT s m' a  ~=  s -> m' (a, s)
@@ -59,6 +61,15 @@ newtype Eval a = Eval { unEval :: CMS.StateT Store
      s -> m' (a, s)     ~= {- where m' = CMR.ReaderT Env m -}
      s -> e -> m (a,s)  ~= {- where m  = CMI.Identity      -}
      s -> e -> (a,s)
+
+-- Exercise: Implement a "reader-state-monad" directly:
+newtype MyMonad s e a = MyMonad {runMyMonad :: s -> e -> (a,s)}
+instance Monad (MyMonad s e) where
+  return = returnMyMonad
+  (>>=)  = bindMyMonad
+returnMyMonad :: a -> MyMonad s e a
+returnMyMonad = error "TBD"
+-- ...
 -}
 
 runEval :: Eval a -> a
