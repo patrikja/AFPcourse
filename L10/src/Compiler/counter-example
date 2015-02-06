@@ -1,0 +1,76 @@
+
+Non pretty printed counter example
+----------------------------------
+
+Found : If (Uno Not (Val (Log True))) ((("b" := Var "s") :-> If (Duo Mod (Duo Add (Duo LessEq (Uno Minus (Uno Not (Val (Log False)))) (Var "w")) (Duo Div (Duo Sub (Var "u") (Duo Mul (Duo Mod (Val (Log True)) (Val (Log True))) (Duo Less (Val (Num (-41))) (Val (Num (-14)))))) (Uno Minus (Uno Not (Duo Mod (Duo Mul (Duo Div (Val (Num 8)) (Val (Num 34))) (Duo Sub (Val (Num 16)) (Var "o"))) (Uno Not (Duo Div (Val (Log True)) (Val Wrong)))))))) (Duo Sub (Duo Mod (Duo Or (Val (Num (-37))) (Duo LessEq (Duo And (Val (Log True)) (Val (Num 47))) (Var "y"))) (Uno Minus (Duo Div (Uno Minus (Uno Minus (Uno Not (Val (Num (-54)))))) (Duo Sub (Uno Not (Val (Log True))) (Uno Minus (Val (Log False))))))) (Var "p"))) (If (Duo Less (Uno Minus (Uno Minus (Duo Or (Duo Mod (Duo Or (Duo Or (Var "s") (Uno Minus (Val (Num 51)))) (Val (Log False))) (Val (Num (-39)))) (Duo Add (Duo And (Duo Mod (Uno Not (Var "h")) (Duo Less (Var "n") (Var "j"))) (Uno Not (Duo LessEq (Val (Num (-24))) (Duo Mod (Val (Log False)) (Var "v"))))) (Uno Not (Var "d")))))) (Duo And (Uno Minus (Val (Log False))) (Uno Not (Val (Num (-30)))))) (If (Duo Mul (Val (Num (-22))) (Uno Minus (Uno Not (Duo Or (Duo Div (Val (Num (-16))) (Duo Mul (Uno Not (Duo Mod (Var "m") (Duo LessEq (Var "d") (Val (Log True))))) (Duo Mod (Duo Mul (Val (Num 53)) (Val (Log False))) (Var "j")))) (Uno Minus (Duo Sub (Duo Mul (Uno Minus (Val Wrong)) (Duo Div (Duo LessEq (Val (Log False)) (Var "s")) (Uno Minus (Var "u")))) (Duo Eq (Duo LessEq (Duo Add (Var "p") (Val (Log False))) (Var "m")) (Duo Div (Val (Num 54)) (Uno Not (Var "r")))))))))) ("c" := Var "o") (Print (Duo Add (Val (Log True)) (Uno Not (Var "u"))))) (While (Duo Mod (Var "q") (Duo And (Duo Mul (Duo And (Duo Eq (Var "y") (Duo Mul (Var "h") (Var "c"))) (Duo Sub (Uno Not (Var "f")) (Uno Not (Var "p")))) (Val (Num (-53)))) (Duo Or (Duo Eq (Duo Mul (Duo Eq (Val (Num (-34))) (Val (Log True))) (Val (Num 14))) (Uno Not (Duo Mod (Duo Or (Val (Log True)) (Val (Num (-20)))) (Uno Minus (Var "w"))))) (Var "a")))) ("d" := Duo Mod (Duo Mod (Duo Mod (Duo Add (Val (Log True)) (Uno Not (Val (Log True)))) (Duo Mul (Duo LessEq (Duo Less (Val (Log False)) (Var "s")) (Duo Mod (Var "x") (Var "f"))) (Duo Eq (Duo Or (Var "o") (Val (Log True))) (Var "e")))) (Duo LessEq (Duo Or (Uno Minus (Uno Minus (Duo Add (Var "v") (Var "a")))) (Duo Or (Var "b") (Var "i"))) (Uno Minus (Val (Num (-24)))))) (Uno Minus (Var "f"))))) ((Skip :-> Print (Var "s")) :-> If (Duo Sub (Duo Mod (Val (Num 4)) (Duo Or (Val (Num 52)) (Duo Sub (Uno Not (Val (Num (-9)))) (Var "v")))) (Uno Not (Duo And (Duo Eq (Var "y") (Uno Minus (Val (Log True)))) (Var "e")))) (Print (Uno Minus (Duo Mul (Var "t") (Duo Or (Uno Minus (Val (Num (-20)))) (Duo LessEq (Uno Not (Uno Minus (Uno Minus (Duo LessEq (Var "z") (Duo Less (Val (Log True)) (Val (Log False))))))) (Var "t")))))) ("u" := Uno Minus (Duo Or (Val Wrong) (Duo Sub (Duo Eq (Val (Num 54)) (Var "k")) (Duo Div (Val (Num (-24))) (Uno Not (Uno Not (Duo Less (Val (Num (-41))) (Uno Minus (Var "v"))))))))))) :-> Print (Duo LessEq (Duo And (Duo Less (Duo Mul (Duo Sub (Duo Mod (Var "h") (Val (Num 28))) (Val (Num (-46)))) (Uno Minus (Uno Minus (Duo Mul (Val (Num 5)) (Val Wrong))))) (Duo Less (Uno Not (Val (Log False))) (Duo Or (Duo Less (Val (Num (-38))) (Val (Num 46))) (Duo LessEq (Val (Log True)) (Val (Num 12)))))) (Duo And (Duo Or (Var "s") (Uno Not (Var "h"))) (Uno Not (Uno Not (Duo Eq (Duo Add (Uno Minus (Var "p")) (Duo Or (Val (Log False)) (Val (Log True)))) (Uno Minus (Duo Mul (Val (Log True)) (Val (Num 28))))))))) (Duo Mul (Duo Mod (Duo Eq (Duo LessEq (Duo Less (Val (Log False)) (Val (Log False))) (Duo Eq (Var "f") (Var "s"))) (Uno Minus (Duo Mod (Duo Eq (Val (Num (-10))) (Var "d")) (Duo And (Var "i") (Val (Log False)))))) (Var "j")) (Duo Less (Duo Mod (Duo LessEq (Val (Num (-20))) (Duo Mod (Val (Num 49)) (Var "p"))) (Var "p")) (Var "b"))))) Skip
+Shrunk: If (Val (Log True)) (Print (Var "u")) Skip
+
+Pretty printed
+--------------
+
+Shrunk:
+
+if true then
+  print u
+else
+  skip
+
+Found :
+
+if !true then
+  b := s
+  if  (((-(!false)) <= w)
+         + (u - true % true * ((-41) < (-14)))
+             / (-(!(8 / 34 * (16 - o) % !(true / error))))
+      ) % (((-37) || (true && 47) <= y)
+             % (-((-(-(!(-54)))) / (!true - (-false))))
+             - p
+          )
+      then
+    if  (-(-((s || (-51) || false) % (-39)
+               || (!h % (n < j) && !((-24) <= false % v)) + !d
+            )
+          )
+        ) < ((-false) && !(-30))
+        then
+      if  (-22)
+            * (-(!((-16) / (!(m % (d <= true)) * (53 * false % j))
+                     ||
+                       (-((-error) * ((false <= s) / (-u)) - ((p + false <= m) == 54 / !r)
+                         )
+                       )
+                  )
+                )
+              )
+          then
+        c := o
+      else
+        print true + !u
+    else
+      while
+          q % ((y == h * c && !f - !p) * (-53)
+                 && (((-34) == true) * 14 == !((true || (-20)) % (-w)) || a)
+              )
+          do
+        d :=
+          (true + !true) % (((false < s) <= x % f) * ((o || true) == e))
+            % (((-(-(v + a))) || (b || i)) <= (-(-24)))
+            % (-f)
+  else
+    skip
+    print s
+    if 4 % (52 || !(-9) - v) - !(y == (-true) && e) then
+      print -(t * ((-(-20)) || !(-(-(z <= (true < false)))) <= t))
+    else
+      u := -(error || (54 == k) - (-24) / !(!((-41) < (-v))))
+  print
+    ((h % 28 - (-46)) * (-(-(5 * error)))
+       < (!false < ((-38) < 46 || true <= 12))
+       && ((s || !h) && !(!((-p) + (false || true) == (-(true * 28)))))
+    ) <=
+        (((false < false) <= (f == s)) == (-(((-10) == d) % (i && false))))
+          % j
+          * (((-20) <= 49 % p) % p < b)
+else
+  skip
+

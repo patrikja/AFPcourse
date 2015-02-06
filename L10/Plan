@@ -1,0 +1,101 @@
+-*- Org -*-
+* Learning outcomes
+** Types: read, understand ...
+** Spec: use specification based development techniques
+*** Spec.Test: formulate and test properties about the program
+*** Spec.Trans: transform programs on the basis of reasoning
+* Testing: Generating values
+** Repetition about generators in general and the QuickCheck API
+
+> class Arbitrary a where
+>   arbitrary :: Gen a      -- think: RandSeed -> (a, RandSeed)
+>   shrink :: a -> [a]      -- "smaller" values for 
+
+> return     ::  a -> Gen a
+> (>>=)      ::  Gen a -> (a -> Gen b) -> Gen b
+> choose     ::  Random a => (a,a) -> Gen a
+> oneof      ::  [Gen a] -> Gen a
+> frequency  ::  [(Int, Gen a)] -> Gen a
+> elements   ::  [a] -> Gen a
+> sized      ::  (Int -> Gen a) -> Gen a
+
+> instance Arbitrary Bool where
+>   arbitrary = choose (False, True)
+>
+> instance (Arbitrary a, Arbitrary b) => Arbitrary (a,b) where
+>   arbitrary =  do
+>                  x  <-  arbitrary
+>                  y  <-  arbitrary
+>                  return (x,y)
+>
+> data Dir = North | East | South | West
+> instance Arbitrary Dir where
+>   arbitrary = elements [North, East, South, West]
+> instance Arbitrary Int where
+>   arbitrary = choose (-20,20)
+> instance Arbitrary Int where
+>   arbitrary = sized (\ n -> choose (-n,n))
+
+Useful helper function:
+
+QuickCheck.sample :: Show a => Gen a -> IO ()
+** Shrinking
+
+shrink :: Arbitrary a => a -> [a]
+
+Help QuickCheck find small counterexamples by pointing out
+smaller values to try. QuickCheck generates lots of values which
+pass the test. Assume |a| is a value which fails. Then we could
+have a conceptual tree like this:
+
+*** Example of a "shrinking tree":
+
+                a    -- shrink a = [b, g, h]
+               /|\   -- shrink b = [c, d]
+              b g h  -- shrink c = []
+             /|   |\ -- shrink d = [e, f]
+            c d   i k-- shrink e = shrink f = shrink g = []
+              |\ /|  -- shrink h = [i, k]
+              e f j  -- shrink i = [f, j], ...
+
+In that case, QuickCheck will traverse this tree depth-first in
+search of a node |x| which fails but for which all |shrink x|
+pass. 
+
+Examples: 
+a, b, c fail          => x = c
+a, b fail, c, d pass  => x = b
+
+* Bigger compiler example: Haskell Program Coverage
+
+Mainly parts of Compiler/Properties.hs and the Haskell program
+coverage tool (hpc).
+
+** Compiler example infrastructure
+
+   Compiler.compile :: Command -> [Instruction]
+    Machine.exec    ::            [Instruction] -> Trace Value
+Interpreter.interp  :: Command ->                  Trace Value
+
+Interpreter.run     :: Command -> Env -> (Trace Value, Env)
+
+
+** Some of the compiler (testing) code
+
+file:src/Compiler/Properties_demo.hs
+file:src/Compiler/Syntax.hs
+file:src/Compiler/Compiler.hs  -- insert a bug
+
+* ParserTests 
+Simplify - pick monomorphic types
+file:src/ParserTests.hs 
+
+
+* Misc.
+
+emacs ParserTests.hs Compiler/Properties.hs
+
+Useful command to experiment with some file inside a hackage package:
+
+(repl = read, eval, print loop)
+cabal repl SomeFile.hs

@@ -1,0 +1,31 @@
+name:                AFPlecture10
+version:             2015.0
+synopsis:            AFP course lecture 10
+-- description:         
+homepage:            http://www.cse.chalmers.se/edu/course/afp/
+license:             BSD3
+license-file:        LICENSE
+author:              Patrik Jansson
+maintainer:          patrikj@chalmers.se
+-- copyright:           
+-- category:            
+build-type:          Simple
+cabal-version:       >=1.8
+
+-- extra-source-files: Compiler/Makefile
+
+library
+  Hs-source-dirs:      src
+  exposed-modules:     Compiler.Value, Compiler.Syntax, Compiler.Machine, Compiler.StackMap, Compiler.Behaviour, 
+                       Compiler.PolyParser, Compiler.Parser, Compiler.Pretty, Compiler.PropPretty,
+                       Compiler.Main, Compiler.Interpreter, Compiler.Compiler, Compiler.Generators, Compiler.TypedGenerators
+  -- other-modules:       
+  build-depends:       base < 5, mtl < 2.2, containers < 0.6, QuickCheck < 2.8, pretty < 1.2, array < 0.6
+    
+
+
+test-suite test-compiler
+  type:       exitcode-stdio-1.0
+  main-is:    Compiler/Properties.hs
+  Hs-source-dirs:      src, src/Compiler
+  build-depends:       AFPlecture10 < 2016, base < 5, mtl < 2.2, containers < 0.6, QuickCheck < 2.8, pretty < 1.2, array < 0.6
