@@ -31,7 +31,6 @@
 * *Testing cannot (generally) prove the absence of bugs.*
 
 ---
-
 ##Correctness
 
 * When is a program correct?
@@ -40,7 +39,6 @@
 * What about bugs in the specification?
 
 ---
-
 ##This lecture
 
 * Equational reasoning with Haskell programs
@@ -54,19 +52,21 @@
 * Understand how QuickCheck works and how to make QuickCheck usable for your own larger programs.
 
 ---
-
 #Equational reasoning
 
 ##Referential transparency
 
-* ``Equals can be substituted for equals''
+* "Equals can be substituted for equals"
 * In other words: if an expression has a value in a context, we can replace it with any other expression that has the same value in the context without affecting the meaning of the program.
 
----
+(A nice summary is [What is referential transparency?](http://stackoverflow.com/questions/210835/what-is-referential-transparency) on stackoverflow.)
 
+---
 ## Referential transparency (contd.)
 
-SML is (like most languages) *not* referentially transparent:
+SML (like most languages) needs a complex notion of "value" to qualify
+as referentially transparent. If we try naively to use only the
+resulting int we get into trouble:
 
 ```sml
 let  val  x    =  ref 0                  
@@ -77,7 +77,7 @@ end
 
 The expression evaluates to |4|.
 
-The value of |f 1| is |1|. But
+We may think the value of |f 1| is |1|. But
 
 ```sml
 let  val  x    =  ref 0                  
@@ -89,7 +89,6 @@ end
 evaluates to |3|.
 
 ---
-
 ##Referential transparency (contd.)
 
 Also
@@ -112,11 +111,10 @@ in   r + r
 %}
 
 ---
-
 ##Referential transparency in Haskell
 
-* Haskell is referentially transparent.
-* The SML example breaks down because Haskell has no untracked side-effects.
+* Haskell is referentially transparent with "simple" values.
+* The SML example is clarified because Haskell has no untracked side-effects.
 
 ```Haskell
 do
@@ -129,8 +127,10 @@ do
 
 The type of |f| is |Int -> IO Int|, not |Int -> Int| as in SML.
 
----
+(You could say that the IO monad is "built-in" to SML. It is always
+lurking in the background.)
 
+---
 ##Referential transparency in Haskell (contd.)
 
 * Because of referential transparency, the definitions of functions give us rules for reasoning about Haskell programs.
@@ -142,12 +142,10 @@ data [a] = [] | a : [a]
 
 To prove |forall ((xs :: [a])) . P xs|, we prove
 
-    * |P []|
-    * |forall ((x :: a)) (xs :: [a]) . P xs -> P (x : xs)|
-
+* |P []|
+* |forall ((x :: a)) (xs :: [a]) . P xs -> P (x : xs)|
 
 ---
-
 ##Equational reasoning example
 
 
@@ -174,7 +172,6 @@ Lemma:
 |forall ((x :: a)) (ys :: [a]) . length (insert x ys) === 1 + length ys|
 
 ---
-
 ##Proof of the Lemma
 
 \begin{Lemma}
@@ -198,7 +195,6 @@ Case |[]|:
 ```
 
 ---
-
 ##Proof of the Lemma (contd.)
 
 Lemma: |forall ((x :: a)) (ys :: [a]) . length (insert x ys) === 1 + length ys|
@@ -236,7 +232,6 @@ Case |y:ys|, case |x > y|:
 ```
 
 ---
-
 ##Proof of the Theorem
 
 Theorem: |forall ((xs :: [a])) . length (isort xs) === length xs|
@@ -254,7 +249,6 @@ Case |[]|:
 ```
 
 ---
-
 ##Proof of the Theorem (contd.)
 
 Theorem: |forall ((xs :: [a])) . length (isort xs) === length xs|
@@ -275,11 +269,10 @@ Case |x:xs|:
 ```
 
 ---
-
 ##Equational reasoning summary
 
 * Equational reasoning can be an elegant way to prove properties of a program.
-* Equational reasoning can be used to establish a relation between an ``obivously correct'' Haskell program (a specification) and an efficient Haskell program.
+* Equational reasoning can be used to establish a relation between an "obivously correct" Haskell program (a specification) and an efficient Haskell program.
 * Equational reasoning is usually quite lengthy.
 * Careful with special cases (laziness):
     * undefined values;
@@ -287,14 +280,12 @@ Case |x:xs|:
 * It is infeasible to prove properties about every Haskell program using equational reasoning.
 
 ---
-
 ##Other proof methods
 
 * Type systems.
 * Proof assistants.
 
 ---
-
 #Specification and testing using QuickCheck
 
 ##QuickCheck
@@ -306,7 +297,6 @@ Case |x:xs|:
 * Shrinks failing test cases.
 
 ---
-
 ##Using QuickCheck
 
 To use QuickCheck in your program:
@@ -352,7 +342,6 @@ property :: Testable prop => prop -> Property
 
 
 ---
-
 ##Recap: Classes and instances (contd.)
 
 * Instances declare which types belong to a predicate.
@@ -377,7 +366,6 @@ quickCheck :: Testable prop => prop -> IO ()
 ```
 
 ---
-
 ##Nullary properties
 
 ```Haskell
@@ -457,7 +445,6 @@ ordered (x:y:ys)  =  x <= y && ordered (y:ys)
 ```
 
 ---
-
 ##How to fully specify sorting (contd.)
 
 Property 2:
@@ -505,7 +492,6 @@ The function |collect| gathers statistics about test cases. This information is 
      1% 7
 
 ---
-
 ##More information about test data (contd.)
 
 In the extreme case, we can show the actual data that is tested:
@@ -521,7 +507,6 @@ In the extreme case, we can show the actual data that is tested:
 Question: Why is it important to have access to the test data?
 
 ---
-
 ##Implications
 
 The function insert preserves an ordered list:
@@ -558,7 +543,6 @@ But:
 Only 12 lists have really been tested!
 
 ---
-
 ##Implications (contd.)
 
 The solution is to use the QuickCheck implication operator:
@@ -583,7 +567,6 @@ Now we get:
     Gave up! Passed only 43 tests (100% True).
 
 ---
-
 ##Configuring QuickCheck
 
 ```Haskell
@@ -646,7 +629,6 @@ instance Arbitrary Dir where
 ```
 
 ---
-
 ##Generating numbers
 
 * A simple possibility:
@@ -689,7 +671,6 @@ liftM2  :: (a -> b -> c)  ->  Gen a -> Gen b -> Gen c
 *Termination is unlikely!*
 
 ---
-
 ##Generating trees (contd.)
 
 ```Haskell
@@ -704,6 +685,9 @@ arbitraryTree n = frequency [  (1, liftM   Leaf  arbitrary),
 ```
 
 Why a non-zero probability for |Leaf| in the second case of |arbitraryTree|?
+
+Links:
+* [GenTree.hs](GenTree.hs)
 
 ---
 ##Shrinking
@@ -743,7 +727,6 @@ All lists are ordered?
     [0,-1]
 
 ---
-
 ##Loose ends
 
 * Haskell can deal with infinite values, and so can QuickCheck. However, properties must not inspect infinitely many values. For instance, we cannot compare two infinite values for equality and still expect tests to terminate. Solution: Only inspect finite parts.
