@@ -14,11 +14,11 @@ insert x (y : xs)
   | x < y     = x : y : xs
   | otherwise = y : insert x xs
 
-sort :: Ord a => [a] -> [a]
-sort [] = []
-sort (x : xs) = insert x (sort xs)
+isort :: Ord a => [a] -> [a]
+isort [] = []
+isort (x : xs) = insert x (isort xs)
 -- or equivalently
--- > sort = foldr insert []
+-- > isort = foldr insert []
 
 -- * Properties
 
@@ -28,9 +28,9 @@ ordered []           = True
 ordered [_x]         = True
 ordered (x : y : xs) = x <= y  &&  ordered (y : xs)
 
--- | 'sort' should produce ordered results.
-prop_sort :: [Integer] -> Bool
-prop_sort xs = ordered (sort xs)
+-- | 'isort' should produce ordered results.
+prop_isort :: [Integer] -> Bool
+prop_isort xs = ordered (isort xs)
 
 -- | 'insert' should preserve orderedness. Bad property!  Why:
 -- it's quite unlikely that a random longish list will be
@@ -61,7 +61,7 @@ instance Q.Arbitrary El where
 -- | Sorting twice is the same as sorting once. Not true for our
 -- insertion sort!
 prop_idem :: [El] -> Bool
-prop_idem xs = sort (sort xs) == sort xs
+prop_idem xs = isort (isort xs) == isort xs
 
 -- What is wrong? (spoiler below)
 
