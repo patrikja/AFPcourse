@@ -109,8 +109,6 @@ let  val  x    =  ref 0
 in   r + r
 ```
 
-%}
-
 ---
 ##Referential transparency in Haskell
 
@@ -166,18 +164,16 @@ insert x (y:ys)
   | otherwise    =  y : insert x ys 
 ```
 
-###Theorem: Sorting preserves length
+* Theorem: Sorting preserves length
 |forall ((xs :: [a])) . length (isort xs) === length xs|
 
-Lemma:
+* Lemma:
 |forall ((x :: a)) (ys :: [a]) . length (insert x ys) === 1 + length ys|
 
 ---
 ##Proof of the Lemma
 
-\begin{Lemma}
-|forall ((x :: a)) (ys :: [a]) . length (insert x ys) === 1 + length ys|
-\end{Lemma}
+Lemma: |forall ((x :: a)) (ys :: [a]) . length (insert x ys) === 1 + length ys|
 
 Proof by induction on the list.
 
