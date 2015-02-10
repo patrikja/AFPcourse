@@ -51,10 +51,11 @@
 * Understand how to define QuickCheck properties and how to use QuickCheck.
 * Understand how QuickCheck works and how to make QuickCheck usable for your own larger programs.
 
----
-#Equational reasoning
 
-##Referential transparency
+---
+##Equational reasoning
+
+###Referential transparency
 
 * "Equals can be substituted for equals"
 * In other words: if an expression has a value in a context, we can replace it with any other expression that has the same value in the context without affecting the meaning of the program.
@@ -698,14 +699,12 @@ The other method in |Arbitrary| is
 shrink :: (Arbitrary a) => a -> [a]
 ```
 
-
 * Maps each value to a number of structurally smaller values.
 * Default definition returns |[]| and is always safe.
 * When a failing test case is discovered, |shrink| is applied repeatedly until no smaller failing test case can be obtained.
 
 ---
 ##Defining |Arbitrary| generically
-
 
 * Both |arbitrary| and |shrink| are examples of *datatype-generic* functions -- they can be defined for (almost) any Haskell datatype in a systematic way.
 * Haskell does not provide any way to write down such an algorithm.
