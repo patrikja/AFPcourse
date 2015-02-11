@@ -93,7 +93,7 @@ file:src/ParserTests.hs
 
 * Misc.
 
-emacs ParserTests.hs Compiler/Properties.hs
+emacs Plan src/ParserTests.hs src/Compiler/Properties.hs
 
 Useful command to experiment with some file inside a hackage package:
 

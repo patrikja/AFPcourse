@@ -11,17 +11,17 @@ author: Patrik Jansson
 data-dir: ""
  
 library
-    build-depends: base <5, mtl <2.2, containers <0.6, QuickCheck <2.8,
-                   pretty <1.2, array <0.6
-    exposed-modules: Compiler.Value Compiler.Syntax Compiler.Machine
-                     Compiler.StackMap Compiler.Behaviour Compiler.PolyParser
-                     Compiler.Parser Compiler.Pretty Compiler.PropPretty Compiler.Main
-                     Compiler.Interpreter Compiler.Compiler Compiler.Generators
-                     Compiler.TypedGenerators
-    exposed: True
-    buildable: True
-    hs-source-dirs: src
- 
+  hs-source-dirs: src
+  build-depends: base <5, mtl <2.2, containers <0.6, QuickCheck <2.8,
+                 pretty <1.2, array <0.6
+
+  exposed-modules: Sample, ParserTests, Compiler.Compiler,
+      Compiler.Interpreter, Compiler.Properties, Compiler.Generators,
+      Compiler.PropPretty, Compiler.PolyParser, Compiler.StackMap,
+      Compiler.Parser, Compiler.Value, Compiler.Machine,
+      Compiler.Syntax, Compiler.Pretty, Compiler.Main,
+      Compiler.TypedGenerators, Compiler.Behaviour
+
 test-suite test-compiler
     build-depends: AFPlecture10 -any, base <5, mtl <2.2,
                    containers <0.6, QuickCheck <2.8, pretty <1.2, array <0.6
@@ -29,4 +29,3 @@ test-suite test-compiler
     main-is: Compiler/Properties.hs
     buildable: True
     hs-source-dirs: src src/Compiler
- 

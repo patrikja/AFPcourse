@@ -35,6 +35,6 @@ run (Print e)   s = (eval e s :> End, s)
 
 eval :: Expr -> Env -> Value
 eval (Var x)      s = look x s
-eval (Val v)      s = v
+eval (Val v)     _s = v
 eval (Uno op a)   s = uno op (eval a s)
 eval (Duo op a b) s = duo op (eval a s) (eval b s)

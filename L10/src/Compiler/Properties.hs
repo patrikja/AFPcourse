@@ -1,11 +1,11 @@
-module Main where
+module Compiler.Properties where
 -- import Compiler.Parser
 -- import Compiler.PropPretty
 import Compiler.Behaviour   (Trace(..), cut, crashed)
 import Compiler.Interpreter (interp)
 import Compiler.Compiler    (compile)
 import Compiler.Machine     (exec)
-import Compiler.Syntax      (Command(..), Expr(..), Name)
+import Compiler.Syntax      (Command(..), Expr(..))
 import Compiler.Value       (Value(..), Op1(..), Op2(..))
 import Compiler.Pretty      ()
 
@@ -14,7 +14,7 @@ import Compiler.Generators
    arbEnum, arbValue, shrinkValue)
 import Compiler.TypedGenerators 
   (arbCommand, genEnv, genExpr, inferExpr, 
-   typedShrink, typedShrinkE)
+   typedShrink, typedShrinkE, Type)
 
 import Test.QuickCheck 
 
@@ -28,27 +28,30 @@ s =~= t = forAllShrink arbitrary shrink $ \(Positive n) ->
           in whenFail (debug s t) (s' == t')
 --          in  collect s' (s' == t')
   where
-    debug s t = do
-      putStrLn $ "lhs: " ++ show s
-      putStrLn $ "rhs: " ++ show t
+    debug lhs rhs = do
+      putStrLn $ "lhs: " ++ show lhs
+      putStrLn $ "rhs: " ++ show rhs
 
 -- properties
 
-prop_Congruence  = forAllShrink arbCommand shrink        $ \p ->
-                     interp p =~= exec (compile p)
+propCongruence :: Property
+propCongruence  = forAllShrink arbCommand shrink        $ \p ->
+                    interp p =~= exec (compile p)
 
 -- A "no shrinking" version:
-prop_Congruence' = forAllShrink arbCommand shrinkNothing $ \p ->
-                     interp p =~= exec (compile p)
+propCongruence' :: Property
+propCongruence' = forAllShrink arbCommand shrinkNothing $ \p ->
+                    interp p =~= exec (compile p)
 
 --
+canCrash :: Command -> Bool
 canCrash p = case p of
     Skip       -> False
     Print _    -> False
     If c a b   -> canBeWrong c || any canCrash [a, b]
     While c a  -> canBeWrong c || canCrash a
     a :-> b    -> any canCrash [a, b]
-    x := e     -> canBeWrong e
+    _x := e    -> canBeWrong e
   where
     canBeWrong (Duo Div _ _)  = True
     canBeWrong (Duo Mod _ _)  = True
@@ -58,24 +61,28 @@ canCrash p = case p of
     canBeWrong (Var _)        = False
 
 
-prop_crash =
+propCrash :: Property
+propCrash =
   forAllShrink arbCommand typedShrink $ \p ->
   forAllShrink arbitrary shrink $ \(Positive n) ->
   let t = cut n (interp p) in
   whenFail (print t) $ crashed t ==> canCrash p
 
-prop_typedExpr t =
+propTypedExpr :: Type -> Property
+propTypedExpr t =
   forAll genEnv $ \env ->
   forAllShrink (genExpr env t) typedShrinkE $ \e ->
     all ((t ==) . inferExpr env) $ typedShrinkE e
 
+main :: IO ()
 main = do
---  run 20 $ prop_typedExpr
---  run 200 $ prop_Congruence'   -- no shrinking
-  run 200 $ prop_Congruence    -- shrinking
---  run  50 $ prop_crash
---  run 100 $ prop_pretty_parse
+--  run 20 $ propTypedExpr
+--  run 200 $ propCongruence'   -- no shrinking
+  run 200 $ propCongruence    -- shrinking
+--  run  50 $ propCrash
+--  run 100 $ propPrettyParse
     
+run :: Testable prop => Int -> prop -> IO ()
 run n = quickCheckWith stdArgs{ maxSuccess = n }
 
 ----------------------------------------------------------------
@@ -99,5 +106,3 @@ instance Arbitrary Op2 where
 instance Arbitrary Value where
   arbitrary = arbValue
   shrink    = shrinkValue
-
-

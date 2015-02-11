@@ -1,6 +1,6 @@
 
 -- | Testing the parser library from lecture 4.
-module Main where
+module ParserTests where
 
 import Control.Applicative((<$>), (<*>))
 import Control.Arrow(second)

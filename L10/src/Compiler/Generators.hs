@@ -1,6 +1,6 @@
 module Compiler.Generators where
 import Compiler.Syntax      (Command(..), Expr(..), Name)
-import Compiler.Value       (Value(..), Op1(..), Op2(..))
+import Compiler.Value       (Value(..), Op1, Op2)
 
 import Test.QuickCheck 
 import Control.Monad       (liftM, liftM2, liftM3)
@@ -16,7 +16,7 @@ shrinkExpr  (Duo o e1 e2)    = e1 : e2 :
            [ Duo o e1' e2 | e1' <- shrinkExpr e1 ] ++
            [ Duo o e1 e2' | e2' <- shrinkExpr e2 ]
 shrinkExpr  (Val v) = [ Val v' | v' <- shrinkValue v ]
-shrinkExpr  (Var x) = [ Val (Num 0)
+shrinkExpr  (Var _) = [ Val (Num 0)
                       , Val (Bol False)
                       , Val (Bol True) ]
 
@@ -39,7 +39,9 @@ arbSizedExpr n = frequency $
     arbExpr' = arbSizedExpr (n-1)
     arbExpr2 = arbSizedExpr (n `div` 2)
 
+arbUno :: Gen Op1
 arbUno = arbEnum
+arbDuo :: Gen Op2
 arbDuo = arbEnum
 
 arbCommand :: Gen Command

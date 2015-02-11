@@ -7,8 +7,8 @@ succeed :: a -> Parser s a
 succeed v inp = [(v,inp)]
 
 satisfy :: (s -> Bool) -> Parser s s
-satisfy p []     = []
-satisfy p (x:xs) = if p x then [(x,xs)] else []
+satisfy _p []     = []
+satisfy  p (x:xs) = if p x then [(x,xs)] else []
 
 lit :: Eq s => s -> Parser s s
 lit x = satisfy (x==)
@@ -67,7 +67,7 @@ symbol = P $ satisfy (const True)
 P p +++ P q = P (p ||| q)
 
 pfail :: P s a
-pfail = P $ \inp -> []
+pfail = P $ \_inp -> []
 
 parse :: P s a -> [s] -> [(a,[s])]
 parse = unP
@@ -76,6 +76,7 @@ instance Monad (P s) where
   return     =  P . succeed
   P p >>= f  =  P $ \inp -> do (x, rest) <- p inp
                                unP (f x) rest
+
 -- Possible bug to use for debugging:
 --                               (y, _   ) <- unP (f x) rest
 --                               return (y, rest)

@@ -11,11 +11,13 @@ import Compiler.Generators
 import Control.Monad
 import Test.QuickCheck 
 
-prop_Congruence p = collect (take 10 $ show p) $  
+propCongruence :: Command -> Property
+propCongruence p = collect (take 10 $ show p) $  
   interp p =~= exec (compile p)
 -- 
 
 -- (=~=) :: (Show a, Eq a) => Trace a -> Trace a -> Integer -> Bool
+(=~=) :: (Show a, Eq a) => Trace a -> Trace a -> Positive Integer -> Property
 s =~= t = \(Positive n) -> 
           let  s' = cut n s
                t' = cut n t
@@ -23,7 +25,8 @@ s =~= t = \(Positive n) ->
 -- collect (crashed s') $ 
 -- 
 
-main = do quickCheck prop_Congruence
+main :: IO ()
+main = do quickCheck propCongruence
 
 ----------------
 instance Arbitrary Command where

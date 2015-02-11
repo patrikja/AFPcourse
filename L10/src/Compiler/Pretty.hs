@@ -47,12 +47,12 @@ instance Pretty Value where
     prettyPrec p (Num n)
         | n >= 0    = text $ show n
         | otherwise = mparens (p>0) $ text $ show n
-    prettyPrec p (Bol True)     = text "T"
-    prettyPrec p (Bol False)    = text "F"
+    prettyPrec _ (Bol True)     = text "T"
+    prettyPrec _ (Bol False)    = text "F"
     prettyPrec _ Wrong          = text "Wrong"
 
 instance Pretty Expr where
-    prettyPrec p (Var x)        = text x
+    prettyPrec _ (Var x)        = text x
     prettyPrec p (Val v)        = prettyPrec p v
     prettyPrec p (Uno Minus e)  = mparens (p>0) $ text "-" <> prettyPrec 10 e
     prettyPrec p (Uno Not e)    = mparens (p>9) $ text "!" <> prettyPrec 10 e
@@ -76,17 +76,22 @@ instance Pretty Op2 where
                     LessEq  -> "<="
                     Eq      -> "=="
 
+prec :: Op2 -> Int
 prec op     = head [ p | (op', _, p) <- ops, op == op' ]
+assoc :: Op2 -> Assoc
 assoc op    = head [ f | (op', f, _) <- ops, op == op' ]
+precL :: Op2 -> Int
 precL op = case assoc op of
                 L   -> prec op
                 _   -> prec op + 1
+precR :: Op2 -> Int
 precR op = case assoc op of
                 R   -> prec op
                 _   -> prec op + 1
 
 data Assoc = L | R | N
 
+ops :: [(Op2, Assoc, Int)]
 ops =   
   [ (And, L, 2)
   , (Or,  L, 1)
@@ -100,5 +105,6 @@ ops =
   , (Eq,     N, 3)
   ]
 
+mparens :: Bool -> Doc -> Doc
 mparens True  d  = cat [ text "(" <> d, text ")" ]
 mparens False d  = d
