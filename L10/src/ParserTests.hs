@@ -3,10 +3,8 @@
 module ParserTests where
 
 import Control.Applicative((<$>), (<*>))
-import Control.Arrow(second)
 import Data.List(sort)
 import Test.QuickCheck
-import Test.QuickCheck.Property (noShrinking)
 -- import Parsers                   (P, symbol, (+++), pfail, parse)
 import Compiler.PolyParser                   (P, symbol, (+++), pfail, parse)
 
@@ -17,13 +15,13 @@ import qualified Parser1 as Spec (P, symbol, (+++), pfail, parse)
 -- for a polymorphic type, so to do this we restrict ourselves to
 -- parsers of type P Bool Bool and build a datatype to model
 -- these. This type basically captures recognizers of certain patterns
--- in raw binary data.
+-- in raw binary data (modelled as [Bool]).
 data ParsBB
   = Plus ParsBB ParsBB
   | Fail
   | Return Bool
   | Symbol
-  | Bind ParsBB B2ParsBB -- the second type is needs to be filled in
+  | Bind ParsBB B2ParsBB -- the second type needs to be filled in
 
 -- | Instead of arbitrary functions (which quickCheck can generate but
 -- not check equality of or print) we build a datatype modelling a few
@@ -37,18 +35,21 @@ apply :: B2ParsBB -> Bool -> ParsBB
 apply (K p)      _ = p
 apply (If p1 p2) x = if x then p1 else p2
 
--- | We can show elements in our model, but not the parsers from the
---   implementation.
+-- | We can show elements in our model of parsers (but not the parsers
+-- from the implementation).
 instance Show ParsBB where
-  showsPrec n p = case p of
-    Fail   -> showString "pfail"
-    Symbol -> showString "symbol"
-    Return x -> showParen (n > 2) $ showString "return " . shows x
-    Plus p q -> showParen (n > 0) $ showsPrec 1 p
-                                  . showString " +++ "
-                                  . showsPrec 1 q
-    Bind p f -> showParen (n > 1) $ showsPrec 2 p
-                                  . showsBind f
+  showsPrec = showsPrecParsBB
+
+showsPrecParsBB :: Int -> ParsBB -> ShowS
+showsPrecParsBB n pa = case pa of
+    Fail      -> showString "pfail"
+    Symbol    -> showString "symbol"
+    Return x  -> showParen (n > 2) $ showString "return " . shows x
+    Plus p q  -> showParen (n > 0) $ showsPrec 1 p
+                                   . showString " +++ "
+                                   . showsPrec 1 q
+    Bind p f  -> showParen (n > 1) $ showsPrec 2 p
+                                   . showsBind f
     
 -- | Just to make the output a bit more readable
 showsBind :: B2ParsBB -> ShowS
@@ -59,9 +60,12 @@ showsBind f      = showString " >>= ". showsPrec 1 f
 -- And we can show our functions. That would have been harder if
 -- we had used real functions.
 instance Show B2ParsBB where
-  show (K p)      = "\\_ -> " ++ show p
-  show (If p1 p2) = "\\x -> if x then " ++ show p1 ++
-                               " else " ++ show p2
+  show = showB2ParsBB
+
+showB2ParsBB :: B2ParsBB -> String
+showB2ParsBB (K p)      = "\\_ -> " ++ show p
+showB2ParsBB (If p1 p2) = "\\x -> if x then " ++ show p1 ++
+                                     " else " ++ show p2
 
 -- | Generating an arbitrary parser. Parameterised by a size argument
 --   to ensure that we don't generate infinite parsers.
@@ -82,7 +86,7 @@ genParsBB n =
 -- | Generating arbitrary functions in our model.
 genFun :: Int -> Gen B2ParsBB
 genFun n = oneof $
-  [ K  <$> genParsBB n    -- ^ Half of our functions are constant
+  [ K  <$> genParsBB n    -- ^ Half of our functions are (explicitly) constant
   , If <$> gen2 <*> gen2
   ]
   where
@@ -98,19 +102,21 @@ instance Arbitrary ParsBB where
     [ Plus p1' p2 | p1' <- shrink p1 ] ++
     [ Plus p1 p2' | p2' <- shrink p2 ]
   shrink Fail         = [ Return False ]
-  shrink (Return x)   = []
+  shrink (Return _x)  = []
   shrink Symbol       = [ Return False ]
   shrink (Bind p k)   = p : apply k False : apply k True :
     [ Bind p' k | p' <- shrink p ] ++
     [ Bind p k' | k' <- shrink k ]
 
 instance Arbitrary B2ParsBB where
-  arbitrary = sized genFun
+  arbitrary  = sized genFun
+  shrink     = shrinkB2ParsBB
 
-  shrink (K p)      = [ K p | p <- shrink p ]
-  shrink (If p1 p2) = K p1 : K p2 :
-    [ If p1 p2 | p1 <- shrink p1 ] ++
-    [ If p1 p2 | p2 <- shrink p2 ]
+shrinkB2ParsBB :: B2ParsBB -> [B2ParsBB]
+shrinkB2ParsBB (K p)      = [ K p' | p' <- shrink p ]
+shrinkB2ParsBB (If p1 p2) = K p1 : K p2 :
+    [ If p1' p2 | p1' <- shrink p1 ] ++
+    [ If p1 p2' | p2' <- shrink p2 ]
 
 -- | We can turn a parser in our model into its specification...
 spec :: ParsBB -> Spec.P Bool Bool
@@ -148,33 +154,42 @@ bagEq xs ys = sort xs == sort ys
 -- We can turn all the laws we had into properties.
 -- Exercise: check all the laws L1 .. L10.
 
+law1'' :: (Monad m, Eq (m b)) =>   a -> (a -> m b) -> Bool
 law1'' x f =   (return x >>= f)   ==   (f x)
 
+law1' :: (Ord b, Ord s) =>         a -> (a -> P s b) -> [s] -> Bool
 law1' x f =   return x >>= f   =~=   f x
 
+law1 :: Bool -> B2ParsBB -> [Bool] -> Bool
 law1 x f0 =   return x >>= f   =~=   f x
   where f = compileFun f0
 
+law2 :: ParsBB -> [Bool] -> Bool
 law2 p0 =     p >>= return   =~=   p
   where p = compile p0
 
+law3 :: ParsBB -> B2ParsBB -> B2ParsBB -> [Bool] -> Bool
 law3 p0 f0 g0 =  (p >>= f) >>= g  =~=  p >>= (\x -> f x >>= g)
   where p = compile p0
         f = compileFun f0
         g = compileFun g0
 
+law5 :: ParsBB -> ParsBB -> B2ParsBB -> [Bool] -> Bool
 law5 p0 q0 f0 =   (p +++ q) >>= f  =~=  (p >>= f) +++ (q >>= f)
   where p = compile p0
         q = compile q0
         f = compileFun f0
 
+law9 :: ParsBB -> ParsBB -> [Bool] -> Bool
 law9 p0 q0 =      p +++ q  =~=  q +++ p
   where p = compile p0
         q = compile q0
 
 -- | We can also check that the implementation behaves as the
 --   specification.
-prop_spec p s  = -- whenFail debug $ 
+-- prop_spec :: ParsBB -> [Bool] -> Bool
+prop_spec :: ParsBB -> [Bool] -> Property
+prop_spec p s  = whenFail debug $ 
                  lhs  `bagEq`  rhs
   where
     lhs = parse    (compile p) s
@@ -187,14 +202,17 @@ prop_spec p s  = -- whenFail debug $
 ----------------
 -- | A utility function for turning off shrinking. Only used to
 -- illustrate the strength of shrinking.
+quickCheckNo :: Testable prop => prop -> IO ()
 quickCheckNo law = quickCheck (noShrinking law)
 
 -- ----------------------------------------------------------------
+main :: IO ()
 main = do           
   putStrLn "** prop_spec:"
   quickCheckNo prop_spec
 --  quickCheck prop_spec
   
+rest :: IO ()
 rest = do 
   putStrLn "** Monad law 1:"
   quickCheckNo law1
@@ -250,5 +268,6 @@ allLists :: (Bounded a, Enum a) => [[a]]
 allLists = [] : [ x : xs | x <- allA, xs <- allLists ]
   where allA = [minBound .. maxBound]
 
+test :: IO [(ParsBB, [[Bool]])]
 test = do ps <- sample' (arbitrary :: Gen ParsBB)
           return $ zip ps (map language ps) 

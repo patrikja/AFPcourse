@@ -86,6 +86,9 @@ file:src/Compiler/Properties_demo.hs
 file:src/Compiler/Syntax.hs
 file:src/Compiler/Compiler.hs  -- insert a bug
 
+cd src/; make
+file:///home/patrikj/src/AFPcourse/L10/src/Compiler/hpc_index_fun.html
+
 * ParserTests 
 Simplify - pick monomorphic types
 file:src/ParserTests.hs 
