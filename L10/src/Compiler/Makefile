@@ -1,5 +1,5 @@
-# MODULE = Properties
-MODULE = Properties_demo
+MODULE = Properties
+# MODULE = Properties_demo
 
 run :
 	ghc --make ${MODULE}.hs -fhpc
