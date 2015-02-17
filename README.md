@@ -20,14 +20,14 @@ Lecture plan:
 * L4: [Monads](L3/) and [Parsing](L4/): a case-study in program transformation
 * L5: [Parsing](L4/) and [Monad Transformers](L5/), part 1: how to build your monad from transformers. 
 * L6: [Monad Transformers](L5/), part 2: more transformers and the extensible interpreter
-* L7: Specification, verification and testing (QuickCheck)
-* L8: Exercise session based on exams from earlier years
-* L9: EDSL guest lecture by Emil Axelsson
+* L7: Exercise session based on exams from earlier years
+* L8: Specification, verification and testing (QuickCheck)
+* L9: [EDSL guest lecture](https://github.com/emilaxelsson/deep-shallow-edsl) by [Emil Axelsson](http://www.cse.chalmers.se/~emax/)
 * L10: More QuickCheck: Generating, shrinking, etc.
 * L11: Prel. Type based modelling in Haskell, part 1
 * L12: Agda tutorial
 * L13: Prel. Type based modelling in Haskell, part 2
-* L14: Guest lecture: Cezar Ionescu
+* L14: Program derivation: Maximum segment sum (guest lecture by [Cezar Ionescu](http://www.cse.chalmers.se/~cezar/))
 * L15: Exercise session based on exams from earlier years
 * L16: (Perhaps repetition)
 
