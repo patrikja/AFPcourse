@@ -1,4 +1,4 @@
-module Main where
+module Compiler.Properties where
 import Compiler.Syntax      (Command(..), Expr(..), Name)
 import Compiler.Value       (Value(..))
 import Compiler.Interpreter (interp)

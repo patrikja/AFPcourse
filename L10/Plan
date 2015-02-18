@@ -103,12 +103,5 @@ Useful command to experiment with some file inside a hackage package:
 cabal repl SomeFile.hs
 
 ** Preparation of "live-coding" environment
-# Remove old remains
-rm -r live
-# Copy all the "finished" files
-rsync --recursive   ./       live/
-# Overwite some of them with incomplete files
-rsync --recursive   before/  live/
-# Ready to start live-coding in live/src/
 
-emacs live/Plan live/src/ParserTests.hs live/src/Compiler/Properties.hs
+make
