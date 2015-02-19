@@ -31,7 +31,7 @@ data B2ParsBB
   | If ParsBB ParsBB  -- \x -> if x then p1 else p2
 
 -- Applying a function to an argument.
-apply :: B2ParsBB -> Bool -> ParsBB
+apply :: B2ParsBB -> (Bool -> ParsBB)
 apply (K p)      _ = p
 apply (If p1 p2) x = if x then p1 else p2
 

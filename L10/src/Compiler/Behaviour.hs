@@ -18,6 +18,7 @@ Crash    +++ t = Crash
 Cut      +++ _ = Cut
 
 cut :: Integer -> Trace a -> Trace a
+cut  n  _ | n < 0 = error "cut: negative input"
 cut  0 _ = Cut
 cut  n (a :> s) = a :> cut (n - 1) s
 cut  n (Step s) = Step $ cut (n - 1) s

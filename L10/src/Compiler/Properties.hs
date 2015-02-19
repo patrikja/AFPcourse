@@ -1,21 +1,14 @@
 module Compiler.Properties where
--- import Compiler.Parser
--- import Compiler.PropPretty
-import Compiler.Behaviour   (Trace(..), cut, crashed)
+import Compiler.Syntax      (Command(..), Expr(..), Name)
+import Compiler.Value       (Value(..))
 import Compiler.Interpreter (interp)
 import Compiler.Compiler    (compile)
-import Compiler.Machine     (exec)
-import Compiler.Syntax      (Command(..), Expr(..))
-import Compiler.Value       (Value(..), Op1(..), Op2(..))
+import Compiler.Machine     (exec, Instruction)
+import Compiler.Behaviour   (Trace(..), cut, crashed)
 import Compiler.Pretty      ()
+import Compiler.Generators
 
-import Compiler.Generators  
-  (arbExpr, shrinkExpr, shrinkCommand, 
-   arbEnum, arbValue, shrinkValue)
-import Compiler.TypedGenerators 
-  (arbCommand, genEnv, genExpr, inferExpr, 
-   typedShrink, typedShrinkE, Type)
-
+import Control.Monad
 import Test.QuickCheck 
 
 -- helper functions
@@ -24,9 +17,7 @@ import Test.QuickCheck
 s =~= t = forAllShrink arbitrary shrink $ \(Positive n) ->
           let  s' = cut n s
                t' = cut n t
---          in s' == t'
           in whenFail (debug s t) (s' == t')
---          in  collect s' (s' == t')
   where
     debug lhs rhs = do
       putStrLn $ "lhs: " ++ show lhs
@@ -91,6 +82,7 @@ instance Arbitrary Expr where
   arbitrary  = arbExpr
   shrink     = shrinkExpr  
 
+----------------
 instance Arbitrary Command where
   arbitrary  = arbCommand
   shrink     = shrinkCommand             
@@ -106,3 +98,21 @@ instance Arbitrary Op2 where
 instance Arbitrary Value where
   arbitrary = arbValue
   shrink    = shrinkValue
+
+whileTrue :: Command -> Command
+whileTrue c = While (Val (Bol True)) c
+
+testProg1 :: Command
+testProg1 = whileTrue Skip
+
+testCompile :: [Instruction]
+testCompile = compile testProg1
+
+testExec :: Trace Value
+testExec = exec testCompile
+
+testInterp :: Trace Value
+testInterp = interp testProg1
+
+testProg2 :: Command
+testProg2 = If (Val (Bol False)) Skip (Print (Val (Num 0)))

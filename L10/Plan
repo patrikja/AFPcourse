@@ -1,4 +1,5 @@
 -*- Org -*-
+AFP Lecture 10
 * Learning outcomes
 ** Types: read, understand ...
 ** Spec: use specification based development techniques
@@ -82,7 +83,7 @@ Interpreter.run     :: Command -> Env -> (Trace Value, Env)
 
 ** Some of the compiler (testing) code
 
-file:src/Compiler/Properties_demo.hs
+file:src/Compiler/Properties.hs
 file:src/Compiler/Syntax.hs
 file:src/Compiler/Compiler.hs  -- insert a bug
 

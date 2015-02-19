@@ -5,6 +5,8 @@ import Compiler.Syntax  (Expr(..), Command(..))
 import Compiler.StackMap(StackMap, stackMap, location, depth, push)
 import Compiler.Value   (Value(Wrong))
 
+-- Intentionally buggy version
+
 compile :: Command -> [Instruction]
 compile c =
   replicate (depth sm) (Push Wrong) ++
@@ -18,14 +20,12 @@ compObey sm Skip =
 compObey sm (v := e) =
   compEval sm e ++
   [Store (location sm v)]
---  [Store (location sm v + 1)] -- one possible bug
 compObey sm (c1 :-> c2) =
   compObey sm c1 ++
   compObey sm c2
 compObey sm (If e c1 c2) =
   compEval sm e ++
---  [JumpUnless (length isc1)] ++    -- one possible bug
-  [JumpUnless (length isc1 + 1)] ++
+  [JumpUnless (length isc1)] ++
   isc1 ++
   [Jump (length isc2)] ++
   isc2
@@ -36,8 +36,7 @@ compObey sm (While e c) =
   ise ++
   [JumpUnless (length isc + 1)] ++
   isc ++
---  [Jump (negate (length isc + 1 + length ise))]    -- one possible bug
-  [Jump (negate (length isc + 1 + length ise + 1))]
+  [Jump (negate (length isc + 1 + length ise))]
   where
   ise = compEval sm e
   isc = compObey sm c
