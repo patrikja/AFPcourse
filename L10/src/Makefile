@@ -14,4 +14,3 @@ clean:
 	-rm -r .hpc/
 	-rm Compiler/${MODULE} Compiler/${MODULE}.tix ${MODULE}.tix
 	-rm Compiler/*.html
-

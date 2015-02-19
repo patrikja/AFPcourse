@@ -1,15 +1,16 @@
 module Compiler.Properties where
 import Compiler.Syntax      (Command(..), Expr(..), Name)
-import Compiler.Value       (Value(..))
+import Compiler.Value       (Value(..), Op1(..), Op2(..))
 import Compiler.Interpreter (interp)
 import Compiler.Compiler    (compile)
 import Compiler.Machine     (exec, Instruction)
 import Compiler.Behaviour   (Trace(..), cut, crashed)
 import Compiler.Pretty      ()
-import Compiler.Generators
+import qualified Compiler.Generators       as G
+import qualified Compiler.TypedGenerators  as TG
 
 import Control.Monad
-import Test.QuickCheck 
+import Test.QuickCheck
 
 -- helper functions
 
@@ -26,12 +27,12 @@ s =~= t = forAllShrink arbitrary shrink $ \(Positive n) ->
 -- properties
 
 propCongruence :: Property
-propCongruence  = forAllShrink arbCommand shrink        $ \p ->
+propCongruence  = forAllShrink G.arbCommand shrink        $ \p ->
                     interp p =~= exec (compile p)
 
 -- A "no shrinking" version:
 propCongruence' :: Property
-propCongruence' = forAllShrink arbCommand shrinkNothing $ \p ->
+propCongruence' = forAllShrink G.arbCommand shrinkNothing $ \p ->
                     interp p =~= exec (compile p)
 
 --
@@ -54,16 +55,16 @@ canCrash p = case p of
 
 propCrash :: Property
 propCrash =
-  forAllShrink arbCommand typedShrink $ \p ->
+  forAllShrink G.arbCommand TG.typedShrink $ \p ->
   forAllShrink arbitrary shrink $ \(Positive n) ->
   let t = cut n (interp p) in
   whenFail (print t) $ crashed t ==> canCrash p
 
-propTypedExpr :: Type -> Property
+propTypedExpr :: TG.Type -> Property
 propTypedExpr t =
-  forAll genEnv $ \env ->
-  forAllShrink (genExpr env t) typedShrinkE $ \e ->
-    all ((t ==) . inferExpr env) $ typedShrinkE e
+  forAll TG.genEnv $ \env ->
+  forAllShrink (TG.genExpr env t) TG.typedShrinkE $ \e ->
+    all ((t ==) . TG.inferExpr env) $ TG.typedShrinkE e
 
 main :: IO ()
 main = do
@@ -72,32 +73,32 @@ main = do
   run 200 $ propCongruence    -- shrinking
 --  run  50 $ propCrash
 --  run 100 $ propPrettyParse
-    
+
 run :: Testable prop => Int -> prop -> IO ()
 run n = quickCheckWith stdArgs{ maxSuccess = n }
 
 ----------------------------------------------------------------
 
 instance Arbitrary Expr where
-  arbitrary  = arbExpr
-  shrink     = shrinkExpr  
+  arbitrary  = G.arbExpr
+  shrink     = G.shrinkExpr
 
 ----------------
 instance Arbitrary Command where
-  arbitrary  = arbCommand
-  shrink     = shrinkCommand             
+  arbitrary  = G.arbCommand
+  shrink     = G.shrinkCommand
 
 instance Arbitrary Op1 where
-  arbitrary = arbEnum
+  arbitrary = G.arbEnum
   -- no shrink
 
 instance Arbitrary Op2 where
-  arbitrary = arbEnum
+  arbitrary = G.arbEnum
   -- no shrink
 
 instance Arbitrary Value where
-  arbitrary = arbValue
-  shrink    = shrinkValue
+  arbitrary = G.arbValue
+  shrink    = G.shrinkValue
 
 whileTrue :: Command -> Command
 whileTrue c = While (Val (Bol True)) c
