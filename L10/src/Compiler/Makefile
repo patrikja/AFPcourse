@@ -1,5 +1,4 @@
 MODULE = Properties
-# MODULE = Properties_demo
 
 run :
 	ghc --make ${MODULE}.hs -fhpc
@@ -11,7 +10,7 @@ Main:
 	ghc --make Main -fhpc
 
 setup:
-	cabal install QuickCheck
+	cabal install QuickCheck hpc
 
 clean :
 	-rm *.o *.hi
