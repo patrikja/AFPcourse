@@ -54,4 +54,5 @@ messy, but we will have lots of more air to breathe.
 ## Evaluation times:
 
 * Mid-course evaluation meeting: Fr 2015-02-20 15:15 - 16:00 in EDIT-5128
-* Final evaluation meeting: TBD
+* Final evaluation meeting: Tu 2015-04-28 11:00-12:00 in "Fysikhuset, bottenplan"
+* [More course evaluation details](eval/)
