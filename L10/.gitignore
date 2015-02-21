@@ -3,6 +3,4 @@ src/Compiler/*.hs.html
 src/.hpc/
 src/Compiler/Properties
 *.tix
-*.o
-*.hi
 

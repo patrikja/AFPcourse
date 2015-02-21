@@ -1,0 +1,33 @@
+-*- Org -*-
+* This lecture (& week): programming with strong invariants
+** Generalized Algebraic DataTypes (GADTs)
+** type inference
+** (dependent types, families of types)
+* Learning outcomes
+** Types: read, understand and extend Haskell programs which use advanced type system features
+Types.GADT: (generalised) algebraic datatypes & type families
+* Expr: An embedded DSL with two types
+file:src/Expr.hs
+
+Define the type |Value| and |eval :: Expr -> Value|
+
+* Middle: The same embedded DSL with types checked
+file:src/Middle.hs    (file:before/src/Middle.hs)
+
+Discuss design choices and how to build "well-typed" values.
+
+Write a few cases of the type inference (type labelling) function.
+
+Brief reminder of hpc (Haskell program coverage)
+
+file:src/Middle.hs
+
+file:../src/hpc_index.html
+
+* Typed: The same embedded DSL with GADTs
+file:src/Typed.hs 
+
+Define a GADT for typed |Expr| and a new |eval|.
+
+Type inference.
+

@@ -2,9 +2,15 @@
 cabal.sandbox.config
 dist/
 .cabal-sandbox
+live/
 TAGS
 *.aux
 *.fdb_latexmk
 *.fls
 *.log
-live/
+*.o
+*.hi
+hpc_*.html
+*.hs.html
+.hpc/
+*.tix
