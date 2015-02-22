@@ -1,0 +1,42 @@
+-*- Org -*-
+* This lecture (& week): type families (and program calculation)
+** type families
+** program calculation: maximum segment sum (guest lecture)
+* Learning outcomes
+** Types: read, understand and extend Haskell programs which use advanced type system features
+Types.GADT: (generalised) algebraic datatypes & type families
+** Spec: use specification based development techniques
+Spec.Prove: reason about correctness of functional programs
+Spec.Trans: transform programs on the basis of reasoning
+* Type families = associated types
+A few of Simon Peyton-Jones' slides on "Fun with type functions".
+http://www.haskell.org/haskellwiki/Simonpj/Talk:FunWithTypeFuns
+** Simple example: file:src/Add.hs 
+** Connect back to our Expr-lang from lecture 11
+
+file:src/AssocTypes.hs
+
+To compare with:
+file:src/FunDeps.hs
+
+** More complex example: Arrays (To read off-line)
+
+Take-home message: use a type family when you would like a type
+to be a class method. But think twice - perhaps you don't really
+need it.
+
+data family Array a
+newtype instance Array Int    = ArrInt SuperEfficientByteArray 
+newtype instance Array Size   = ArrSize  (Array Int)
+newtype instance Array Index  = ArrIndex (Array Int)
+newtype instance Array (a, b) = ArrPair (Array a, Array b)
+
+
+file:src/Array.hs 
+file:src/Array/Properties.hs 
+file:src/Array/Example.hs
+
+* Misc. notes
+
+Add.hs 
+Array.hs Array/Properties.hs Array/Example.hs Array/ShowInstances.hs Array/EqInstances.hs
