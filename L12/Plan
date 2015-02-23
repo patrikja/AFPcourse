@@ -1,0 +1,56 @@
+-*- mode: org; -*-
+AFP lecture 12: [[http://en.wikipedia.org/wiki/Curry%E2%80%93Howard_correspondence][Curry-Howard]]
+
+An introduction to Agda, comparing it to Haskell.
+
+* Learning outcomes
+** Types: read, understand and extend (Haskell) programs which use advanced type system features
+** Spec: use specification based development techniques
+*** Spec.Prove: reason about correctness of functional programs
+
+Deeper understanding of Haskell
+
+* What is Agda?
+Agda is both 
+
+  a functional programming language with dependent types
+
+and 
+
+  a proof assistant for developing constructive proofs 
+
+based on the idea of the 
+
+  Curry-Howard correspondence 
+
+as embodied in 
+
+  Per Martin-Löf's Type Theory.
+
+* Tutorial
+** ( file:AgdaTutorial/Basics.hs  )
+** ( file:AgdaTutorial/Basics.hcr )
+** ( file:AgdaTutorial/Basics_shortnames.hcr )
+** file:AgdaTutorial/Basics.agda       
+** file:AgdaTutorial/Datatypes.agda    
+** file:AgdaTutorial/CurryHoward.agda  
+** file:AgdaTutorial/Families.agda     
+** file:AgdaTutorial/Filter.agda       
+** file:AgdaTutorial/Modules.agda      
+** file:AgdaTutorial/Records.agda
+* Misc.
+
+emacs --geometry 140x47+171+0 --fullheight Prelude.agda \
+  AgdaTutorial/Basics.agda       \
+  AgdaTutorial/Datatypes.agda    \
+  AgdaTutorial/CurryHoward.agda  \
+  AgdaTutorial/Families.agda     \
+  AgdaTutorial/Filter.agda       \
+  AgdaTutorial/Modules.agda      \
+  AgdaTutorial/Records.agda
+
+ghc -c -fext-core Basics.hs # show that Haskell also passes types around (in the ghc core language)
+# http://www.haskell.org/ghc/docs/7.2.2/html/users_guide/ext-core.html
+
+# Datatypes.agda CurryHoward.agda Families.agda Filter.agda  Modules.agda Records.agda
+

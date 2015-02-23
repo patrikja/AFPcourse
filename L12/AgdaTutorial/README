@@ -1,0 +1,39 @@
+This tutorial is based on a lecture by Ulf Norell.
+Edited for AFP 2013 by Patrik Jansson.
+
+In addition to the .agda files there are some .hs files providing
+corresponding Haskell code.
+
+Learn more about Agda on the Agda wiki:
+  http://wiki.portal.chalmers.se/agda/
+or take the course "Types for Programs and Proofs"
+study period 1, 2013.
+
+Contents:
+README
+
+Basics.agda         Basics.hs       Basics.hcr    Basics_shortnames.hcr
+Datatypes.agda      Datatypes.hs
+CurryHoward.agda
+Families.agda       Families.hs     FamiliesExtra.agda
+Filter.agda                         SubsetMoreExplicit.agda
+Modules.agda
+Records.agda
+
+Bool.agda
+Nat.agda
+Parity.agda
+
+Everything.agda
+Makefile
+
+
+----------------
+Original from:
+
+          Types Summer School 2007
+                 Bertinoro
+             Aug 19 - 31, 2007
+                   Agda
+                Ulf Norell
+

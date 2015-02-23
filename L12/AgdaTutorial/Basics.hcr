@@ -1,0 +1,14 @@
+%module main:Basics
+  main:Basics.compose :: %forall bapy capzz aapA . (bapy -> capzz) ->
+                                                   (aapA -> bapy) -> aapA -> capzz =
+    \ @ baHS
+      @ caHT
+      @ aaHU
+      (fapF::baHS -> caHT)
+      (gapG::aaHU -> baHS)
+      (xapH::aaHU) ->
+        fapF (gapG xapH);
+  main:Basics.id1 :: %forall aapC . aapC -> aapC =
+    \ @ aaIa (xapD::aaIa) -> xapD;
+  main:Basics.id2 :: %forall aapB . aapB -> aapB =
+    \ @ aaI2 (xapE::aaI2) -> xapE;

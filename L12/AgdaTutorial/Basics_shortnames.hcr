@@ -1,0 +1,5 @@
+%module main:Basics
+  main:Basics.compose :: %forall b c a . (b -> c) -> (a -> b) -> a -> c =
+    \ @b @c @a (f::b -> c) (g::a -> b) (x::a) ->  f (g x);
+  main:Basics.id1 :: %forall a . a -> a = \ @a (x::a) -> x;
+  main:Basics.id2 :: %forall a . a -> a = \ @a (x::a) -> x;
