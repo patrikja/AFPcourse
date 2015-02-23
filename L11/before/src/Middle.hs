@@ -7,12 +7,14 @@ data ExprI where
   LitI  :: Int                            -> ExprI
   (:+)  ::          ExprI     -> ExprI    -> ExprI
   IfI   :: ExprB -> ExprI     -> ExprI    -> ExprI
+  deriving Show
 
 data ExprB where
   LitB  :: Bool                           -> ExprB
   EqI   ::          ExprI     -> ExprI    -> ExprB
   EqB   ::          ExprB     -> ExprB    -> ExprB
   IfB   :: ExprB -> ExprB     -> ExprB    -> ExprB
+  deriving Show
 
 evalB :: ExprB    ->  Bool
 evalB (LitB b)     =  error "evalB: TBD"

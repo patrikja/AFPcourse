@@ -17,7 +17,8 @@ eBad = If (LitB False) (LitI 1) (LitI 2 :+ LitB True)
 eBad'= If (LitB False) (LitI 1) (LitB True)
 
 -- | A value is an integer or a boolean. 
-data Value  -- TODO
+data Value = VInt Int | VBool Bool
+  deriving Show
 -- type Value = Either Int Bool
 
 -- | Evaluating expressions. Things are a bit complicated
@@ -25,13 +26,31 @@ data Value  -- TODO
 -- types for the operations. Fails if the evaluated expression
 -- isn't well-typed.
 eval :: Expr -> Value
-eval (LitI n)     = error "eval: LitI TODO"
-eval (LitB b)     = error "eval: LitB TODO"
-eval (e1 :+ e2)   = error "eval: :+   TODO"
-eval (e1 :== e2)  = error "eval: :==  TODO"
-eval (If b t e)   = error "eval: If   TODO"
+eval (LitI n)     = VInt n
+eval (LitB b)     = VBool b
+eval (e1 :+ e2)   = plus  (eval e1) (eval e2)
+eval (e1 :== e2)  = equal (eval e1) (eval e2)
+eval (If b t e)   = myIf (eval b) (eval t) (eval e)
 
+myIf :: Value -> Value -> Value -> Value
+myIf (VBool b) tv  ev = if b then tv else ev 
+myIf (VInt x)  _tv _ev = error $ "Badly typed condition "++show x
 
+plus :: Value -> Value -> Value
+plus (VInt  x) (VInt  y) = VInt (x+y)
+plus (VBool x) (VInt  y) = VInt (convertBoolToInt x + y)  -- just this time
+plus (VInt  x) (VBool y) = VInt (x + convertBoolToInt y)  -- just this time
+plus (VBool x) (VBool y) = VBool (x || y)
+
+convertBoolToInt :: Bool -> Int
+convertBoolToInt True = 1
+convertBoolToInt False = 0
+
+equal :: Value -> Value -> Value
+equal (VInt  x) (VInt  y) = VBool (x == y)
+equal (VBool _) (VInt  _) = error "Untyped =="
+equal (VInt  _) (VBool _) = error "Untyped =="
+equal (VBool x) (VBool y) = VBool (x == y)
 
 
 

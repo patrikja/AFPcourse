@@ -22,7 +22,7 @@ Brief reminder of hpc (Haskell program coverage)
 
 file:src/Middle.hs
 
-file:../src/hpc_index.html
+file:src/hpc_index.html
 
 * Typed: The same embedded DSL with GADTs
 file:src/Typed.hs 
@@ -31,3 +31,13 @@ Define a GADT for typed |Expr| and a new |eval|.
 
 Type inference.
 
+* Summary
+
+Expr   - "untyped" embedded language + tagged evaluator
+Middle - using two datatypes (ExprB and ExprI) + two untagged evaluators
+Typed  - using a GADT + one untagged evaluator
+
+Also introducing
++ implementing type infererence
++ dictionary translation (sketch)
++ families of datatypes

@@ -16,16 +16,19 @@ infix  0 :::
 
 -- | The type of well-typed expressions. There is no way to
 -- construct an ill-typed expression in this datatype.
-data Expr t where
-  LitI  :: Int                           -> Expr Int
-  LitB  :: Bool                          -> Expr Bool
-  (:+)  ::         Expr Int -> Expr Int  -> Expr Int
-  (:==) :: Eq t => Expr t   -> Expr t    -> Expr Bool
-  If    :: Expr Bool -> Expr t -> Expr t -> Expr t
+data Expr q where -- TODO: replace the q's
+  LitI  :: Int                             -> Expr Int
+  LitB  :: Bool                            -> Expr Bool
+  (:+)  ::              Expr Int-> Expr Int-> Expr Int
+  (:==) :: Eq a =>      Expr a  -> Expr a  -> Expr Bool
+  If    :: Expr Bool -> Expr a  -> Expr a  -> Expr a
 
--- | A type-safe evaluator. Much nicer now that we now that
--- expressions are well-typed. No Value datatype needed, no
--- extra constructors VInt, VBool.
+{-
+    (:==) :: (EqD a) ->   Expr a  -> Expr a  -> Expr Bool
+EqD a = (a -> a -> Bool, a -> a -> Bool)
+-}
+
+-- | A type-safe evaluator.
 eval :: Expr t -> t
 eval (LitI n)     =  n
 eval (LitB b)     =  b
@@ -36,6 +39,12 @@ eval (If b t e)   =  if eval b then eval t else eval e
 eOK :: Expr Int
 eOK  = If (LitB False) (LitI 1) (LitI 2 :+ LitI 1736)
 -- eBad = If (LitB False) (LitI 1) (LitI 2 :+ LitB True)
+
+
+
+
+
+
 
 -- | We can forget that an expression is typed. For instance, to
 -- be able to reuse the pretty printer we already have.
@@ -66,6 +75,14 @@ instance Show (Expr t) where
 data Type t where
   TInt  :: Type Int
   TBool :: Type Bool
+
+{-
+data Type Int where
+  TInt  :: Type Int
+
+data Type Bool where
+  TBool :: Type Bool
+-}
 
 instance Show (Type t) where
   show TInt  = "Int"
@@ -111,27 +128,11 @@ _     =?= _     = Nothing
 -- about @s@ and @t@.
 infer :: E.Expr -> Maybe TypedExpr
 infer e = case e of
-  E.LitI n -> return (LitI n ::: TInt)
-
-  E.LitB b -> return (LitB b ::: TBool)
-
-  r1 E.:+ r2 -> do
-    e1 ::: TInt  <-  infer r1
-    e2 ::: TInt  <-  infer r2
-    return (e1 :+ e2 ::: TInt)
-
-  r1 E.:== r2 -> do
-    e1 ::: t1    <-  infer r1
-    e2 ::: t2    <-  infer r2
-    Refl         <-  t1 =?= t2
-    return (e1 :== e2 ::: TBool)
-
-  E.If r1 r2 r3 -> do
-    e1 ::: TBool <-  infer r1
-    e2 ::: t2    <-  infer r2
-    e3 ::: t3    <-  infer r3
-    Refl         <-  t2 =?= t3
-    return (If e1 e2 e3 ::: t2)
+  E.LitI n       -> error "TBD"
+  E.LitB b       -> error "TBD"
+  r1 E.:+ r2     -> error "TBD"
+  r1 E.:== r2    -> error "TBD"  -- interesting case!
+  E.If r1 r2 r3  -> error "TBD"  -- interesting case!
 
 -- | We can do type checking by inferring a type and comparing
 -- it to the type we expect.
@@ -141,30 +142,33 @@ check r t = do
   Refl     <- t' =?= t
   return e
 
-test1R = read "1+2 == 3"
-test1  = fromJust (infer test1R)
+-- test1R = read "1+2 == 3"
+-- test1  = fromJust (infer test1R)
 
 ----------------------------------------------------------------
 evalTB :: E.Expr -> Maybe E.Value
 evalTB e = do
   b <- check e TBool
-  return (E.VBool $ eval b)
+  return $ error "TBD"
 
 evalTI :: E.Expr -> Maybe E.Value
 evalTI e = do
   i <- check e TInt
-  return (E.VInt $ eval i)
+  return $ error "TBD"
 
 evalT :: E.Expr -> Maybe E.Value
 evalT e = evalTB e  `mplus`  evalTI e
 
 prop_eval :: E.Expr -> Property
+prop_eval = error "TBD"
+{-
 prop_eval e = let  mv         = evalT e
                    wellTyped  = isJust   mv
                    v          = fromJust mv
               in wellTyped ==>  
                  label (E.showTypeOfVal v) $
                  E.eval e == v
+-}
 
 -- | Check that the evals agree for well-typed terms
 main :: IO ()

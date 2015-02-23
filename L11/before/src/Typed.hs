@@ -30,7 +30,7 @@ eval (LitI n)      = error "eval: LitI  TODO"
 eval (LitB b)      = error "eval: LitB  TODO"
 eval (e1 :+ e2)    = error "eval: :+    TODO"
 eval (e1 :== e2)   = error "eval: :==   TODO"
-eval (If e1 e2 e3) = error "eval: If    TODO"
+eval (If b t e)    = error "eval: If    TODO"
 
 eOK :: Expr Int
 eOK  = If (LitB False) (LitI 1) (LitI 2 :+ LitI 1736)
@@ -159,4 +159,5 @@ prop_eval e = let  mv         = evalT e
 -}
 
 -- | Check that the evals agree for well-typed terms
+main :: IO ()
 main = quickCheck prop_eval
