@@ -18,9 +18,9 @@ Discuss design choices and how to build "well-typed" values.
 
 Write a few cases of the type inference (type labelling) function.
 
-Brief reminder of hpc (Haskell program coverage)
-
 file:src/Middle.hs
+
+** A brief reminder of hpc (Haskell program coverage)
 
 file:src/hpc_index.html
 
@@ -30,6 +30,38 @@ file:src/Typed.hs
 Define a GADT for typed |Expr| and a new |eval|.
 
 Type inference.
+
+** Notation and scope:
++ The type variable(s) in the |data Expr a where| header of a GADT have no scope. Think of it as |data Expr :: * -> * where|.
++ Each contructor has its own set of independent type variables.
++ This is in contrast to "normal" data declaration where the type variables in the header scope over the full definition.
+
+** Overloading and dictionary passing
+
+This may seem off-topic, but the discussion in the lecture came from the use of the existential type
+
+Eq a => Expr a -> Expr a -> Expr Bool
+
+and the corresponding case of eval using (==) between values of unknown type.
+
+To explain what is happening let's start with a normal overloaded function like 
+
+elem :: Eq a => a -> [a] -> Bool
+
+You can think of this as a function of one more argument:
+
+elemBy :: EqD a -> a -> [a] -> Bool
+
+The extra argument is a _dictionary_ where you can think of
+
+type EqD a  =  (a -> a -> Bool)
+
+This extra argument is inserted automatically by the compiler based on
+the local type information.
+
+Coming back to the existential type, the constructor (:==) is actually
+storing not only the two subtrees of type Expr a but also the
+dictionary of type EqD a.
 
 * Summary
 
