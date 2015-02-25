@@ -85,7 +85,7 @@ swap (pa , pb) = (pb , pa)
 
 {-
 -- Bug / feature (limit / strength): the logic is _constructive_
-excludedMiddle : (P : ⋆) -> (P  ∨  ¬ P)
+excludedMiddle : (P : ⋆) -> (P  ∨  (¬ P))
 excludedMiddle P = {!!} -- can not be implemented
 -}
 
@@ -97,5 +97,5 @@ excludedMiddle P = {!!} -- can not be implemented
 
 
 -- Detail:
-notNotEM : (P : ⋆) -> ¬ ¬ (P  ∨  ¬ P)
+notNotEM : (P : ⋆) -> ¬ ¬ (P  ∨  (¬ P))
 notNotEM P = \f -> f (inr (\p -> f (inl p)))

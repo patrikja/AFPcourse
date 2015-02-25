@@ -51,7 +51,7 @@ nil A = [] {A}
 map : ∀ {A B : ⋆} -> (A -> B) -> List A -> List B
 map f xs = ?
 -- Emacs: C-c C-c    case split
---        C-c C-a    "auto tactic"
+--        C-c C-a    "auto tactic" -- beware!
 ----------------
 -- Empty datatypes
 

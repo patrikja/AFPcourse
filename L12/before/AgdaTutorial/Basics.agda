@@ -15,6 +15,7 @@ id₁ = ?                           -- id1 = \ x -> x
 --        C-c <space>  give                                                             
 id₂ : (A : Set) -> A -> A         -- id2 ::  a -> a          
 id₂ = ?                           -- id2 = \ x -> id1 (id1 x)
+--        C-c C-a      auto   
 
 {- Haskell differences:
 1. Single colon (:) for "has type" where Haskell uses double (::)
@@ -61,6 +62,7 @@ id₄ = ?
 _∘_ :  {A B C : ⋆} -> (B -> C) -> (A -> B) -> (A -> C)
 f ∘ g = ?
 -- Emacs: C-c C-e    show context
+--        C-c C-,    show goal and context
 
 -- You can supply a hidden argument if wanted (or needed) by
 -- enclosing it in {curly braces}. You can also hide any

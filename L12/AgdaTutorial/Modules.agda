@@ -110,6 +110,7 @@ test' = sort (3 :: 2 :: 4 :: 0 :: [])
 
 ----------------
 -- Local definitions
+infix 4 _==_
 
 data _==_ {A : Set}(x : A) : A -> Set where
   refl : x == x

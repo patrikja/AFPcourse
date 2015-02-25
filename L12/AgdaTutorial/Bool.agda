@@ -1,6 +1,8 @@
 
 module Bool where
 
+infix 0 if_then_else_
+
 data Bool : Set where
   true  : Bool
   false : Bool

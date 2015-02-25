@@ -3,12 +3,12 @@ module CurryHoward where
 ⋆ = Set
 {-
 The Curry-Howard isomorphism provides a "Logic" reading of types:
-  p : P               p is a proof of P
-                      
-  FALSE = empty type  False
-  non-empty type      True
-  P -> Q              P implies Q
-  (a : A) -> P        ∀a:A. P
+  p : P                     p is a proof of P
+                            
+  FALSE = empty type        False
+  non-empty type            True
+  P -> Q                    P implies Q
+  (a : A) -> P              ∀a:A. P
   ...
 
 -}
@@ -21,7 +21,13 @@ data TRUE : ⋆ where    -- non-empty type, Haskell type: ()
 
 data _∧_ (P Q : ⋆) : ⋆ where  -- the wedge is pronounced "and"
   _,_ : P  ->  Q  ->  P ∧ Q
+-- Some simple examples
 
+const : {A B : ⋆} -> A -> (B -> A)
+const = ?
+
+swap : {P Q : ⋆} -> P ∧ Q -> Q ∧ P
+swap = ?
 -- A proof of (P ∧ Q) is a pair of
 --   a proof of P   and
 --   a proof of Q
@@ -62,24 +68,16 @@ data ∃ (A : ⋆)(P : A -> ⋆) : ⋆  where
 ¬_ : ⋆ -> ⋆
 ¬ A  =  A -> FALSE
 
-test1 : ¬ FALSE  -- a proof a "not false"
-test1 = ?
+test1 : ¬ FALSE  -- a proof of "not false"
+test1 = {!!}
 
 test2 : ¬ ¬ TRUE    -- (TRUE → FALSE) → FALSE
-test2 = ?
+test2 = {!!}
 
-
--- Some simple examples
-
-const : {A B : ⋆} -> A -> (B -> A)
-const pa pb = pa
-
-swap : {P Q : ⋆} -> P ∧ Q -> Q ∧ P
-swap (pa , pb) = (pb , pa)
 
 {-
 -- Bug / feature (limit / strength): the logic is _constructive_
-excludedMiddle : (P : ⋆) -> (P  ∨  ¬ P)
+excludedMiddle : (P : ⋆) -> (P  ∨  (¬ P))
 excludedMiddle P = {!!} -- can not be implemented
 -}
 
@@ -91,5 +89,5 @@ excludedMiddle P = {!!} -- can not be implemented
 
 
 -- Detail:
-notNotEM : (P : ⋆) -> ¬ ¬ (P  ∨  ¬ P)
-notNotEM = ?
+notNotEM : (P : ⋆) -> ¬ ¬ (P  ∨  (¬ P))
+notNotEM = {!!}
