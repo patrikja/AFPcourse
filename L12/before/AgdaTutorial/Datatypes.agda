@@ -2,7 +2,7 @@
 
 -- This is where the fun begins.  Unleashing datatypes, pattern
 -- matching and recursion.
-module Datatypes_demo where
+module Datatypes where
 ⋆ = Set   -- Could be import-ed from Basics
 ----------------------------------------------------------------
 -- Simple datatypes.
@@ -20,8 +20,7 @@ pred (suc n) = n
 
 -- Now let's do recursion.
 _+_ : Nat -> Nat -> Nat
-zero  + m  =  m
-suc n + m  =  suc (n plus m)
+_+_  =  ?
 
 infixl 60 _+_
 
@@ -35,13 +34,7 @@ data Bool : ⋆ where
   false : Bool
 
 if_then_else_ : {A : ⋆} -> Bool -> A -> A -> A
-if true  then x else y = x
-if false then x else y = y
-{-
--- Same definition as
-if_then_else_ true  x y = x
-if_then_else_ false x y = y
--}
+if_then_else_ = ?
 
 ----------------
 -- Parameterised datatypes
@@ -56,14 +49,13 @@ nil : (A : ⋆) -> List A
 nil A = [] {A}
 
 map : ∀ {A B : ⋆} -> (A -> B) -> List A -> List B
-map f [] = []
-map f (x :: xs) = f x :: map f xs
+map f xs = ?
 -- Emacs: C-c C-c    case split
 --        C-c C-a    "auto tactic"
 ----------------
 -- Empty datatypes
 
--- A very useful type is the empty datatype.
+-- A very useful(?) type is the empty datatype.
 data FALSE : ⋆ where   -- Not the same as false : Bool
 
 -- When pattern matching on an element of an empty type, something

@@ -2,7 +2,7 @@
 -- Each Agda file contains a top-level module, whose name
 -- corresponds to the file name (just like in Haskell).
 
-module Basics_demo where
+module Basics where
 ----------------------------------------------------------------
 -- Expressions (types and terms)
 
@@ -10,11 +10,11 @@ module Basics_demo where
 -- λ-calculus.
                                   -- Haskell (for comparison)
 id₁ : (A : Set) -> A -> A         -- id1 ::  a -> a          
-id₁ A x = x                       -- id1 = \ x -> x          
+id₁ = ?                           -- id1 = \ x -> x          
 -- Emacs: C-c C-r      refine
 --        C-c <space>  give                                                             
 id₂ : (A : Set) -> A -> A         -- id2 ::  a -> a          
-id₂ = λ A x → id₁ A (id₁ A x)           -- id2 = \ x -> id1 (id1 x)
+id₂ = ?                           -- id2 = \ x -> id1 (id1 x)
 
 {- Haskell differences:
 1. Single colon (:) for "has type" where Haskell uses double (::)
@@ -39,7 +39,7 @@ id₂ = λ A x → id₁ A (id₁ A x)           -- id2 = \ x -> id1 (id1 x)
 
 -- Another useful function, featuring telescopes and typed λs.
 compose :  (A B C : ⋆) -> (f : B -> C) -> (g : A -> B) -> (a : A) -> C
-compose A B C f g a = f (g a)
+compose = ?
 
 -- Exercise: write a dependently typed version of compose
 
@@ -51,15 +51,15 @@ compose A B C f g a = f (g a)
 
 -- Note the {curlies} in the type and no A in the definition.
 id₃ : {A : ⋆} -> A -> A
-id₃ x = x
+id₃ = ?
 
 -- And it's not there when applying the function.
 id₄ : {A : ⋆} -> A -> A
-id₄ x = id₃ (id₃ x)
+id₄ = ?
 
 -- Now compose can be written infix
 _∘_ :  {A B C : ⋆} -> (B -> C) -> (A -> B) -> (A -> C)
-f ∘ g = \ x -> f {!!}
+f ∘ g = ?
 -- Emacs: C-c C-e    show context
 
 -- You can supply a hidden argument if wanted (or needed) by

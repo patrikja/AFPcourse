@@ -76,6 +76,3 @@ subset p (x :: xs) with p x
 subset p (x :: xs) | true  = keep (subset p xs)
 subset p (x :: xs) | false = drop (subset p xs)
 -}
-
-
-
