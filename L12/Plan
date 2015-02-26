@@ -54,3 +54,4 @@ ghc -c -fext-core Basics.hs # show that Haskell also passes types around (in the
 
 # Datatypes.agda CurryHoward.agda Families.agda Filter.agda  Modules.agda Records.agda
 
+(set-frame-font "Ubuntu Mono-25" nil t)
