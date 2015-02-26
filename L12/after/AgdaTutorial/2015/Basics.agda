@@ -10,11 +10,12 @@ module Basics where
 -- λ-calculus.
                                   -- Haskell (for comparison)
 id₁ : (A : Set) -> A -> A         -- id1 ::  a -> a          
-id₁ = ?                           -- id1 = \ x -> x          
+id₁ A x = x                        -- id1 = \ x -> x          
 -- Emacs: C-c C-r      refine
 --        C-c <space>  give                                                             
-id₂ : (A : Set) -> A -> A         -- id2 ::  a -> a          
-id₂ = ?                           -- id2 = \ x -> id1 (id1 x)
+id₂ : (A : Set) -> A -> A         -- id2 :: forall a. a -> a          
+id₂ A x = id₁ A (id₁ A x)          
+-- id2 = \ x -> id1 (id1 x)
 --        C-c C-a      auto   
 
 {- Haskell differences:
@@ -23,7 +24,7 @@ id₂ = ?                           -- id2 = \ x -> id1 (id1 x)
 3. No upper- / lower-case rules for identifiers
 4. Dependent function types available: f :  (a : A) -> B
 5. Agda likes white space. This is not correct:
-     id₁:(A:Set)->A->A
+     id₁ : ( A : Set ) -> A -> A
    Why not? In Agda the following strings are valid identifiers:
      "id₁:", "A:Set", "->A->A"
 
@@ -40,7 +41,7 @@ id₂ = ?                           -- id2 = \ x -> id1 (id1 x)
 
 -- Another useful function, featuring telescopes and typed λs.
 compose :  (A B C : ⋆) -> (f : B -> C) -> (g : A -> B) -> (a : A) -> C
-compose = ?
+compose A B C f g a = f (g a)
 
 -- Exercise: write a dependently typed version of compose
 
@@ -52,15 +53,15 @@ compose = ?
 
 -- Note the {curlies} in the type and no A in the definition.
 id₃ : {A : ⋆} -> A -> A
-id₃ = ?
+id₃ = \x -> x
 
 -- And it's not there when applying the function.
 id₄ : {A : ⋆} -> A -> A
-id₄ = ?
+id₄ {A} x = id₃ {A} (id₃ {A} x)
 
 -- Now compose can be written infix
 _∘_ :  {A B C : ⋆} -> (B -> C) -> (A -> B) -> (A -> C)
-f ∘ g = ?
+_∘_ {A} {B} {C} f g = compose A B C f g
 -- Emacs: C-c C-e    show context
 --        C-c C-,    show goal and context
 

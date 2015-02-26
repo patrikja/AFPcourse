@@ -20,7 +20,9 @@ pred (suc n) = n
 
 -- Now let's do recursion.
 _+_ : Nat -> Nat -> Nat
-_+_  =  ?
+zero  + y = y
+suc x + y = suc (x + y)
+--  C-c C-c  case-split
 
 infixl 60 _+_
 
@@ -34,7 +36,8 @@ data Bool : ⋆ where
   false : Bool
 
 if_then_else_ : {A : ⋆} -> Bool -> A -> A -> A
-if_then_else_ = ?
+if true  then t else e = t
+if false then t else e = e
 
 ----------------
 -- Parameterised datatypes
@@ -50,7 +53,8 @@ nil : (A : ⋆) -> List A
 nil A = [] {A}
 
 map : ∀ {A B : ⋆} -> (A -> B) -> List A -> List B
-map f xs = ?
+map f []        = []
+map f (x :: xs) = f x :: map f xs
 -- Emacs: C-c C-c    case split
 --        C-c C-a    "auto tactic" -- beware!
 ----------------
@@ -62,8 +66,8 @@ data FALSE : ⋆ where   -- Not the same as false : Bool : ⋆
 -- When pattern matching on an element of an empty type, something
 -- interesting happens:
 
-elim-FALSE : {A : ⋆} -> FALSE -> A
-elim-FALSE ()  -- Note that there is no right hand side!
+elim-FALSE : ∀ {A : ⋆} -> FALSE -> A
+elim-FALSE () 
 
 -- The pattern () is called an absurd pattern and "matches"
 -- the non-existent elements of an empty type.
