@@ -13,11 +13,10 @@ someEvals :: ( E.Expr      -> E.Value
              )
 someEvals = (E.eval, M.evalB, M.evalI, M.eval, T.eval)
 
--- Could we capture all of these in a type class? Note that the value
--- type varies with the expression type. 
+-- Could we capture all of these instances in a type class? Note that
+-- the value type varies with the expression type.
 
-class Eval e where
-  eval :: e -> someOtherTypeDependingOn e
+class Eval e where  eval :: e -> someOtherTypeDependingOn e
 
 -- main = do print $ eval E.eOK
 --           print $ eval M.eOK
