@@ -1,0 +1,20 @@
+-*- Org -*-
+* Admin
+** Written exam 
+Next week: Tuesday morning 2013-03-17 in the "M"-building
+** Course evaluation 
+Final course evaluation meeting: 
+  2015-04-28 at 11.00 in the Physics building, ground floor.
+** Course overview
+
+file:overview.markdown
+file:coverage.markdown
+
+* A choice of topics
+** Difficult concepts from earlier lectures?
+** Read-Write monad  file:RWMonad.hs
+** MaybeT transformer  
+*** file:MaybeT/Deep.hs 
+*** file:MaybeT/Shallow.hs
+
+...
