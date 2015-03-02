@@ -48,7 +48,3 @@ file:src/Array.hs
 file:src/Array/Properties.hs 
 file:src/Array/Example.hs
 
-* Misc. notes
-
-Add.hs 
-Array.hs Array/Properties.hs Array/Example.hs Array/ShowInstances.hs Array/EqInstances.hs

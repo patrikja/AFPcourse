@@ -21,35 +21,33 @@ class Add a b where           -- uses MultiParamTypeClasses
 
 instance Add Integer Double where
   type AddTy Integer Double = Double
-  add x y = fromIntegral x + y
-
+  add x y = (fromInteger x) + y
 instance Add Double Integer where
   type AddTy Double Integer = Double
-  add x y = x + fromIntegral y
+  add x y = x + (fromInteger y)
 
-instance (Num a) => Add a a where -- uses FlexibleInstances
+instance (Num a) => Add a a where    -- uses FlexibleInstances
   type AddTy a a = a
   add x y = x + y
 
-instance (Add Integer a) => 
-         Add Integer [a] where    -- uses FlexibleContexts
-  type AddTy Integer [a] = [AddTy Integer a]
-  add x ys = map (add x) ys
--- or equivalently 
--- > add x = map (add x)
--- or even
--- > add = map . add
+{-
+instance Add a [a] where   -- uses FlexibleContexts
+  type AddTy a [a] = [a]
+  add = addIntList'
 
-{- or more generally:
-instance Integral a => Add a Double where
-  type AddTy a Double = Double
-  add x y = fromIntegral x + y
+addIntList' :: (Add Integer a) => Integer -> [a] -> [a]
+addIntList' i xs = zipWith add (repeat i) xs
+  -- add :: Integer -> a -> AddTy Integer a
 -}
 
+addIntList :: (Add a a) => a -> [a] -> [a]
+addIntList x xs = zipWith add (repeat x) xs
+
+
 -- --------------
---   
 test :: Double
 test = add (3::Integer) (4::Double)
+{-   
 
 aList :: [Integer]
 aList =  [0,6,2,7]
@@ -60,10 +58,10 @@ test2 = add (1::Integer) aList
 test3 :: [Double]
 test3 = add (38::Integer) [1700::Double]
 
+-}
 -- What is the type of this function?
 test4 x y z = add x (add y z)
-
-
+-- spoiler below
 
 
 
