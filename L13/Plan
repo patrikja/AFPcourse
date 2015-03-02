@@ -1,7 +1,7 @@
 -*- Org -*-
 * This lecture (& week): type families (and program calculation)
 ** type families
-** program calculation: maximum segment sum (guest lecture)
+** Thursday: program calculation: maximum segment sum (guest lecture)
 * Learning outcomes
 ** Types: read, understand and extend Haskell programs which use advanced type system features
 Types.GADT: (generalised) algebraic datatypes & type families
@@ -18,6 +18,18 @@ file:src/AssocTypes.hs
 
 To compare with:
 file:src/FunDeps.hs
+
+** Connect back to AgdaTutorial
+
+( file:../L12/AgdaTutorial/Families.agda )
+
+file:src/Families.hs
+
+If time allows: promotion of values to types:
+
+file:src/Promotion.hs
+
+
 
 ** More complex example: Arrays (To read off-line)
 
