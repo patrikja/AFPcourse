@@ -1,6 +1,6 @@
 # Lecture 2: (Embedded) Domain Specific Languages
 
-[Lecture slides](https://cdn.rawgit.com/patrikja/AFPcourse/master/L2/slides.html)
+[Lecture slides](https://rawgit.com/patrikja/AFPcourse/master/L2/slides.html)
 
 Below is just a "table of contents" for the lecture.
 
