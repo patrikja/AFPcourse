@@ -111,8 +111,10 @@ addS x y = mapS (\t -> sample x t + sample y t) timeS
 
 * Shallow embedding
     * Represent elements by their semantics (what observations they support)
-* Deep embedding
     * Constructor functions and combinators do most of the work, run functions for free
+* Deep embedding
+    * Represent elements by how they are constructed
+    * Most of the work done by the run functions, constructor functions and combinators for free
 * Or something in-between
 
 ---
