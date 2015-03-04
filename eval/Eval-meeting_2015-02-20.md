@@ -60,5 +60,6 @@ Jeff: Suggestion: organize a TA session with feedback on common lab questions / 
 
 You are invited to propose question (by Monday 2015-03-09) to be included in the questionnaire in addition to the standard 11 questions:
 
-http://document.chalmers.se/download?docid=41f3d1e4-73ef-417e-a6f5-a13076822c3d
+* [Common template](template.md) ([as PDF](http://document.chalmers.se/download?docid=41f3d1e4-73ef-417e-a6f5-a13076822c3d))
+* [Proposed AFP-specific questions](questions.md)
 
