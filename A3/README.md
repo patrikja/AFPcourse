@@ -1,0 +1,39 @@
+# Project selection status 2015-03-05:
+
+I'm very happy to see so many projects have started! Here is the current status:
+
+## Projects around the following hackage packages have been accepted
+
+| Package             | Group | 
+| ------------------- | ----- | 
+| Graph               |     6 |
+| HaTeX               |    15 |
+| Haste­compiler      |    24 |
+| Hlearn              |    34 |
+| Repa                |    21 |
+| Scotty              |     5 |
+| Yesod               |    38 |
+| api-tools           |     1 |
+| chalmers-lava2000   |     4 |
+| chalmers-lava2000   |    11 |
+| distributed-process |    14 |
+| distributed-process |    31 |
+| extensible-effects  |    20 |
+| feldspar-language   |    28 |
+| feldspar-language   |    29 |
+| gf                  |    25 |
+| haskeline           |    13 |
+| parsec              |    17 |
+| purescript          |    36 |
+| syntactic           |     8 |
+| testing-feat        |    32 |
+
+## Pending review after initial rejection
+
+Two quickspec proposals
+
+## Pending resubmisson after initial rejection
+
+(Too simple, too big, too vague, etc.)
+
+time, scotty, Agda, fast-tags, crypto-api, Blaze
