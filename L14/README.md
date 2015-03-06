@@ -24,5 +24,4 @@ Reading:
 * "Algebraic Identities for Program Calculation", Richard Bird, The Computer Journal, Vol. 32, No. 2, 1989, pp 122-126
 
 For reference:
-* An Agda-derivation of the Maximum Segment Sum is available here
-** https://bitbucket.org/scmlab/aopa/src/17652ccd5c661cd0a338531bbc1720d4329e56dd/Examples/MSS/Derivation.agda?at=master
+* An [Agda-derivation of the Maximum Segment Sum is available](https://bitbucket.org/scmlab/aopa/src/17652ccd5c661cd0a338531bbc1720d4329e56dd/Examples/MSS/Derivation.agda?at=master)
