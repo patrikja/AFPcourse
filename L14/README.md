@@ -11,6 +11,12 @@ of such algebraic identities, and use them in the presentation of a
 "canonical" example of program calculation: computing a linear-time
 solution to the maximum segment sum problem.
 
+The prepared lecture material is in [Part1.lhs](Part1.lhs) and
+[Part2.lhs](Part2.lhs). The actual material covered during L14 was
+bascially the contents of [Part1.lhs](Part1.lhs) while the second part
+is additional reading and a few proofs which did not fit in the
+time-slot.
+
 Micro-bio: Cezar Ionescu is currently a PostDoc on "Increasingly
 Correct Scientific Computing" in the FP group at Chalmers. Before that
 he worked for several years at the Potsdam Institute for Climate
