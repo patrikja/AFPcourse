@@ -1,4 +1,4 @@
-
+module Memo where
 import Data.Map (Map)
 import qualified Data.Map as Map
 import Data.List  (unfoldr)
@@ -11,7 +11,7 @@ fibcore :: (Eq t, Num t, Num a) => (t -> a) -> t -> a
 fibcore cont = \n -> case n of
   0 -> 0
   1 -> 1
-  n -> cont (n - 1) + cont (n - 2)
+  n' -> cont (n' - 1) + cont (n' - 2)
 
 -- then a pure "memoizer":
 memoPure :: (Enum a, Num a) => (a -> b) -> Int -> b
@@ -56,7 +56,9 @@ fib = memo $ fibcore fib
 -- that you get a single memo structure and not one for each
 -- call. For instance, the following doesn't work, since memo
 -- won't be applied until there is an argument to badfib.
+badfib :: Int -> Integer
 badfib n = memo (fibcore badfib) n
 
+badfib' :: Int -> Integer
 badfib' n = memoPure (fibcore badfib') n
 

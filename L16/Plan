@@ -7,14 +7,17 @@ Final course evaluation meeting:
   2015-04-28 at 11.00 in the Physics building, ground floor.
 ** Course overview
 
-file:overview.markdown
-file:coverage.markdown
+file:doc/overview.markdown
+file:doc/coverage.markdown
 
 * A choice of topics
 ** Difficult concepts from earlier lectures?
-** Read-Write monad  file:RWMonad.hs
+** Read-Write monad  file:src/RWMonad.hs
 ** MaybeT transformer  
-*** file:MaybeT/Deep.hs 
-*** file:MaybeT/Shallow.hs
-
-...
+*** file:src/MaybeT/Deep.hs 
+*** file:src/MaybeT/Shallow.hs
+** More from the AgdaTutorial
+*** file:../L12/AgdaTutorial/Families.agda
+*** file:../L12/AgdaTutorial/Filter.agda
+*** file:../L12/AgdaTutorial/Modules.agda
+*** file:../L12/AgdaTutorial/Records.agda

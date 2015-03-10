@@ -1,4 +1,5 @@
 {-# LANGUAGE TypeSynonymInstances, OverlappingInstances, FlexibleContexts #-}
+module NoGenerics where
 import Control.Applicative  (Applicative, pure, (<*>), (<$>))
 import qualified Control.Monad.Reader 
               as CMR        (MonadReader, runReader, ask, local)
@@ -24,9 +25,9 @@ newtype Expr = Expr { unExpr :: Expr' Expr }
 -- foldMap :: (Foldable t, Monoid m) => 
 --            (a -> m) -> t a -> m
 instance Foldable Expr' where
-  foldMap f (Var _)     = mempty
-  foldMap f (App e1 e2) = f e1  `mappend`  f e2
-  foldMap f (Lam _ e)   = f e
+  foldMap _f (Var _)     = mempty
+  foldMap  f (App e1 e2) = f e1  `mappend`  f e2
+  foldMap  f (Lam _ e)   = f e
 
 -- Once we get the instances out of the way we can define
 -- @freeVars@ quite elegantly.
@@ -34,38 +35,38 @@ instance Foldable Expr' where
 freeVars :: Expr -> Set Name
 freeVars (Expr e) = case e of
   Var x   -> Set.singleton x
-  Lam x e -> Set.delete x (freeVars e)
+  Lam x b -> Set.delete x (freeVars b)
   _       -> foldMap freeVars e
 
 -- Another more interesting example: alphaRename
 
 instance Functor Expr' where
-  fmap f (Var x)     = Var x
-  fmap f (App e1 e2) = App   (f e1) (f e2)
-  fmap f (Lam x e)   = Lam x (f e)
+  fmap _f (Var x)     = Var x
+  fmap  f (App e1 e2) = App   (f e1) (f e2)
+  fmap  f (Lam x e)   = Lam x (f e)
 
 -- traverse :: (Traversable t, Applicative f) => 
 --             (a -> f b) -> t a -> f (t b)
 instance Traversable Expr' where
-  traverse f (Var x)     = pure (Var x)
-  traverse f (App e1 e2) = App    <$>  f e1  <*>  f e2
-  traverse f (Lam x e)   = Lam x  <$>  f e
+  traverse _f (Var x)     = pure (Var x)
+  traverse  f (App e1 e2) = App    <$>  f e1  <*>  f e2
+  traverse  f (Lam x e)   = Lam x  <$>  f e
 
 type Supply = [Name]
-names :: Supply
-names = [ s ++ [c] | s <- "":names, c <- ['a'..'z'] ]
+nameS :: Supply
+nameS = [ s ++ [c] | s <- "":nameS, c <- ['a'..'z'] ]
 type Renaming = Map Name Name
 type Env = (Supply, Renaming)
 
 alphaRename :: Expr -> Expr
-alphaRename e = CMR.runReader (alpha e) (names, Map.empty)
+alphaRename e = CMR.runReader (alpha e) (nameS, Map.empty)
 
 -- alpha :: CMR.MonadReader Env m => Expr -> m Expr    
 alpha :: (CMR.MonadReader Env m, Applicative m) =>
          Expr -> m Expr
 alpha (Expr e) = Expr <$> case e of
   Var x   -> Var <$> rename x
-  Lam x e -> fresh x $ \y -> Lam y <$> alpha e
+  Lam x b -> fresh x $ \y -> Lam y <$> alpha b
   _       -> traverse alpha e
 
 rename :: (CMR.MonadReader (s, Map n n) m, Ord n) => n -> m n
@@ -101,30 +102,30 @@ app e1 e2 = Expr (App e1 e2)
 var :: Name -> Expr
 var x     = Expr (Var x)
 
-e1, e2, e3 :: Expr
-e1 = lam "x" $ var "x"
-e2 = lam "unused" $ var "C"
-e3 = lam "x" $ lam "y" $ lam "z" $ 
-     app (var "x") (var "z") `app` 
-     app (var "y") (var "z")
+ex1, ex2, ex3 :: Expr
+ex1 = lam "x" $ var "x"
+ex2 = lam "unused" $ var "C"
+ex3 = lam "x" $ lam "y" $ lam "z" $ 
+      app (var "x") (var "z") `app` 
+      app (var "y") (var "z")
 
 instance Show Expr where
   showsPrec p (Expr e) = showsPrec p e
 
 instance Show e => Show (Expr' e) where
-  showsPrec p (Var x) = showString x
+  showsPrec _ (Var x) = showString x
   showsPrec p (App e1 e2) = showParen (p>1) $
     showsPrec 1 e1 . showString " " . showsPrec 2 e2
   showsPrec p (Lam x e) = showParen (p>0) $
     showString ("\\" ++ x ++ "-> ") . shows e
 
 test :: Expr -> IO ()
-test e = do printf "e=%s; free(e)=%s; α(e)=%s\n" 
+test e = do printf "e=%-25s;  free(e)=%-5s;  α(e)=%-25s\n" 
               (show e) 
               (show $ Set.toList $ freeVars e) 
               (show $ alphaRename e)
           
 main :: IO ()
-main = do test e1
-          test e2
-          test e3
+main = do test ex1
+          test ex2
+          test ex3

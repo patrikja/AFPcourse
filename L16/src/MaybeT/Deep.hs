@@ -1,7 +1,7 @@
 {-# LANGUAGE GADTs #-}
 
 module MaybeT.Deep where
-
+import qualified Control.Applicative as CA
 import qualified Control.Monad.Trans as CMT
 import qualified Control.Monad       as CM
 
@@ -28,17 +28,7 @@ runMaybeT:: Monad m => MaybeT m a -> m (Maybe a)
 
 
 
-
-
-
-
-
-
-
-
-
-
--- Deep embedding
+-- Deep embedding (a bit too deep)
 
 data MaybeT m a where
   Return :: a -> MaybeT m a
@@ -59,3 +49,22 @@ runMaybeT (m :>>= f) = do
   case r of
     Nothing -> return Nothing
     Just x  -> runMaybeT (f x)
+
+----------------
+
+--------
+-- Preparing for the Functor-Applicative-Monad proposal:
+--   https://www.haskell.org/haskellwiki/Functor-Applicative-Monad_Proposal
+
+-- | The following instances are valid for _all_ monads:
+instance Monad f => Functor (MaybeT f) where
+  fmap = CM.liftM
+  
+instance Monad f => CA.Applicative (MaybeT f) where
+  pure   = return
+  (<*>)  = CM.ap
+
+-- Exercise: implement instances with weaker requirements:
+--   Functor f => Functor (MaybeT f)
+-- and
+--   CA.Applicative f => CA.Applicative (MaybeT f)

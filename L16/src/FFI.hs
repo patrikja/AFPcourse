@@ -1,5 +1,6 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
-import Control.Applicative
+module FFI where
+-- import Control.Applicative
 import Foreign (Storable(..), Ptr, alloca)
 import Foreign.C (CInt(..), CString, withCString, peekCString)
 import System.IO.Unsafe(unsafePerformIO)

@@ -1,5 +1,7 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 -- RankNTypes, 
+module Cont where
+import Control.Applicative
 import Control.Monad
 import Control.Monad.Trans
 
@@ -45,7 +47,7 @@ example n = do
 -- Note that m doesn't have to be a monad for ContT r m to be a
 -- monad.
 newtype ContT r m a = ContT { unContT :: Cont (m r) a }
-  deriving (Monad, MonadCont)
+  deriving (Monad, MonadCont, Functor, Applicative)
 
 runContT :: Monad m => ContT a m a -> m a
 runContT m = unCont (unContT m) return
@@ -55,3 +57,24 @@ instance MonadTrans (ContT r) where
 
 instance MonadIO m => MonadIO (ContT r m) where
   liftIO = lift . liftIO
+
+----------------
+-- Some extras
+
+instance Functor (Cont r) where
+  fmap = fmapC
+
+instance Applicative (Cont r) where
+  pure = pureC
+  (<*>) = apC
+
+fmapC :: (a -> b) -> Cont r a -> Cont r b
+fmapC f (Cont ga) = Cont $ \kb -> ga (kb . f)
+
+pureC :: a -> Cont r a
+pureC a = Cont $ \k -> k a
+apC :: Cont r (a -> b) -> Cont r a -> Cont r b
+apC (Cont gf) (Cont ga) = Cont $ \kb ->
+                            ga $ \ka ->
+                            gf $ \kf ->
+                            kb (kf ka)

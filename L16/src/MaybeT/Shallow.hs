@@ -2,6 +2,7 @@
 
 module MaybeT.Shallow where
 
+import qualified Control.Applicative as CA
 import qualified Control.Monad.Trans as CMT
 import qualified Control.Monad       as CM
 
@@ -53,3 +54,29 @@ instance CMT.MonadTrans MaybeT where
 
 liftMT :: Monad m => m a -> MaybeT m a
 liftMT m = MaybeT (CM.liftM Just m)
+
+----------------
+
+-- MaybeT also takes (applicative) functors to (applicative) functors
+
+instance Functor f => Functor (MaybeT f) where
+  fmap = fmapMT
+
+instance CA.Applicative f => CA.Applicative (MaybeT f) where
+  pure = pureMT
+  (<*>) = apMT
+
+fmapMT :: Functor f => (a -> b) -> MaybeT f a -> MaybeT f b
+fmapMT f (MaybeT ma) = MaybeT $ fmap (fmapMaybe f) ma
+
+fmapMaybe :: (a->b) -> Maybe a -> Maybe b
+fmapMaybe = fmap
+
+pureMT :: CA.Applicative f => a -> MaybeT f a
+pureMT a = MaybeT $ CA.pure (Just a)
+
+apMT :: CA.Applicative f => MaybeT f (a->b) -> MaybeT f a -> MaybeT f b
+apMT (MaybeT mf) (MaybeT ma) = MaybeT $ apMaybe CA.<$> mf CA.<*> ma
+
+apMaybe :: Maybe (a -> b) -> Maybe a -> Maybe b
+apMaybe = CM.ap

@@ -2,6 +2,7 @@
 {-# LANGUAGE FlexibleInstances #-}
 
 module RWMonad where
+import Control.Applicative
 import Data.Monoid
 import Test.QuickCheck
 -- import qualified Test.QuickCheck.Property as QC
@@ -27,8 +28,26 @@ B. State and prove the three Monad laws for |RW e w|.
 
 -}
 
+instance Functor (RW e w) where
+  fmap = fmapRW
+
+fmapRW :: (a -> b) -> RW e w a -> RW e w b
+fmapRW f (RW g) = RW $ \e -> let (a, w) = g e in (f a, w)
+  
+instance Monoid w => Applicative (RW e w) where
+  pure = pureRW
+  (<*>) = apRW
+  
+pureRW :: Monoid w => a -> RW e w a
+pureRW a = RW $ \_e-> (a, mempty)
+
+apRW :: Monoid w => RW e w (a -> b) -> RW e w a -> RW e w b
+apRW (RW gf) (RW ga) = RW $ \e -> let (f, wf) = gf e
+                                      (a, wa) = ga e
+                                  in  (f a, wf `mappend` wa)
+
 instance Monoid w => Monad (RW e w) where
-  return = returnRW
+  return = returnRW   -- = pureRW
   (>>=)  = bindRW
 
 newtype RW e w a = RW {unRW :: e -> (a, w)}
@@ -42,9 +61,8 @@ tellRW   :: w -> (RW e w) ()
 listenRW :: (RW e w) a -> (RW e w) (a, w)
 
 askRW = RW (\e -> (e, mempty))
-localRW e2e (RW e2aw) = RW $ \ e -> e2aw (e2e e) -- :: (a, w)
-  -- e2e :: e -> e
-  -- e2aw :: e -> (a, w)
+localRW :: (e1 -> e2) -> RW e2 w a -> RW e1 w a
+localRW e2e (RW e2aw) = RW $ \ e -> e2aw (e2e e)
 
 
 
@@ -53,13 +71,13 @@ localRW e2e (RW e2aw) = RW $ \ e -> e2aw (e2e e) -- :: (a, w)
 
 
 
-returnRW a = RW $ \e-> (a, mempty)
+returnRW = pureRW
 bindRW (RW e2aw) a2m = RW $ \e -> let (a, w1) = e2aw e
                                       (b, w2) = unRW (a2m a) e
                                   in (b, w1 `mappend` w2)
 -- askRW = RW $ \e -> (e, mempty)
 -- localRW f (RW e2aw) = RW $ \e -> e2aw (f e)
-tellRW w = RW $ \e -> ((), w)
+tellRW w = RW $ \_e -> ((), w)
 listenRW (RW e2aw) = RW $ \e -> let (a, w) = e2aw e
                                 in ((a, w), w)
 
@@ -88,15 +106,15 @@ proofReturnBind x f = AllEq
   , -- Monad instance for RW
     (returnRW x `bindRW` f)
   , {- def. returnRW -}
-    ((RW $ \e->(x, mempty)) `bindRW` f)
+    ((RW $ \_e->(x, mempty)) `bindRW` f)
   , {- def. bindRW -}
-    let e2aw = \e->(x, mempty) 
+    let e2aw = \_e->(x, mempty) 
         a2m = f
     in RW $ \e -> let (a, w1) = e2aw e
                       (b, w2) = unRW (a2m a) e
                   in (b, w1 `mappend` w2)
   , {- inlining -}
-    RW $ \e -> let (a, w1) = (\e->(x, mempty)) e
+    RW $ \e -> let (a, w1) = (\_e->(x, mempty)) e
                    (b, w2) = unRW (f a) e
                in (b, w1 `mappend` w2)
   , {- beta-red.  -}
@@ -117,6 +135,7 @@ proofReturnBind x f = AllEq
     f x
   ]
 
+proofBindReturn :: Monoid w => RW e w a -> AllEq (RW e w a)
 proofBindReturn m = AllEq
   [
     m >>= return 
@@ -134,7 +153,7 @@ proofBindReturn m = AllEq
                in (b, w1 `mappend` w2)
   , {- def. returnRW -}
     RW $ \e -> let (a, w1) = unRW m e
-                   (b, w2) = unRW (RW $ \e->(a, mempty)) e
+                   (b, w2) = unRW (RW $ \_e->(a, mempty)) e
                in (b, w1 `mappend` w2)
   , {- unRW . RW == id, beta-red. -}
     RW $ \e -> let (a, w1) = unRW m e
@@ -154,6 +173,9 @@ proofBindReturn m = AllEq
 
 
 
+proofBindBind :: Monoid w =>
+                 RW e w a1 -> (a1 -> RW e w a2) -> (a2 -> RW e w a3) ->
+                 AllEq (RW e w a3)
 proofBindBind m f g  = AllEq
   [
     (m >>= f) >>= g
@@ -209,9 +231,9 @@ proofBindBind m f g  = AllEq
                    (b, w2) = unRW (
                      let e2aw = unRW (f a)
                          a2m  = g
-                     in RW $ \e -> let (a, w1) = e2aw e
-                                       (b, w2) = unRW (a2m a) e
-                                   in (b, w1 `mappend` w2)
+                     in RW $ \e' -> let (a', w1') = e2aw e'
+                                        (b', w2') = unRW (a2m a') e'
+                                    in (b', w1' `mappend` w2')
                      ) e
                in (b, w1 `mappend` w2)
   ,  -- def. of bindRW (again)
@@ -234,9 +256,12 @@ proofBindBind m f g  = AllEq
     (m >>= (\x-> f x >>= g))
   ]
 
+mytest :: (Arbitrary b, Show b, Eq a, Eq w) =>
+          AllEq (RW b w a) -> Property
 mytest (AllEq ms) = forAll arbitrary $ \e -> 
                     allEq $ map (flip unRW e) ms
 
+allEq :: Eq a => [a] -> Bool
 allEq []      =  True
 allEq (x:xs)  =  all (x==) xs
 
@@ -260,6 +285,7 @@ proofBindBind' :: Blind (RWIS Bool) ->
                   AllEq (RWIS Int)
 proofBindBind' (Blind m) (Blind f) (Blind g) = proofBindBind m f g
   
+main :: IO ()
 main = do 
   quickCheck proofBindBind'
   quickCheck proofBindReturn'
