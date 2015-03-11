@@ -1,6 +1,6 @@
-# Project selection status 2015-03-05:
+# Project selection status 2015-03-11:
 
-I'm very happy to see so many projects have started! Here is the current status:
+I'm very happy to see so many projects have running! Here is the current status:
 
 ## Projects around the following hackage packages have been accepted
 
@@ -8,8 +8,8 @@ I'm very happy to see so many projects have started! Here is the current status:
 | ------------------- | ----- | 
 | Graph               |     6 |
 | HaTeX               |    15 |
-| Haste­compiler      |    24 |
 | Hlearn              |    34 |
+| NLP(?)              |     3 |
 | Repa                |    21 |
 | Scotty              |     5 |
 | Yesod               |    38 |
@@ -23,17 +23,14 @@ I'm very happy to see so many projects have started! Here is the current status:
 | feldspar-language   |    29 |
 | gf                  |    25 |
 | haskeline           |    13 |
+| haste-compiler      |     7 |
+| haste-compiler      |    16 |
+| haste-compiler      |    22 |
+| haste­compiler      |    24 |
+| netwire             |    33 |
 | parsec              |    17 |
 | purescript          |    36 |
+| quickspec           |     9 |
 | syntactic           |     8 |
 | testing-feat        |    32 |
 
-## Pending review after initial rejection
-
-Two quickspec proposals
-
-## Pending resubmisson after initial rejection
-
-(Too simple, too big, too vague, etc.)
-
-time, scotty, Agda, fast-tags, crypto-api, Blaze
