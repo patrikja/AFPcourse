@@ -32,29 +32,59 @@ instance Monoid w => Monad (RW e w) where
   return = returnRW   -- = pureRW
   (>>=)  = bindRW
 
-newtype RW e w a = RW {unRW :: () } -- TODO
+newtype RW e w a = RW {unRW :: e -> (a, w) }
   deriving (Arbitrary)
 returnRW :: Monoid w => a -> (RW e w) a
+returnRW a = RW $ \_e -> (a, mempty)
+                --  e -> (a, w)
+
 bindRW   :: Monoid w => (RW e w) a -> (a -> (RW e w) b) -> 
                                             (RW e w) b
+bindRW (RW e2aw) a2mb = RW $ \e -> let  (a, w) = e2aw e
+                                        RW g   = a2mb a -- g :: e -> (b, w)
+                                        (b, w')= g e
+                                   in (b, mappend w w')  
+  -- e2aw ::  e ->  (a, w)
+  -- a2m  ::  a ->  (RW e w) b
+  -- a2m  :~: a ->  e -> (b, w)
+
+{-
+newtype Last a = Last a
+instance Monoid a => Monoid (Last a) where
+  mempty = Last mempty
+  mappend x y = y
+-}
+
 askRW    :: Monoid w => (RW e w) e
---localRW  :: (e -> e) -> (RW e w) a -> (RW e w) a
+askRW    = RW $ \e -> (e, mempty) -- :: (e, w)
+
+
+localRW  :: (e -> r) -> (RW r w) a -> (RW e w) a
+localRW e2r (RW r2aw) = RW $ r2aw . e2r
+  -- e2r  :: e -> r
+  -- r2aw      :: r -> (a, w)
+  --         e      -> (a, w)                                    
+
+-- localRW e2e e2ma = RW $ \e -> -- :: (a, w)
+  -- unRW e2ma :: e' -> (a, w)
+                        
 tellRW   :: w -> (RW e w) ()
+tellRW w = RW $ \_e -> ((), w) -- :: ((), w)
+
+-- do tell [ErrorOutofBounds]
+--    tell []
+   
+
+
 listenRW :: (RW e w) a -> (RW e w) (a, w)
+listenRW (RW e2aw) = undefined
 
-askRW = undefined
-localRW e2e (RW e2aw) = undefined
-  -- e2e :: e -> e
-  -- e2aw :: e -> (a, w)
-
-returnRW a = undefined
-bindRW (RW e2aw) a2m = undefined
+-- do  (a, logsofar) <- listen someSubComp
+--     continue 
                        
                        
 -- askRW = RW $ \e -> (e, mempty)
 -- localRW f (RW e2aw) = RW $ \e -> e2aw (f e)
-tellRW w = undefined
-listenRW (RW e2aw) = undefined
                      
 
 -- State and prove the three Monad laws

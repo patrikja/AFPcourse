@@ -15,12 +15,21 @@ instance Monad (Cont r) where
   return  =  returnC
   (>>=)   =  bindC
 
-returnC :: a -> Cont r a
-returnC a = Cont $ \k -> k a
-                    
-bindC :: Cont r a -> (a -> Cont r b) -> Cont r b
-bindC m f = Cont $ \k -> unCont m $ \x -> unCont (f x) k
+-- unCont :: Cont r a -> (a->r) -> r
 
+returnC :: a -> Cont r a
+returnC a = Cont $ \k -> k a   --   ::      r
+                               -- k :: a -> r
+                    
+-- bindC :~: ((a->r)->r) -> (a -> ((b->r)->r)) -> ((b->r)->r)
+bindC :: Cont r a -> (a -> Cont r b) -> Cont r b
+bindC (Cont ca) a2cb = Cont $ \k -> ca (\a -> unCont (a2cb a) k)
+
+  -- k     ::  b->r
+  -- ca    :: (a->r) -> r
+  -- a2cb  :: a -> Cont r b
+  -- a2cb  :~: a -> (b->r) -> r
+  
 -- running is to continue by doing nothing (id)
 runCont :: Cont a a -> a
 runCont m = unCont m id

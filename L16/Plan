@@ -21,3 +21,6 @@ file:doc/coverage.markdown
 *** file:../L12/AgdaTutorial/Filter.agda
 *** file:../L12/AgdaTutorial/Modules.agda
 *** file:../L12/AgdaTutorial/Records.agda
+* Misc
+
+(set-frame-font "Ubuntu Mono-25" nil t)

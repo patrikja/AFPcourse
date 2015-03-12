@@ -1,5 +1,4 @@
-{-# LANGUAGE GADTs #-}
-
+{-# LANGUAGE GADTs, KindSignatures #-}
 module MaybeT.Deep where
 import qualified Control.Applicative as CA
 import qualified Control.Monad.Trans as CMT
@@ -18,7 +17,7 @@ instance CMT.MonadTrans MaybeT where
 returnMT :: Monad m => a ->  MaybeT m a
 bindMT   :: Monad m => MaybeT m a -> (a -> MaybeT m b) -> 
                                            MaybeT m b
-failMT   :: Monad m => t -> MaybeT m a
+failMT   :: Monad m => String -> MaybeT m a
 liftMT   :: Monad m => m a -> MaybeT m a
 runMaybeT:: Monad m => MaybeT m a -> m (Maybe a)
 
@@ -30,7 +29,7 @@ runMaybeT:: Monad m => MaybeT m a -> m (Maybe a)
 
 -- Deep embedding (a bit too deep)
 
-data MaybeT m a where
+data MaybeT (m :: * -> *) a where
   Return :: a -> MaybeT m a
   (:>>=) :: MaybeT m a -> (a -> MaybeT m b) -> MaybeT m b
   Fail   :: MaybeT m a

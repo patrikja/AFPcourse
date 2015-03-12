@@ -1,8 +1,6 @@
 {-# LANGUAGE GADTs, KindSignatures #-}
-
-
 module MaybeT.Deep where
-
+import qualified Control.Applicative as CA
 import qualified Control.Monad.Trans as CMT
 import qualified Control.Monad       as CM
 
