@@ -28,7 +28,7 @@ Lecture plan:
 * [L12](L12/): Agda tutorial
 * [L13](L13/): Type based modelling in Haskell, part 2: Type families
 * [L14](L14/): Program derivation: Maximum segment sum (guest lecture by [Cezar Ionescu](http://www.cse.chalmers.se/~cezar/))
-* L15: Exercise session based on exams from earlier years
+* [L15](L15/): Exercise session based on exams from earlier years
 * [L16](L16/): A choice of topics: in 2015 we did RWmonad + Newtype deriving + Cont monad.
 
 # Schedule
