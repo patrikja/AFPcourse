@@ -20,22 +20,18 @@ Lecture plan:
 * L4: [Monads](L3/) and [Parsing](L4/): a case-study in program transformation
 * L5: [Parsing](L4/) and [Monad Transformers](L5/), part 1: how to build your monad from transformers. 
 * L6: [Monad Transformers](L5/), part 2: more transformers and the extensible interpreter
-* L7: Exercise session based on exams from earlier years
+* [L7](L7/): Exercise session based on exams from earlier years
 * [L8](L8/): Specification, verification and testing (QuickCheck)
 * L9: [EDSL guest lecture](https://github.com/emilaxelsson/deep-shallow-edsl) by [Emil Axelsson](http://www.cse.chalmers.se/~emax/)
 * [L10](L10/): More QuickCheck: Generating, shrinking, etc.
 * [L11](L11/): Type based modelling in Haskell, part 1: GADTs
 * [L12](L12/): Agda tutorial
 * [L13](L13/): Type based modelling in Haskell, part 2: Type families
-* L14: Program derivation: Maximum segment sum (guest lecture by [Cezar Ionescu](http://www.cse.chalmers.se/~cezar/))
+* [L14](L14/): Program derivation: Maximum segment sum (guest lecture by [Cezar Ionescu](http://www.cse.chalmers.se/~cezar/))
 * L15: Exercise session based on exams from earlier years
-* L16: (Perhaps repetition)
+* [L16](L16/): A choice of topics: in 2015 we did RWmonad + Newtype deriving + Cont monad.
 
 # Schedule
-
-Due to large interest the lectures have been moved to bigger rooms
-starting 2015-01-26 (study week 2). The resulting schedule looks a bit
-messy, but we will have lots of more air to breathe.
 
 [TimeEdit schedule](https://se.timeedit.net/web/chalmers/db1/public/ri1X50gQ9560YvQQ05Z6970Y0Zy6007311Y54Q785.html):
 
