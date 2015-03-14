@@ -1,5 +1,4 @@
-#AFP 2014: Annotated learning outcomes
-(Not yet updated for 2015 lecture numbering.)
+#AFP 2015: Annotated learning outcomes
 
 * DSL: design embedded domain specific languages
     * DSL.Concepts: (abstract) syntax, semantics, ...
