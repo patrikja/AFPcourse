@@ -12,7 +12,9 @@ fmapEqual = error "Can't be done!?"
 
 -- Functor, but not Applicative
 
-{- Either a -}
+-- ((,) Void) 
+
+  
 
 -- Applicative, but not Monad
 

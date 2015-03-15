@@ -35,10 +35,10 @@ instance Monad Program where
   (>>=)   = bindP
 
 returnP :: a -> Program a
-returnP = error "TBD"
+returnP x = P $ error "TBD"
 
 bindP :: Program a -> (a -> Program b) -> Program b
-bindP = error "TBD"
+bindP p k = P $ error "TBD"
 
 -- | Running a program is simply returning its semantics.
 run :: Program a -> IOSem a
