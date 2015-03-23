@@ -14,9 +14,19 @@ sizeP            = \_f _p  s _t -> s
 (==?)            = liftPc (==)
 (>?)             = liftPc (>)
 
--- Some variations:
+-- Some OK variations:
 liftPc'   :: (a -> b -> c) -> InfoP a ->       b -> InfoP c
 liftPc' op ia b   = \ f  p  s  t -> ia f p s t `op` b
+pathP'    :: InfoP FilePath
+pathP'            = liftPath id
+
+-- Some examples of errors
+-- redefine InfoP as a deep embedding (making all the operations contructors in a datatype)
+-- Use monadic do-notation (without providing a Monad instance)
+-- liftPc f ip = liftP2 f ip $ constP
+-- (==??) iA a fp p i utc = a == $ iA fp p i utc
+-- liftP2 f (Const a) (Const b) = Const (f a b)
+-- ...
 
 ----------------------------------------------------------------
 -- Problem 1b: Implement filterM and forM using just return, (>>=), liftM and foldr
@@ -36,6 +46,41 @@ forM xs (body :: a -> m b) = foldr step base xs
          step x mxs = body x >>= \b -> liftM (b:) mxs
 
 
+-- Variants
+forM' :: Monad m => [a] -> (a -> m b) -> m [b]
+forM' xs (body :: a -> m b) = foldr step base xs
+   where base :: m [b]
+         base = return []
+         step :: a -> m [b] -> m [b]
+         step x = liftM2 (:) (body x)
+         -- or    liftM2 (:) . body
+-- But only if you also implement liftM2
+liftM2, liftM2' :: Monad m => (a -> b -> c) -> m a -> m b -> m c
+liftM2  op ma mb = ma >>= \a -> liftM (op a) mb
+liftM2' op ma mb = ma >>= \a -> mb >>= \b -> return (op a b)
+
+-- ================================================================
+-- Some errors on the b) part
+--   type1 = a -> [m a] -> [m a]
+--   type2 = a -> [m b] -> [m b]
+--   filterM f xs = liftM $ foldr (\a1 a2 -> ...) [] xs
+
+-- "Almost right"s:
+-- (in filterM): step x = mp x >>= \b -> if b then liftM (x:) else id
+-- (in forM):    step x = body x >>= \b -> liftM (b:)
+
+-- Working but unnecessarily complex
+filterM' :: Monad m => (a -> m Bool) -> [a] -> m [a]
+filterM' _f []      = return []
+filterM'  f (l:ls)  = mergeLM (testM f l) (filterM f ls)
+
+testM :: (Monad m) => (a -> m Bool) -> a -> m [a]
+testM f a = (f a) >>= \b -> if b then return [a] else return []
+
+mergeLM :: (Monad m) => m [a] -> m [a] -> m [a]
+mergeLM mas mbs = mas >>= \as -> mbs >>= \bs -> return (as ++ bs)
+
+
 -- ================================================================
 
 -- Exam question text:
@@ -43,7 +88,7 @@ forM xs (body :: a -> m b) = foldr step base xs
 -- newtype FilePath     = FilePath () -- Imported from the Prelude
 newtype Permissions  = Permissions () -- Not part of exam question
 newtype UTCTime      = UTCTime ()     -- Not part of exam question
-  
+
 type InfoP a = FilePath -> Permissions -> Integer -> UTCTime -> a
 find = error "Not part of exam question"
 myTest :: InfoP Bool
@@ -67,4 +112,3 @@ sizeP     :: InfoP Integer
 
 type Predicate = InfoP Bool
 find :: FilePath -> Predicate -> IO [FilePath]  -- run function
-         
