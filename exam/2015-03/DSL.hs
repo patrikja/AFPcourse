@@ -19,6 +19,8 @@ liftPc'   :: (a -> b -> c) -> InfoP a ->       b -> InfoP c
 liftPc' op ia b   = \ f  p  s  t -> ia f p s t `op` b
 pathP'    :: InfoP FilePath
 pathP'            = liftPath id
+constP'    :: a -> InfoP a
+constP' = const.const.const.const
 
 -- Some examples of errors
 -- redefine InfoP as a deep embedding (making all the operations contructors in a datatype)
@@ -58,6 +60,13 @@ forM' xs (body :: a -> m b) = foldr step base xs
 liftM2, liftM2' :: Monad m => (a -> b -> c) -> m a -> m b -> m c
 liftM2  op ma mb = ma >>= \a -> liftM (op a) mb
 liftM2' op ma mb = ma >>= \a -> mb >>= \b -> return (op a b)
+
+shared :: Monad m => (a -> res -> [b] -> [b]) -> (a -> m res) -> [a] -> m [b]
+shared f fm =foldr (\x m -> fm x >>= \res -> liftM (f x res) m) (return [])
+filterM'' :: Monad m => (a -> m Bool) -> [a] -> m [a]
+filterM''    = shared (\x b -> if b then (x:) else id)
+forM''    :: Monad m => [a] -> (a -> m b) -> m [b]
+forM'' xs fm = shared (const (:)) fm xs
 
 -- ================================================================
 -- Some errors on the b) part
