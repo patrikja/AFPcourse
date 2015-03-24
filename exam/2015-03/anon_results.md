@@ -3,8 +3,8 @@
 These are inofficial results - only LADOK results are legally binding.
 The table is sorted by anonymous code.
 
-2015-03-24: P1 and P2 corrected so far. Median score on P2 is 8.
-2015-03-23: Only Problem 1 (P1) corrected so far. The median score on P1 is 11.
+* 2015-03-24: P1 and P2 corrected so far. Median score on P2 is 8.
+* 2015-03-23: Only Problem 1 (P1) corrected so far. The median score on P1 is 11.
 
 
 | Course | Code | P1 | P2 | P3 | Sum | Grade |
