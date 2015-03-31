@@ -1,0 +1,34 @@
+AFP course teachers
+--------
+* 2010 onwards: Patrik Jansson
+* 2008-2009: Ulf Norell
+* Earlier(?): Ulf Norell, Koen Claessen, Lennart Augustsson, John Hughes
+  * TODO: sort out who did which year
+  * http://web.archive.org/web/20100525103856/http://www.cs.chalmers.se/Cs/Grundutb/Kurser/afp/
+
+AFP results history
+-----------
+
+AFP15 student numbers:
+* 68 did the lab  (50 passed, 18 failed)
+* 57 did the exam (27 passed, 30 failed)
+
+AFP14 student numbers:
+* 37 did the lab  (24 passed, 13 failed)
+* 19 did the exam (17 passed,  2 failed)
+
+AFP13 student numbers:
+* 43 did the lab  (32 passed, 11 failed)
+* 34 did the exam (21 passed, 13 failed)
+
+AFP12 student numbers:
+* 33 did the lab  (27 passed,  4 failed)
+* 28 did the exam (14 passed, 14 failed)
+
+AFP11 student numbers:
+* >29 did the lab (26 passed, ? failed)
+* 32 did the exam (24 passed, 8 failed)
+
+AFP10 student numbers:
+* 47 did the lab  (36 passed, 11 failed)
+* 27 did the exam (19 passed,  8 failed)
