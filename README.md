@@ -11,14 +11,32 @@ code associated with the AFP course. It is currently (Jan-Mar 2015)
 under construction with material being migrated from the main course
 home page step by step.
 
+Grading
+-------
+
+The final grade of the course is a based on a weighted average of the
+lab grade and the exam grade (provided that both are at least "Pass").
+The weights are the number of credits: 4.5cr (60%) for the labs and
+3cr (40%) for the exam. Among the labs, number 2 has a higher weight.
+
+In March 2015 the final result is
+* 68 did the lab  (50 passed, 18 failed)
+* 57 did the exam (27 passed, 30 failed)
+and 26 passed both the exam and the labs.
+
+These numbers may be adjusted after the "exam check" (granskning)
+opportunities Mon 2015-04-13 and Tue 2015-04-14. Both at 12.45-13.10
+in my office (EDIT 5468) or in the nearby corner room if we need more
+space.
+
 Lecture plan:
 ------------
 
-* [L1](L1/): Course intro, Haskell recap, first DSL example 
+* [L1](L1/): Course intro, Haskell recap, first DSL example
 * [L2](L2/): EDSLs and the Shapes example
 * [L3](L3/): Monads: how to build your own monad from scratch
 * L4: [Monads](L3/) and [Parsing](L4/): a case-study in program transformation
-* L5: [Parsing](L4/) and [Monad Transformers](L5/), part 1: how to build your monad from transformers. 
+* L5: [Parsing](L4/) and [Monad Transformers](L5/), part 1: how to build your monad from transformers.
 * L6: [Monad Transformers](L5/), part 2: more transformers and the extensible interpreter
 * [L7](L7/): Exercise session based on exams from earlier years
 * [L8](L8/): Specification, verification and testing (QuickCheck)
@@ -37,9 +55,9 @@ Lecture plan:
 
 | Week | Monday 13-15     | Room    | Thursday 10-12   | Room |
 | ---- | ---------------- | ------- | ---------------- | ---- |
-|   1  | 2015-01-19       | EL43    | 2015-01-22       | EL43 | 
-|   2  | 2015-01-26       | EF      | 2015-01-29       | VK   | 
-|   3  | 2015-02-02       | EF      | 2015-02-05       | ED   | 
+|   1  | 2015-01-19       | EL43    | 2015-01-22       | EL43 |
+|   2  | 2015-01-26       | EF      | 2015-01-29       | VK   |
+|   3  | 2015-02-02       | EF      | 2015-02-05       | ED   |
 |   4  | 2015-02-09       | VK      | 2015-02-12       | EE   |
 |   5  | 2015-02-16       | EF      | 2015-02-19       | EA   |
 |   6  | 2015-02-23       | EF      | 2015-02-26       | EA   |
