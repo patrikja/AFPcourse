@@ -15,6 +15,8 @@ please use this doodle:
 
 for booking a discussion slot (deadline 2015-08-17).
 
+  https://doodle.com/8ywfprea5tdkhrq7
+
 We will not re-open the Fire submission system this time - just zip up
 and submit your files as an attachment to a mail to patrikj at
 chalmers.se (_not_ as a reply to the afp15 group;-).
