@@ -3,9 +3,9 @@
 As announced by the end of the course, in connection with the written
 re-exam we also organise a "re-lab" for those who tried but failed the
 labs during study period 3 2015 (or who want to improve their grade).
-If you hand in solutions to the labs + book a slot by 2010-08-17 (the
+If you hand in solutions to the labs + book a slot by 2015-08-17 (the
 week before the written re-exam) and present your solution to us in
-room EDIT 5468 during your discussion slot on 2010-08-21, then you
+room EDIT 5468 during your discussion slot on 2015-08-21, then you
 will be graded again on the lab without having to wait for 2016. (The
 purpose of the short individual presentation is to make sure you
 actually understand your solution.)

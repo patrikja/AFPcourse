@@ -24,10 +24,8 @@ In March 2015 the final result is
 * 57 did the exam (27 passed, 30 failed)
 and 26 passed both the exam and the labs.
 
-These numbers may be adjusted after the "exam check" (granskning)
-opportunities Mon 2015-04-13 and Tue 2015-04-14. Both at 12.45-13.10
-in my office (EDIT 5468) or in the nearby corner room if we need more
-space.
+In August there will be a written re-exam and also a
+["re-lab" opportunity](re-lab.md).
 
 Lecture plan:
 ------------
