@@ -10,6 +10,12 @@ AFP course teachers
 * [2001](https://web.archive.org/web/20011004074156/http://www.cs.chalmers.se/~koen/teaching.html): Koen Claessen
 * [2000](https://web.archive.org/web/20001026233438/http://www.cs.chalmers.se/~koen/teaching.html): Koen Claessen
 * [1999](http://web.archive.org/web/20000831122446/http://www.cs.chalmers.se/~augustss/AFP/index.html): Lennart Augustsson
+* 1998: ?
+* [1997](http://web.archive.org/web/19980122062430/http://www.cs.chalmers.se/~rjmh/AFP/): John Hughes
+* [1996](http://web.archive.org/web/19970305040312/http://www.cs.chalmers.se/~rjmh/AFP/): John Hughes
+* [1995](http://web.archive.org/web/19970219235016/http://www.cs.chalmers.se/~magnus/afp/mail): Magnus Carlsson
+* 1994: John?
+* [1993?](http://web.archive.org/web/19970219234946/http://www.cs.chalmers.se/~magnus/afp/about.html): John Hughes
 * At different times: Ulf Norell, Koen Claessen, Lennart Augustsson, John Hughes, Josef Svenningsson, Magnus Carlsson
   * TODO: sort out who did which year
   * http://web.archive.org/web/20100525103856/http://www.cs.chalmers.se/Cs/Grundutb/Kurser/afp/
