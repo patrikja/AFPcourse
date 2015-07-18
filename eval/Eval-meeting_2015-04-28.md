@@ -1,5 +1,7 @@
 ﻿#Kursnämndsprotokoll: TDA342 Advanced Functional Programming
 
+(Source: [Chalmers document repository](http://document.chalmers.se/doc/2b1116d3-59c6-4b99-ae0d-1bd9bf754f21))
+
 * Institution (Department): DATA- OCH INFORMATIONSTEKNIK
 * Program (Program): MPALG DATAVETENSKAP - ALGORITMER, PROGRAMSPRÅK OCH LOGIK, MASTERPROGRAM
 * Årskurs (Year):
@@ -38,3 +40,8 @@ Cooperation with the teachers worked well.
 Lab descriptions will be clarified with specifications for what’s required for grades 3, 4 and 5 for different ambition levels. This might also help with reducing the workload for those students not aiming for the highest grade.
 
 ##Övrigt (Other matters)
+
+Links:
+* http://document.chalmers.se/doc/2b1116d3-59c6-4b99-ae0d-1bd9bf754f21
+* https://course-eval.portal.chalmers.se/sr/Reports/TDA342/2014/2015/LP3-LP3/WithoutComments
+* Overall impression: 4.13 (where 5 is maximal)
