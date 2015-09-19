@@ -76,14 +76,29 @@ strat = while enemiesLeft $ do
     * left n >> left n == left (2*n)
     * left 360 >> p == p
     * forward n >> backward n == return () -- assuming no robot obstacle
-    * if_ (pure True) p q == a
+    * if_ (pure True) p q == p
     * if_ (pure False) p q == q
     * p >> idle == idle >> p == p
     * Monad, applicative and functor laws are also fine here.
 -}
+-- Not required on the exam: Haskell code for testing the laws
 
+(===) :: Robot a -> Robot a -> Bool
+(===) = error "Robot equality not implemented"
 
+propLeftTwice :: Degrees -> Bool
+propLeftTwice n = (left n >> left n) === left (2*n)
 
+propLeft360 :: Robot a -> Bool
+propLeft360 p = (left 360 >> p) === p
+
+propIfTrue :: Robot a -> Robot a -> Bool
+propIfTrue  p q = if_ (pure True)  p q === p
+
+propIfFalse :: Robot a -> Robot a -> Bool
+propIfFalse p q = if_ (pure False) p q === q
+
+-- ...
 
 -- Problem d: a deep embedding
 data Robot a where
