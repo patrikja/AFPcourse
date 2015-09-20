@@ -82,6 +82,7 @@ strat = while enemiesLeft $ do
     * Monad, applicative and functor laws are also fine here.
 -}
 -- Not required on the exam: Haskell code for testing the laws
+-- Included here just for type checking the laws.
 
 (===) :: Robot a -> Robot a -> Bool
 (===) = error "Robot equality not implemented"
@@ -97,6 +98,12 @@ propIfTrue  p q = if_ (pure True)  p q === p
 
 propIfFalse :: Robot a -> Robot a -> Bool
 propIfFalse p q = if_ (pure False) p q === q
+
+propIdle1 :: Robot () -> Bool
+propIdle1 p = (p >> idle) === p
+
+propIdle2 :: Robot a -> Bool
+propIdle2 p = (idle >> p) === p
 
 -- ...
 
