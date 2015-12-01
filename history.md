@@ -1,6 +1,7 @@
 AFP course teachers
 --------
-* 2010 onwards: Patrik Jansson
+* 2016 onwards: Alejandro Russo
+* 2010-2015: Patrik Jansson
 * 2008-2009: Ulf Norell
 * 2006: Koen Claessen
 * [2005](https://web.archive.org/web/20051204231530/http://www.cs.chalmers.se/Cs/Grundutb/Kurser/afp/course.html): Lennart Augustsson
